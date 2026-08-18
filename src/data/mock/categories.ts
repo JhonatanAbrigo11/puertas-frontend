@@ -1,0 +1,60 @@
+import { Category } from '../../core/domain/entities/Category';
+
+export const mockCategories: Category[] = [
+  {
+    id: 'all',
+    name: 'Todos los Productos',
+    shortName: 'Todos',
+    description: 'Catálogo completo de soluciones en aluminio y vidrio',
+    iconName: 'view-grid',
+    productCount: 22,
+  },
+  {
+    id: 'ventanas',
+    name: 'Ventanas de Aluminio',
+    shortName: 'Ventanas',
+    description: 'Sistemas corredizos, proyectables y abatibles de alta estanqueidad',
+    iconName: 'window-maximize',
+    productCount: 4,
+  },
+  {
+    id: 'mamparas',
+    name: 'Mamparas & Divisiones de Vidrio',
+    shortName: 'Mamparas',
+    description: 'Divisiones en vidrio templado para oficinas, baños y salas',
+    iconName: 'door-sliding',
+    productCount: 4,
+  },
+  {
+    id: 'fachadas',
+    name: 'Fachadas en Alucobond (ACM)',
+    shortName: 'Fachadas ACM',
+    description: 'Revestimientos arquitectónicos y muros cortina modernos',
+    iconName: 'office-building',
+    productCount: 3,
+  },
+  {
+    id: 'vitrinas',
+    name: 'Vitrinas Comerciales',
+    shortName: 'Vitrinas',
+    description: 'Módulos de exhibición en aluminio anodizado y cristal',
+    iconName: 'storefront',
+    productCount: 4,
+  },
+  {
+    id: 'pergolas',
+    name: 'Pérgolas Modernas & Policarbonato',
+    shortName: 'Pérgolas',
+    description: 'Estructuras exteriores con policarbonato alveolar y compacto',
+    iconName: 'umbrella',
+    productCount: 3,
+  },
+  {
+    id: 'puertas',
+    name: 'Puertas Residenciales & Corredizas',
+    shortName: 'Puertas',
+    description: 'Puertas principales, corredizas y batientes de alta seguridad',
+    iconName: 'door',
+    productCount: 4,
+  },
+];
