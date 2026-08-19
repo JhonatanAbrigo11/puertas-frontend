@@ -15,6 +15,7 @@ import { materialsMap } from '../../../data/mock/materials';
 import { Product } from '../../../core/domain/entities/Product';
 import { RecipeItem } from '../../../core/domain/entities/Recipe';
 import { TechnicalIllustration } from '../../../shared/components/TechnicalIllustration';
+import { getProductImageUri } from '../../../shared/utils/getProductImageUri';
 import { generateAndDownloadPdf } from '../../../core/domain/services/pdfGenerator';
 import { CreateProductModal } from '../components/CreateProductModal';
 import { AddRecipeMaterialModal } from '../components/AddRecipeMaterialModal';
@@ -373,6 +374,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                     >
                       <TechnicalIllustration
                         type={prod.illustrationType}
+                        imageUri={getProductImageUri(prod)}
                         width={42}
                         height={36}
                         isThumbnail={true}
@@ -423,6 +425,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                       <View style={styles.itemThumb}>
                         <TechnicalIllustration
                           type={prod.illustrationType}
+                          imageUri={getProductImageUri(prod)}
                           width={50}
                           height={42}
                           isThumbnail={true}

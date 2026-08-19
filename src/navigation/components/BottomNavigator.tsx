@@ -41,36 +41,43 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
   const { width: windowWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
-  // 4 Navigation Tabs mapped to a 5-slot grid (Slot 2 is the permanent Center + button)
+  // 5 Navigation Tabs mapped to a 6-slot grid (Slot 3 is the permanent Center + button)
   const leftTabs: NavTabItem[] = [
     {
-      id: 'catalog',
+      id: 'dashboard',
       slotIndex: 0,
-      label: 'Catálogo',
-      iconInactive: 'view-grid-outline',
-      iconActive: 'view-grid',
+      label: 'Inicio',
+      iconInactive: 'view-dashboard-outline',
+      iconActive: 'view-dashboard',
+    },
+    {
+      id: 'catalog',
+      slotIndex: 1,
+      label: 'Proforma',
+      iconInactive: 'clipboard-text-outline',
+      iconActive: 'clipboard-text',
+      badgeCount: quoteItemCount > 0 ? quoteItemCount : undefined,
     },
     {
       id: 'quote',
-      slotIndex: 1,
-      label: 'Carrito',
-      iconInactive: 'cart-outline',
-      iconActive: 'cart',
-      badgeCount: quoteItemCount,
+      slotIndex: 2,
+      label: 'Clientes',
+      iconInactive: 'account-outline',
+      iconActive: 'account',
     },
   ];
 
   const rightTabs: NavTabItem[] = [
     {
       id: 'settings',
-      slotIndex: 3,
+      slotIndex: 4,
       label: 'Inventario',
       iconInactive: 'package-variant-closed',
       iconActive: 'package-variant',
     },
     {
       id: 'manufacturing',
-      slotIndex: 4,
+      slotIndex: 5,
       label: 'Fabricación',
       iconInactive: 'clipboard-text-play-outline',
       iconActive: 'clipboard-text-play',
@@ -82,14 +89,16 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
   // Map active tab to slot index (0, 1, 3, 4)
   const getSlotIndexFromTab = (tab: TabType): number => {
     switch (tab) {
-      case 'catalog':
+      case 'dashboard':
         return 0;
-      case 'quote':
+      case 'catalog':
         return 1;
+      case 'quote':
+        return 2;
       case 'settings':
-        return 3;
-      case 'manufacturing':
         return 4;
+      case 'manufacturing':
+        return 5;
       default:
         return 0;
     }
@@ -101,7 +110,8 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
   const maxWidth = Math.min(windowWidth - 20, 600);
   const [barWidth, setBarWidth] = useState<number>(maxWidth);
 
-  const TOTAL_SLOTS = 5;
+  const TOTAL_SLOTS = 6;
+  const CENTER_SLOT_INDEX = 3;
   const BAR_HEIGHT = 74;
   const CORNER_RADIUS = 26;
   const BUBBLE_SIZE = 50;
@@ -265,8 +275,8 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
 
   // Active Tab Bubble (Burbujita) horizontal translation
   const activeBubbleTranslateX = animatedIndex.interpolate({
-    inputRange: [0, 1, 2, 3, 4],
-    outputRange: [0, 1, 2, 3, 4].map(
+    inputRange: [0, 1, 2, 3, 4, 5],
+    outputRange: [0, 1, 2, 3, 4, 5].map(
       (i) => i * slotWidth + (slotWidth - BUBBLE_SIZE) / 2
     ),
   });
@@ -448,28 +458,26 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
           </View>
         </Animated.View>
 
-        {/* Tab Row: 2 Tabs Left | Center Spacer | 2 Tabs Right */}
+        {/* Tab Row: 3 Tabs Left | Center Spacer | 2 Tabs Right */}
         <View style={styles.tabsRow}>
-          {/* Left Tabs (Catálogo, Carrito) */}
-          <View style={styles.tabSection}>
+          <View style={[styles.tabSection, styles.tabSectionLeft]}>
             {leftTabs.map(renderTabButton)}
           </View>
 
-          {/* Center Spacer Slot (Preserves space for elevated "+" button) */}
           <View style={[styles.centerSlot, { width: slotWidth }]} />
 
-          {/* Right Tabs (Inventario, Fabricación) */}
-          <View style={styles.tabSection}>
+          <View style={[styles.tabSection, styles.tabSectionRight]}>
             {rightTabs.map(renderTabButton)}
           </View>
         </View>
 
-        {/* Permanent Elevated Center "+" Button (Azul, Arriba de todos, with Tactile Dip) */}
         <View
           style={[
             styles.centerButtonContainer,
             {
-              left: (barWidth - CENTER_BUTTON_SIZE) / 2,
+              left:
+                CENTER_SLOT_INDEX * slotWidth +
+                (slotWidth - CENTER_BUTTON_SIZE) / 2,
             },
           ]}
           pointerEvents="box-none"
@@ -607,11 +615,17 @@ const styles = StyleSheet.create({
     zIndex: 5,
   },
   tabSection: {
-    flex: 2,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-around',
     height: '100%',
+  },
+  tabSectionLeft: {
+    flex: 3,
+  },
+  tabSectionRight: {
+    flex: 2,
   },
   centerSlot: {
     height: '100%',

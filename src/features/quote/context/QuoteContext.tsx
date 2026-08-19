@@ -19,6 +19,10 @@ interface ToastInfo {
   type?: 'success' | 'info' | 'warning' | 'error';
 }
 
+export interface ClientRecord extends QuoteCustomer {
+  id: string;
+}
+
 interface QuoteContextType {
   items: QuoteItem[];
   addItem: (
@@ -40,6 +44,12 @@ interface QuoteContextType {
   totals: QuoteTotals;
   customer: QuoteCustomer;
   updateCustomer: (customerData: Partial<QuoteCustomer>) => void;
+  clients: ClientRecord[];
+  selectedClientId: string;
+  selectClient: (clientId: string) => void;
+  addClient: (clientData: QuoteCustomer) => void;
+  updateClient: (clientId: string, clientData: QuoteCustomer) => void;
+  deleteClient: (clientId: string) => void;
   quoteNumber: string;
   toast: ToastInfo;
   showToast: (
@@ -66,6 +76,17 @@ export const QuoteProvider: React.FC<{ children: React.ReactNode }> = ({
     address: 'Av. Arquitectura y Los Alamos #450',
     notes: 'Entrega en obra, incluye pre-instalación de tacos y anclajes.',
   });
+  const [selectedClientId, setSelectedClientId] = useState<string>('current-client');
+  const [clients, setClients] = useState<ClientRecord[]>([
+    {
+      id: 'current-client',
+      name: 'Constructora & Proyectos Civiles S.A.',
+      phone: '+593 99 123 4567',
+      email: 'contacto@constructora.com',
+      address: 'Av. Arquitectura y Los Alamos #450',
+      notes: 'Entrega en obra, incluye pre-instalación de tacos y anclajes.',
+    },
+  ]);
 
   const [toast, setToast] = useState<ToastInfo>({
     visible: false,
@@ -234,6 +255,105 @@ export const QuoteProvider: React.FC<{ children: React.ReactNode }> = ({
     setCustomer((prev) => ({ ...prev, ...customerData }));
   };
 
+  const selectClient = (clientId: string) => {
+    const client = clients.find((item) => item.id === clientId);
+    if (!client) return;
+
+    setSelectedClientId(clientId);
+    setCustomer({
+      name: client.name,
+      phone: client.phone,
+      email: client.email,
+      address: client.address,
+      notes: client.notes,
+    });
+  };
+
+  const addClient = (clientData: QuoteCustomer) => {
+    const newClient: ClientRecord = {
+      id: `client-${Date.now()}`,
+      name: clientData.name.trim(),
+      phone: clientData.phone.trim(),
+      email: clientData.email.trim(),
+      address: clientData.address.trim(),
+      notes: clientData.notes.trim(),
+    };
+
+    setClients((prev) => [newClient, ...prev]);
+    setSelectedClientId(newClient.id);
+    setCustomer({
+      name: newClient.name,
+      phone: newClient.phone,
+      email: newClient.email,
+      address: newClient.address,
+      notes: newClient.notes,
+    });
+  };
+
+  const updateClient = (clientId: string, clientData: QuoteCustomer) => {
+    const normalizedClient: ClientRecord = {
+      id: clientId,
+      name: clientData.name.trim(),
+      phone: clientData.phone.trim(),
+      email: clientData.email.trim(),
+      address: clientData.address.trim(),
+      notes: clientData.notes.trim(),
+    };
+
+    setClients((prev) =>
+      prev.map((client) => (client.id === clientId ? normalizedClient : client))
+    );
+
+    if (selectedClientId === clientId) {
+      setCustomer({
+        name: normalizedClient.name,
+        phone: normalizedClient.phone,
+        email: normalizedClient.email,
+        address: normalizedClient.address,
+        notes: normalizedClient.notes,
+      });
+    }
+  };
+
+  const deleteClient = (clientId: string) => {
+    setClients((prev) => {
+      const nextClients = prev.filter((client) => client.id !== clientId);
+      if (nextClients.length === 0) {
+        const fallbackClient: ClientRecord = {
+          id: 'current-client',
+          name: '',
+          phone: '',
+          email: '',
+          address: '',
+          notes: '',
+        };
+        setSelectedClientId(fallbackClient.id);
+        setCustomer({
+          name: fallbackClient.name,
+          phone: fallbackClient.phone,
+          email: fallbackClient.email,
+          address: fallbackClient.address,
+          notes: fallbackClient.notes,
+        });
+        return [fallbackClient];
+      }
+
+      if (selectedClientId === clientId) {
+        const fallbackClient = nextClients[0];
+        setSelectedClientId(fallbackClient.id);
+        setCustomer({
+          name: fallbackClient.name,
+          phone: fallbackClient.phone,
+          email: fallbackClient.email,
+          address: fallbackClient.address,
+          notes: fallbackClient.notes,
+        });
+      }
+
+      return nextClients;
+    });
+  };
+
   // Memoized Consolidated Materials & Totals
   const consolidatedMaterials = useMemo(() => {
     return consolidateMaterials(items);
@@ -256,6 +376,12 @@ export const QuoteProvider: React.FC<{ children: React.ReactNode }> = ({
         totals,
         customer,
         updateCustomer,
+        clients,
+        selectedClientId,
+        selectClient,
+        addClient,
+        updateClient,
+        deleteClient,
         quoteNumber,
         toast,
         showToast,

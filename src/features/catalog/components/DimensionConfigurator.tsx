@@ -29,6 +29,8 @@ interface DimensionConfiguratorProps {
   onAddToQuote: () => void;
   onPrintSheet?: () => void;
   isValid: boolean;
+  hideActions?: boolean;
+  hideSummary?: boolean;
 }
 
 export const DimensionConfigurator: React.FC<DimensionConfiguratorProps> = ({
@@ -47,6 +49,8 @@ export const DimensionConfigurator: React.FC<DimensionConfiguratorProps> = ({
   onAddToQuote,
   onPrintSheet,
   isValid,
+  hideActions = false,
+  hideSummary = false,
 }) => {
   const presetDimensions = [
     { label: '100 x 100 cm', w: 100, h: 100 },
@@ -285,64 +289,70 @@ export const DimensionConfigurator: React.FC<DimensionConfiguratorProps> = ({
       </View>
 
       {/* 4. Resumen Técnico */}
-      <View style={styles.section}>
-        <Text style={styles.sectionHeader}>RESUMEN</Text>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>SERIE</Text>
-          <Text style={styles.summaryValue} numberOfLines={1}>
-            {product.aluminumSeries}
-          </Text>
-        </View>
-        <View style={styles.summaryRow}>
-          <Text style={styles.summaryLabel}>VIDRIO</Text>
-          <Text style={styles.summaryValue} numberOfLines={1}>
-            {product.glassType}
-          </Text>
-        </View>
-      </View>
+      {!hideSummary && (
+        <>
+          <View style={styles.section}>
+            <Text style={styles.sectionHeader}>RESUMEN</Text>
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>SERIE</Text>
+              <Text style={styles.summaryValue} numberOfLines={1}>
+                {product.aluminumSeries}
+              </Text>
+            </View>
+            <View style={styles.summaryRow}>
+              <Text style={styles.summaryLabel}>VIDRIO</Text>
+              <Text style={styles.summaryValue} numberOfLines={1}>
+                {product.glassType}
+              </Text>
+            </View>
+          </View>
 
-      {/* 5. Subtotal Estimado Box */}
-      <View style={styles.subtotalCard}>
-        <Text style={styles.subtotalLabel}>SUBTOTAL ESTIMADO</Text>
-        <Text style={styles.subtotalValue}>${subtotalDemo.toFixed(2)}</Text>
-        <Text style={styles.subtotalPerUnit}>
-          (${unitPriceDemo.toFixed(2)} / und)
-        </Text>
-      </View>
+          {/* 5. Subtotal Estimado Box */}
+          <View style={styles.subtotalCard}>
+            <Text style={styles.subtotalLabel}>SUBTOTAL ESTIMADO</Text>
+            <Text style={styles.subtotalValue}>${subtotalDemo.toFixed(2)}</Text>
+            <Text style={styles.subtotalPerUnit}>
+              (${unitPriceDemo.toFixed(2)} / und)
+            </Text>
+          </View>
+        </>
+      )}
 
       {/* 6. Buttons */}
-      <View style={styles.buttonsContainer}>
-        <TouchableOpacity
-          style={[styles.primaryAddBtn, !isValid && styles.btnDisabled]}
-          onPress={onAddToQuote}
-          disabled={!isValid}
-          activeOpacity={0.8}
-        >
-          <MaterialCommunityIcons
-            name="cart-plus"
-            size={18}
-            color="#FFFFFF"
-            style={{ marginRight: 6 }}
-          />
-          <Text style={styles.primaryAddBtnText}>Agregar al Carrito</Text>
-        </TouchableOpacity>
-
-        {onPrintSheet && (
+      {!hideActions && (
+        <View style={styles.buttonsContainer}>
           <TouchableOpacity
-            style={styles.secondaryPrintBtn}
-            onPress={onPrintSheet}
+            style={[styles.primaryAddBtn, !isValid && styles.btnDisabled]}
+            onPress={onAddToQuote}
+            disabled={!isValid}
             activeOpacity={0.8}
           >
             <MaterialCommunityIcons
-              name="printer-outline"
+              name="cart-plus"
               size={18}
-              color="#475569"
+              color="#FFFFFF"
               style={{ marginRight: 6 }}
             />
-            <Text style={styles.secondaryPrintBtnText}>Imprimir Ficha</Text>
+            <Text style={styles.primaryAddBtnText}>Agregar al Carrito</Text>
           </TouchableOpacity>
-        )}
-      </View>
+
+          {onPrintSheet && (
+            <TouchableOpacity
+              style={styles.secondaryPrintBtn}
+              onPress={onPrintSheet}
+              activeOpacity={0.8}
+            >
+              <MaterialCommunityIcons
+                name="printer-outline"
+                size={18}
+                color="#475569"
+                style={{ marginRight: 6 }}
+              />
+              <Text style={styles.secondaryPrintBtnText}>Imprimir Ficha</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
     </View>
   );
 };

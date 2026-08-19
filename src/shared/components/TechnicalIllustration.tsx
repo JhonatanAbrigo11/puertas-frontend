@@ -61,7 +61,7 @@ export const TechnicalIllustration: React.FC<TechnicalIllustrationProps> = ({
         <Image
           source={{ uri: srcUri }}
           style={{ width: '100%', height: '100%' }}
-          resizeMode="contain"
+          resizeMode="cover"
         />
 
         {/* Center Dimension Labels */}

@@ -8,6 +8,7 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { QuoteItem } from '../../../core/domain/entities/QuoteItem';
 import { TechnicalIllustration } from '../../../shared/components/TechnicalIllustration';
+import { getProductImageUri } from '../../../shared/utils/getProductImageUri';
 import { Stepper } from '../../../shared/components/Stepper';
 import { colors } from '../../../shared/theme/colors';
 import { typography } from '../../../shared/theme/typography';
@@ -46,6 +47,7 @@ export const QuoteItemCard: React.FC<QuoteItemCardProps> = ({
           <View style={styles.thumbnailContainer}>
             <TechnicalIllustration
               type={item.product.illustrationType}
+              imageUri={getProductImageUri(item.product)}
               height={72}
               isThumbnail={true}
             />

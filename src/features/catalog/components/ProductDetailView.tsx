@@ -1,15 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
+  Modal,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Product } from '../../../core/domain/entities/Product';
 import { useProductConfigurator } from '../hooks/useProductConfigurator';
 import { useQuote } from '../../quote/context/QuoteContext';
 import { TechnicalIllustration } from '../../../shared/components/TechnicalIllustration';
+import { getProductImageUri } from '../../../shared/utils/getProductImageUri';
 import { DimensionConfigurator } from './DimensionConfigurator';
 import { MaterialsTable } from './MaterialsTable';
 import { Badge } from '../../../shared/components/Badge';
@@ -44,6 +47,11 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
   } = useProductConfigurator(product);
 
   const { addItem, customer } = useQuote();
+  const [isBenefitsModalOpen, setIsBenefitsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setIsBenefitsModalOpen(false);
+  }, [product.id]);
 
   const handleAddToQuote = () => {
     if (!isValid) return;
@@ -97,6 +105,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
   };
 
   return (
+    <>
     <ScrollView
       style={styles.container}
       contentContainerStyle={styles.contentContainer}
@@ -117,12 +126,13 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             <View style={styles.previewContainer}>
               <View style={styles.previewBadgeWrapper}>
                 <View style={styles.viewBadge}>
-                  <Text style={styles.viewBadgeText}>Vista frontal</Text>
+                  <Text style={styles.viewBadgeText}>Foto del producto</Text>
                 </View>
               </View>
 
               <TechnicalIllustration
                 type={product.illustrationType}
+                imageUri={getProductImageUri(product)}
                 height={260}
                 widthDimension={widthCm}
                 heightDimension={heightCm}
@@ -172,59 +182,19 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                 />
               </View>
 
-              {/* Description */}
-              <Text style={styles.descriptionText}>
-                {product.fullDescription}
-              </Text>
-
-              {/* Beneficios Clave */}
-              <View style={styles.benefitsSection}>
-                <Text style={styles.benefitsTitle}>BENEFICIOS CLAVE</Text>
-                <View style={styles.benefitsList}>
-                  <View style={styles.benefitItem}>
-                    <MaterialCommunityIcons
-                      name="check-circle-outline"
-                      size={16}
-                      color="#10B981"
-                    />
-                    <Text style={styles.benefitText}>
-                      Perfilería {product.aluminumSeries}
-                    </Text>
-                  </View>
-
-                  <View style={styles.benefitItem}>
-                    <MaterialCommunityIcons
-                      name="check-circle-outline"
-                      size={16}
-                      color="#10B981"
-                    />
-                    <Text style={styles.benefitText}>{product.glassType}</Text>
-                  </View>
-
-                  {product.features.map((feat, idx) => (
-                    <View key={idx} style={styles.benefitItem}>
-                      <MaterialCommunityIcons
-                        name="check-circle-outline"
-                        size={16}
-                        color="#10B981"
-                      />
-                      <Text style={styles.benefitText}>{feat}</Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
-
-              {/* Info Banner */}
-              <View style={styles.infoBanner}>
+              {/* Beneficios en modal (solo ícono foco) */}
+              <TouchableOpacity
+                style={styles.benefitsIconButton}
+                onPress={() => setIsBenefitsModalOpen(true)}
+                activeOpacity={0.8}
+                accessibilityLabel="Más beneficios"
+              >
                 <MaterialCommunityIcons
-                  name="information-outline"
-                  size={16}
-                  color="#0284C7"
+                  name="lightbulb-on-outline"
+                  size={22}
+                  color="#D97706"
                 />
-                <Text style={styles.infoBannerText}>
-                  Producto fabricado a la medida según tus necesidades
-                </Text>
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -251,8 +221,69 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
               onAddToQuote={handleAddToQuote}
               onPrintSheet={handlePrintSheet}
               isValid={isValid}
+              hideActions
+              hideSummary
             />
           </View>
+        </View>
+
+        <View style={styles.fullWidthSummary}>
+          <Text style={styles.fullWidthSummaryTitle}>RESUMEN</Text>
+
+          <View style={styles.fullWidthSummaryGrid}>
+            <View style={styles.fullWidthSummaryItem}>
+              <Text style={styles.summaryLabel}>SERIE</Text>
+              <Text style={styles.summaryValue} numberOfLines={2}>
+                {product.aluminumSeries}
+              </Text>
+            </View>
+
+            <View style={styles.fullWidthSummaryItem}>
+              <Text style={styles.summaryLabel}>VIDRIO</Text>
+              <Text style={styles.summaryValue} numberOfLines={2}>
+                {product.glassType}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.fullWidthSubtotalCard}>
+            <Text style={styles.subtotalLabel}>SUBTOTAL ESTIMADO</Text>
+            <Text style={styles.subtotalValue}>${subtotalDemo.toFixed(2)}</Text>
+            <Text style={styles.subtotalPerUnit}>
+              (${unitPriceDemo.toFixed(2)} / und)
+            </Text>
+          </View>
+        </View>
+
+        <View style={styles.fullWidthActions}>
+          <TouchableOpacity
+            style={[styles.primaryAddBtn, !isValid && styles.btnDisabled]}
+            onPress={handleAddToQuote}
+            disabled={!isValid}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons
+              name="cart-plus"
+              size={18}
+              color="#FFFFFF"
+              style={{ marginRight: 6 }}
+            />
+            <Text style={styles.primaryAddBtnText}>Agregar al Carrito</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.secondaryPrintBtn}
+            onPress={handlePrintSheet}
+            activeOpacity={0.8}
+          >
+            <MaterialCommunityIcons
+              name="printer-outline"
+              size={18}
+              color="#475569"
+              style={{ marginRight: 6 }}
+            />
+            <Text style={styles.secondaryPrintBtnText}>Imprimir Ficha</Text>
+          </TouchableOpacity>
         </View>
 
         {/* HORIZONTAL DIVIDER */}
@@ -268,6 +299,93 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
         </View>
       </View>
     </ScrollView>
+
+    <Modal
+      visible={isBenefitsModalOpen}
+      transparent
+      animationType="fade"
+      onRequestClose={() => setIsBenefitsModalOpen(false)}
+    >
+      <View style={styles.benefitsModalOverlay}>
+        <View style={styles.benefitsModalCard}>
+          <View style={styles.benefitsModalHeader}>
+            <View style={styles.benefitsModalTitleRow}>
+              <MaterialCommunityIcons
+                name="lightbulb-on-outline"
+                size={20}
+                color="#D97706"
+              />
+              <Text style={styles.benefitsModalTitle}>Más beneficios</Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => setIsBenefitsModalOpen(false)}
+              style={styles.benefitsModalClose}
+              accessibilityLabel="Cerrar"
+            >
+              <MaterialCommunityIcons
+                name="close"
+                size={22}
+                color={colors.textPrimary}
+              />
+            </TouchableOpacity>
+          </View>
+
+          <ScrollView
+            style={styles.benefitsModalBody}
+            contentContainerStyle={styles.benefitsModalBodyContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <Text style={styles.benefitsDescription}>{product.fullDescription}</Text>
+
+            <Text style={styles.benefitsTitle}>BENEFICIOS CLAVE</Text>
+            <View style={styles.benefitsList}>
+              <View style={styles.benefitItem}>
+                <MaterialCommunityIcons
+                  name="check-circle-outline"
+                  size={16}
+                  color="#10B981"
+                />
+                <Text style={styles.benefitText}>
+                  Perfilería {product.aluminumSeries}
+                </Text>
+              </View>
+
+              <View style={styles.benefitItem}>
+                <MaterialCommunityIcons
+                  name="check-circle-outline"
+                  size={16}
+                  color="#10B981"
+                />
+                <Text style={styles.benefitText}>{product.glassType}</Text>
+              </View>
+
+              {product.features.map((feat, idx) => (
+                <View key={idx} style={styles.benefitItem}>
+                  <MaterialCommunityIcons
+                    name="check-circle-outline"
+                    size={16}
+                    color="#10B981"
+                  />
+                  <Text style={styles.benefitText}>{feat}</Text>
+                </View>
+              ))}
+            </View>
+
+            <View style={styles.infoBanner}>
+              <MaterialCommunityIcons
+                name="information-outline"
+                size={16}
+                color="#0284C7"
+              />
+              <Text style={styles.infoBannerText}>
+                Producto fabricado a la medida según tus necesidades
+              </Text>
+            </View>
+          </ScrollView>
+        </View>
+      </View>
+    </Modal>
+  </>
   );
 };
 
@@ -278,7 +396,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: spacing.md,
-    paddingBottom: spacing['4xl'],
+    paddingBottom: 120,
   },
   unifiedCard: {
     backgroundColor: '#FFFFFF',
@@ -367,11 +485,75 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     maxWidth: '100%',
   },
-  descriptionText: {
+  benefitsIconButton: {
+    alignSelf: 'flex-start',
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFBEB',
+    borderWidth: 1,
+    borderColor: '#FDE68A',
+    borderRadius: 20,
+    marginBottom: 14,
+  },
+  benefitsModalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(15, 23, 42, 0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: spacing.lg,
+  },
+  benefitsModalCard: {
+    width: '100%',
+    maxWidth: 480,
+    maxHeight: '80%',
+    backgroundColor: colors.surface,
+    borderRadius: borderRadius.lg,
+    borderWidth: 1.5,
+    borderColor: colors.borderLight,
+    overflow: 'hidden',
+    ...shadows.md,
+  },
+  benefitsModalHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderLight,
+  },
+  benefitsModalTitleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  benefitsModalTitle: {
+    fontSize: typography.fontSizes.md,
+    fontWeight: typography.fontWeights.heavy,
+    color: colors.textPrimary,
+  },
+  benefitsModalClose: {
+    padding: 4,
+  },
+  benefitsModalBody: {
+    maxHeight: 420,
+  },
+  benefitsModalBodyContent: {
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+  benefitsDescription: {
     fontSize: 12,
     color: '#475569',
     lineHeight: 18,
-    marginBottom: 14,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    borderRadius: borderRadius.md,
+    padding: spacing.sm,
+    marginBottom: spacing.xs,
   },
   benefitsSection: {
     borderTopWidth: 1,
@@ -421,6 +603,117 @@ const styles = StyleSheet.create({
     backgroundColor: '#F1F5F9',
     marginVertical: 20,
     width: '100%',
+  },
+  fullWidthSummary: {
+    width: '100%',
+    marginTop: spacing.md,
+    paddingTop: spacing.md,
+    borderTopWidth: 1.5,
+    borderTopColor: '#F1F5F9',
+  },
+  fullWidthSummaryTitle: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#64748B',
+    letterSpacing: 0.8,
+    marginBottom: spacing.sm,
+  },
+  fullWidthSummaryGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  fullWidthSummaryItem: {
+    flex: 1,
+    minWidth: 180,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    borderRadius: 8,
+    padding: spacing.sm,
+  },
+  summaryLabel: {
+    fontSize: 10,
+    color: '#94A3B8',
+    fontWeight: '700',
+    letterSpacing: 0.5,
+  },
+  summaryValue: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#0F4C81',
+    marginTop: 4,
+  },
+  fullWidthSubtotalCard: {
+    width: '100%',
+    backgroundColor: '#FDF8ED',
+    borderWidth: 1.5,
+    borderColor: '#E8D28E',
+    borderRadius: 10,
+    padding: 14,
+    marginBottom: spacing.sm,
+  },
+  subtotalLabel: {
+    fontSize: 10,
+    fontWeight: '800',
+    color: '#997316',
+    letterSpacing: 0.5,
+  },
+  subtotalValue: {
+    fontSize: 24,
+    fontWeight: '900',
+    color: '#0A2540',
+    marginVertical: 2,
+  },
+  subtotalPerUnit: {
+    fontSize: 11,
+    color: '#64748B',
+  },
+  fullWidthActions: {
+    width: '100%',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginBottom: spacing.sm,
+  },
+  primaryAddBtn: {
+    flex: 1,
+    minWidth: 200,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#0F4C81',
+    borderWidth: 1,
+    borderColor: '#D4AF37',
+    paddingVertical: 14,
+    borderRadius: 8,
+    ...shadows.sm,
+  },
+  primaryAddBtnText: {
+    fontSize: 13,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  secondaryPrintBtn: {
+    flex: 1,
+    minWidth: 200,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1.5,
+    borderColor: '#CBD5E1',
+    paddingVertical: 14,
+    borderRadius: 8,
+  },
+  secondaryPrintBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#475569',
+  },
+  btnDisabled: {
+    opacity: 0.5,
   },
   lowerRecipeSection: {
     width: '100%',

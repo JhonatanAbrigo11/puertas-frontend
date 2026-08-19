@@ -14,7 +14,12 @@ import { borderRadius, spacing } from '../theme/spacing';
 import { shadows } from '../theme/shadows';
 import { useResponsive } from '../hooks/useResponsive';
 
-export type TabType = 'catalog' | 'quote' | 'settings' | 'manufacturing';
+export type TabType =
+  | 'dashboard'
+  | 'catalog'
+  | 'quote'
+  | 'settings'
+  | 'manufacturing';
 
 interface HeaderProps {
   activeTab: TabType;
@@ -32,10 +37,12 @@ export const Header: React.FC<HeaderProps> = ({
 
   const getTabTitle = () => {
     switch (activeTab) {
+      case 'dashboard':
+        return 'Panel de Control';
       case 'catalog':
-        return 'Catálogo de Productos';
+        return 'Proforma';
       case 'quote':
-        return 'Carrito & Cotización';
+        return 'Lista de Clientes';
       case 'settings':
         return 'Inventario & Control de Stock';
       case 'manufacturing':

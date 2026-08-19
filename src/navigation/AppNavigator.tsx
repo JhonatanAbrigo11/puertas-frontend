@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, SafeAreaView, StatusBar, Platform } from 'react-native';
 import { Header, TabType } from '../shared/components/Header';
 import { Toast } from '../shared/components/Toast';
+import { DashboardScreen } from '../features/dashboard/screens/DashboardScreen';
 import { CatalogScreen } from '../features/catalog/screens/CatalogScreen';
 import { QuoteScreen } from '../features/quote/screens/QuoteScreen';
 import { SettingsScreen } from '../features/settings/screens/SettingsScreen';
@@ -14,7 +15,7 @@ import { Product } from '../core/domain/entities/Product';
 import { colors } from '../shared/theme/colors';
 
 export const AppNavigator: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<TabType>('catalog');
+  const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [isCreateProductModalOpen, setIsCreateProductModalOpen] = useState(false);
   const { items, totals, toast, hideToast, showToast } = useQuote();
@@ -42,11 +43,11 @@ export const AppNavigator: React.FC = () => {
         subMessage={toast.subMessage}
         type={toast.type}
         onDismiss={hideToast}
-        actionLabel={activeTab !== 'quote' ? 'Ver Carrito' : undefined}
+        actionLabel={activeTab !== 'catalog' ? 'Ver Proforma' : undefined}
         onAction={
-          activeTab !== 'quote'
+          activeTab !== 'catalog'
             ? () => {
-                setActiveTab('quote');
+                setActiveTab('catalog');
               }
             : undefined
         }
@@ -63,6 +64,12 @@ export const AppNavigator: React.FC = () => {
 
       {/* Main Active Screen */}
       <View style={styles.screenContainer}>
+        {activeTab === 'dashboard' && (
+          <DashboardScreen
+            onNavigate={setActiveTab}
+            onCreateProduct={() => setIsCreateProductModalOpen(true)}
+          />
+        )}
         {activeTab === 'catalog' && (
           <CatalogScreen
             isMobileSidebarOpen={mobileSidebarOpen}

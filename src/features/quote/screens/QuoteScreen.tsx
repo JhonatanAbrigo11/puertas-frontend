@@ -5,251 +5,524 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  TextInput,
+  Modal,
   Alert,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useQuote } from '../context/QuoteContext';
-import { QuoteItemCard } from '../components/QuoteItemCard';
-import { Button } from '../../../shared/components/Button';
+import { ClientRecord, useQuote } from '../context/QuoteContext';
+import { QuoteCustomer } from '../../../core/domain/entities/Quote';
 import { colors } from '../../../shared/theme/colors';
 import { typography } from '../../../shared/theme/typography';
 import { borderRadius, spacing } from '../../../shared/theme/spacing';
 import { shadows } from '../../../shared/theme/shadows';
 
-import { generateAndDownloadPdf } from '../../../core/domain/services/pdfGenerator';
-import { consolidateMaterials } from '../../../core/domain/services/materialConsolidator';
-import { Quote } from '../../../core/domain/entities/Quote';
-
 interface QuoteScreenProps {
   onGoToCatalog: () => void;
 }
 
-export const QuoteScreen: React.FC<QuoteScreenProps> = ({ onGoToCatalog }) => {
+const emptyClient: QuoteCustomer = {
+  name: '',
+  phone: '',
+  email: '',
+  address: '',
+  notes: '',
+};
+
+export const QuoteScreen: React.FC<QuoteScreenProps> = () => {
   const {
-    items,
-    removeItem,
-    updateItemQuantity,
-    clearQuote,
-    consolidatedMaterials,
-    totals,
-    customer,
-    quoteNumber,
+    clients,
+    selectedClientId,
+    selectClient,
+    addClient,
+    updateClient,
+    deleteClient,
   } = useQuote();
+  const [search, setSearch] = React.useState('');
+  const [isCreateModalOpen, setIsCreateModalOpen] = React.useState(false);
+  const [isViewModalOpen, setIsViewModalOpen] = React.useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+  const [newClient, setNewClient] = React.useState<QuoteCustomer>(emptyClient);
+  const [viewClient, setViewClient] = React.useState<ClientRecord | null>(null);
+  const [editingClient, setEditingClient] = React.useState<ClientRecord | null>(
+    null
+  );
+  const filteredClients = React.useMemo(() => {
+    const query = search.trim().toLowerCase();
+    if (!query) return clients;
+    return clients.filter((client) => {
+      return (
+        client.name.toLowerCase().includes(query) ||
+        client.phone.toLowerCase().includes(query) ||
+        client.email.toLowerCase().includes(query)
+      );
+    });
+  }, [clients, search]);
 
-  const [isGeneratingPdf, setIsGeneratingPdf] = React.useState(false);
-
-  const handleDownloadPdf = async () => {
-    if (items.length === 0) return;
-
-    setIsGeneratingPdf(true);
-    try {
-      const fullQuote: Quote = {
-        id: quoteNumber,
-        quoteNumber,
-        customer,
-        items,
-        totalItemCount: items.length,
-        subtotalMaterialsDemo: totals.subtotalMaterialsDemo,
-        estimatedLaborDemo: totals.estimatedLaborDemo,
-        totalDemo: totals.totalDemo,
-        consolidatedMaterials,
-        createdAt: new Date().toISOString(),
-        validUntil: new Date(Date.now() + 15 * 86400000).toISOString(),
-      };
-
-      const result = await generateAndDownloadPdf(fullQuote, totals);
-
-      if (!result.success && result.error) {
-        alert(`Error al generar el PDF: ${result.error}`);
-      }
-    } catch (err: any) {
-      console.error(err);
-      alert('Ocurrió un error al preparar el documento PDF.');
-    } finally {
-      setIsGeneratingPdf(false);
-    }
+  const handleSelectClient = (client: ClientRecord) => {
+    selectClient(client.id);
   };
 
-  const handleDownloadItemPdf = async (item: typeof items[0]) => {
-    try {
-      const singleItemQuote: Quote = {
-        id: `${quoteNumber}-${item.id.slice(0, 4)}`,
-        quoteNumber: `${quoteNumber}-${item.product.code}`,
-        customer,
-        items: [item],
-        totalItemCount: item.quantity,
-        subtotalMaterialsDemo: item.subtotalDemo,
-        estimatedLaborDemo: Math.round(item.subtotalDemo * 0.25 * 100) / 100,
-        totalDemo: Math.round(item.subtotalDemo * 1.25 * 100) / 100,
-        consolidatedMaterials: consolidateMaterials([item]),
-        createdAt: new Date().toISOString(),
-        validUntil: new Date(Date.now() + 15 * 86400000).toISOString(),
-      };
-
-      const singleTotals = {
-        itemCount: 1,
-        totalProductsCount: item.quantity,
-        subtotalMaterialsDemo: item.subtotalDemo,
-        estimatedLaborDemo: Math.round(item.subtotalDemo * 0.25 * 100) / 100,
-        totalDemo: Math.round(item.subtotalDemo * 1.25 * 100) / 100,
-      };
-
-      const result = await generateAndDownloadPdf(singleItemQuote, singleTotals);
-      if (!result.success && result.error) {
-        alert(`Error al generar el PDF: ${result.error}`);
-      }
-    } catch (err: any) {
-      console.error(err);
-      alert('Ocurrió un error al preparar el documento PDF.');
+  const handleCreateClient = () => {
+    if (!newClient.name.trim()) {
+      return;
     }
+
+    addClient(newClient);
+    setNewClient(emptyClient);
+    setIsCreateModalOpen(false);
   };
 
-  if (items.length === 0) {
-    return (
-      <View style={styles.emptyContainer}>
-        <View style={styles.emptyCard}>
-          <View style={styles.emptyIconCircle}>
-            <MaterialCommunityIcons
-              name="clipboard-text-off-outline"
-              size={48}
-              color={colors.primary}
-            />
-          </View>
-          <Text style={styles.emptyTitle}>Tu Carrito está vacío</Text>
-          <Text style={styles.emptyDescription}>
-            Aún no has agregado ningún producto a la cotización actual. Selecciona
-            un producto en el catálogo, ingresa las medidas de ancho y alto, y
-            agrégalo al carrito.
-          </Text>
+  const handleViewClient = (client: ClientRecord) => {
+    setViewClient(client);
+    setIsViewModalOpen(true);
+  };
 
-          <Button
-            title="IR AL CATÁLOGO DE PRODUCTOS"
-            onPress={onGoToCatalog}
-            variant="primary"
-            size="lg"
-            icon={
-              <MaterialCommunityIcons
-                name="view-grid-plus"
-                size={20}
-                color="#FFFFFF"
-              />
-            }
-            style={styles.emptyButton}
-          />
-        </View>
-      </View>
+  const handleOpenEditClient = (client: ClientRecord) => {
+    setEditingClient({ ...client });
+    setIsEditModalOpen(true);
+  };
+
+  const handleSaveEditClient = () => {
+    if (!editingClient?.name.trim()) {
+      return;
+    }
+
+    updateClient(editingClient.id, editingClient);
+    setEditingClient(null);
+    setIsEditModalOpen(false);
+  };
+
+  const handleDeleteClient = (client: ClientRecord) => {
+    Alert.alert(
+      'Eliminar cliente',
+      `¿Deseas eliminar a "${client.name}"?`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Eliminar',
+          style: 'destructive',
+          onPress: () => {
+            deleteClient(client.id);
+          },
+        },
+      ]
     );
-  }
+  };
 
   return (
-    <ScrollView
-      style={styles.container}
-      contentContainerStyle={styles.contentContainer}
-      showsVerticalScrollIndicator={true}
-    >
-      {/* 1. Header Toolbar Bar */}
-      <View style={styles.sectionHeader}>
-        <View style={styles.sectionHeaderLeft}>
-          <MaterialCommunityIcons
-            name="cart-outline"
-            size={22}
-            color="#0F4C81"
-          />
-          <Text style={styles.sectionTitle}>
-            PRODUCTOS EN EL CARRITO ({items.length})
-          </Text>
-        </View>
-
-        <View style={styles.headerActionsRight}>
-          <TouchableOpacity
-            style={styles.clearCartBtn}
-            onPress={clearQuote}
-            activeOpacity={0.7}
-          >
+    <View style={styles.container}>
+      <ScrollView
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={true}
+      >
+        <View style={styles.filterActionRow}>
+          <View style={styles.searchBox}>
             <MaterialCommunityIcons
-              name="trash-can-outline"
-              size={16}
-              color={colors.danger}
+              name="magnify"
+              size={18}
+              color={colors.textMuted}
             />
-            <Text style={styles.clearCartText}>Vaciar</Text>
-          </TouchableOpacity>
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Buscar por nombre, teléfono o correo"
+              placeholderTextColor={colors.textMuted}
+              value={search}
+              onChangeText={setSearch}
+            />
+          </View>
 
           <TouchableOpacity
-            style={styles.addMoreButton}
-            onPress={onGoToCatalog}
-            activeOpacity={0.7}
+            style={styles.newClientButton}
+            onPress={() => setIsCreateModalOpen(true)}
+            activeOpacity={0.8}
           >
-            <MaterialCommunityIcons
-              name="plus"
-              size={16}
-              color="#FFFFFF"
-            />
-            <Text style={styles.addMoreText}>Agregar más</Text>
+            <MaterialCommunityIcons name="plus" size={16} color="#FFFFFF" />
+            <Text style={styles.newClientButtonText}>Nuevo Cliente</Text>
           </TouchableOpacity>
         </View>
-      </View>
 
-      {/* 2. Quote Item Cards List */}
-      {items.map((item, index) => (
-        <QuoteItemCard
-          key={item.id}
-          item={item}
-          index={index}
-          onUpdateQuantity={(newQty) => updateItemQuantity(item.id, newQty)}
-          onRemove={() => removeItem(item.id)}
-          onDownloadPdf={() => handleDownloadItemPdf(item)}
-        />
-      ))}
+        <View style={styles.tableCard}>
+          <View style={styles.tableCardHeader}>
+            <Text style={styles.tableCardTitle}>
+              LISTA DE CLIENTES ({filteredClients.length} de {clients.length})
+            </Text>
+          </View>
 
-      {/* 4. Final Action Card */}
-      <View style={styles.finalActionCard}>
-        <View style={styles.finalActionInfo}>
-          <Text style={styles.finalActionTitle}>
-            ¿Listo para emitir la cotización?
-          </Text>
-          <Text style={styles.finalActionSubtitle}>
-            Se generará el archivo PDF formal con especificaciones técnicas,
-            despiece consolidado de corte para taller y presupuesto final.
-          </Text>
-        </View>
-
-        <View style={styles.finalActionButtons}>
-          <Button
-            title="AGREGAR MÁS PRODUCTOS"
-            onPress={onGoToCatalog}
-            variant="outline"
-            size="lg"
-            icon={
+          {filteredClients.length === 0 ? (
+            <View style={styles.emptyStateCard}>
               <MaterialCommunityIcons
-                name="view-grid"
-                size={20}
-                color={colors.primary}
+                name="account-search-outline"
+                size={28}
+                color={colors.textMuted}
               />
-            }
-          />
+              <Text style={styles.emptyStateTitle}>Sin resultados</Text>
+              <Text style={styles.emptyStateText}>
+                No encontramos clientes con ese criterio de búsqueda.
+              </Text>
+            </View>
+          ) : (
+            <View style={styles.clientsList}>
+              {filteredClients.map((client, index) => {
+                const isSelected = selectedClientId === client.id;
+                const isEven = index % 2 === 0;
+                const clientCode = `CLI-${String(index + 1).padStart(4, '0')}`;
 
-          <Button
-            title={
-              isGeneratingPdf
-                ? 'GENERANDO DOCUMENTO PDF...'
-                : `DESCARGAR COTIZACIÓN PDF ($${totals.totalDemo.toFixed(2)})`
-            }
-            onPress={handleDownloadPdf}
-            loading={isGeneratingPdf}
-            disabled={isGeneratingPdf}
-            variant="primary"
-            size="lg"
-            icon={
-              <MaterialCommunityIcons
-                name="file-pdf-box"
-                size={22}
-                color="#FFFFFF"
-              />
-            }
-          />
+                return (
+                  <View
+                    key={client.id}
+                    style={[styles.clientRow, isEven && styles.clientRowEven]}
+                  >
+                    <View style={styles.clientMain}>
+                      <View style={styles.codeRow}>
+                        <Text style={styles.clientCode}>{clientCode}</Text>
+                        <View style={styles.categoryBadge}>
+                          <Text style={styles.categoryBadgeText}>Cliente</Text>
+                        </View>
+                        <View
+                          style={[
+                            styles.statusBadge,
+                            isSelected
+                              ? styles.statusBadgeActive
+                              : styles.statusBadgeDefault,
+                          ]}
+                        >
+                          <MaterialCommunityIcons
+                            name={
+                              isSelected
+                                ? 'check-circle'
+                                : 'account-outline'
+                            }
+                            size={12}
+                            color={isSelected ? '#059669' : '#64748B'}
+                          />
+                          <Text
+                            style={[
+                              styles.statusBadgeText,
+                              isSelected
+                                ? styles.statusTextActive
+                                : styles.statusTextDefault,
+                            ]}
+                          >
+                            {isSelected ? 'Activo' : 'Registrado'}
+                          </Text>
+                        </View>
+                      </View>
+
+                      <Text style={styles.clientName}>{client.name}</Text>
+
+                      {!!client.phone && (
+                        <View style={styles.contactRow}>
+                          <MaterialCommunityIcons
+                            name="phone-outline"
+                            size={14}
+                            color="#64748B"
+                          />
+                          <Text style={styles.contactText}>{client.phone}</Text>
+                        </View>
+                      )}
+
+                      {!!client.address && (
+                        <Text style={styles.clientDesc}>{client.address}</Text>
+                      )}
+
+                      {!!client.notes && (
+                        <Text style={styles.clientDesc}>{client.notes}</Text>
+                      )}
+                    </View>
+
+                    <View style={styles.clientRightBlock}>
+                      <View style={styles.contactContainer}>
+                        <Text style={styles.contactValue} numberOfLines={1}>
+                          {client.email || 'Sin correo'}
+                        </Text>
+                        <Text style={styles.contactLabel}>correo</Text>
+                      </View>
+
+                      <View style={styles.actionIconsRow}>
+                        <TouchableOpacity
+                          style={styles.iconBtnView}
+                          onPress={() => handleViewClient(client)}
+                          activeOpacity={0.7}
+                          accessibilityLabel="Ver cliente"
+                        >
+                          <MaterialCommunityIcons
+                            name="eye-outline"
+                            size={18}
+                            color="#0284C7"
+                          />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.iconBtnEdit}
+                          onPress={() => handleOpenEditClient(client)}
+                          activeOpacity={0.7}
+                          accessibilityLabel="Editar cliente"
+                        >
+                          <MaterialCommunityIcons
+                            name="pencil-outline"
+                            size={18}
+                            color="#2563EB"
+                          />
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.iconBtnDelete}
+                          onPress={() => handleDeleteClient(client)}
+                          activeOpacity={0.7}
+                          accessibilityLabel="Eliminar cliente"
+                        >
+                          <MaterialCommunityIcons
+                            name="trash-can-outline"
+                            size={18}
+                            color="#DC2626"
+                          />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                );
+              })}
+            </View>
+          )}
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+
+      <Modal
+        visible={isCreateModalOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsCreateModalOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Crear Nuevo Cliente</Text>
+
+            <TextInput
+              style={styles.formInput}
+              placeholder="Nombre o razón social *"
+              placeholderTextColor={colors.textMuted}
+              value={newClient.name}
+              onChangeText={(text) => setNewClient((prev) => ({ ...prev, name: text }))}
+            />
+            <TextInput
+              style={styles.formInput}
+              placeholder="Teléfono"
+              placeholderTextColor={colors.textMuted}
+              value={newClient.phone}
+              onChangeText={(text) => setNewClient((prev) => ({ ...prev, phone: text }))}
+            />
+            <TextInput
+              style={styles.formInput}
+              placeholder="Correo"
+              placeholderTextColor={colors.textMuted}
+              autoCapitalize="none"
+              keyboardType="email-address"
+              value={newClient.email}
+              onChangeText={(text) => setNewClient((prev) => ({ ...prev, email: text }))}
+            />
+            <TextInput
+              style={styles.formInput}
+              placeholder="Dirección / obra"
+              placeholderTextColor={colors.textMuted}
+              value={newClient.address}
+              onChangeText={(text) => setNewClient((prev) => ({ ...prev, address: text }))}
+            />
+            <TextInput
+              style={[styles.formInput, styles.formInputMultiline]}
+              placeholder="Observaciones"
+              placeholderTextColor={colors.textMuted}
+              multiline
+              textAlignVertical="top"
+              value={newClient.notes}
+              onChangeText={(text) => setNewClient((prev) => ({ ...prev, notes: text }))}
+            />
+
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => setIsCreateModalOpen(false)}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.saveButton}
+                onPress={handleCreateClient}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.saveButtonText}>Guardar Cliente</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={isViewModalOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsViewModalOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Detalle del Cliente</Text>
+
+            {viewClient && (
+              <View style={styles.detailList}>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Nombre</Text>
+                  <Text style={styles.detailValue}>{viewClient.name}</Text>
+                </View>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Teléfono</Text>
+                  <Text style={styles.detailValue}>
+                    {viewClient.phone || '—'}
+                  </Text>
+                </View>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Correo</Text>
+                  <Text style={styles.detailValue}>
+                    {viewClient.email || '—'}
+                  </Text>
+                </View>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Dirección</Text>
+                  <Text style={styles.detailValue}>
+                    {viewClient.address || '—'}
+                  </Text>
+                </View>
+                <View style={styles.detailRow}>
+                  <Text style={styles.detailLabel}>Observaciones</Text>
+                  <Text style={styles.detailValue}>
+                    {viewClient.notes || '—'}
+                  </Text>
+                </View>
+              </View>
+            )}
+
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => setIsViewModalOpen(false)}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.cancelButtonText}>Cerrar</Text>
+              </TouchableOpacity>
+              {viewClient && (
+                <TouchableOpacity
+                  style={styles.saveButton}
+                  onPress={() => {
+                    handleSelectClient(viewClient);
+                    setIsViewModalOpen(false);
+                  }}
+                  activeOpacity={0.8}
+                >
+                  <Text style={styles.saveButtonText}>Usar Cliente</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      <Modal
+        visible={isEditModalOpen}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setIsEditModalOpen(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>Editar Cliente</Text>
+
+            {editingClient && (
+              <>
+                <TextInput
+                  style={styles.formInput}
+                  placeholder="Nombre o razón social *"
+                  placeholderTextColor={colors.textMuted}
+                  value={editingClient.name}
+                  onChangeText={(text) =>
+                    setEditingClient((prev) =>
+                      prev ? { ...prev, name: text } : prev
+                    )
+                  }
+                />
+                <TextInput
+                  style={styles.formInput}
+                  placeholder="Teléfono"
+                  placeholderTextColor={colors.textMuted}
+                  value={editingClient.phone}
+                  onChangeText={(text) =>
+                    setEditingClient((prev) =>
+                      prev ? { ...prev, phone: text } : prev
+                    )
+                  }
+                />
+                <TextInput
+                  style={styles.formInput}
+                  placeholder="Correo"
+                  placeholderTextColor={colors.textMuted}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  value={editingClient.email}
+                  onChangeText={(text) =>
+                    setEditingClient((prev) =>
+                      prev ? { ...prev, email: text } : prev
+                    )
+                  }
+                />
+                <TextInput
+                  style={styles.formInput}
+                  placeholder="Dirección / obra"
+                  placeholderTextColor={colors.textMuted}
+                  value={editingClient.address}
+                  onChangeText={(text) =>
+                    setEditingClient((prev) =>
+                      prev ? { ...prev, address: text } : prev
+                    )
+                  }
+                />
+                <TextInput
+                  style={[styles.formInput, styles.formInputMultiline]}
+                  placeholder="Observaciones"
+                  placeholderTextColor={colors.textMuted}
+                  multiline
+                  textAlignVertical="top"
+                  value={editingClient.notes}
+                  onChangeText={(text) =>
+                    setEditingClient((prev) =>
+                      prev ? { ...prev, notes: text } : prev
+                    )
+                  }
+                />
+              </>
+            )}
+
+            <View style={styles.modalActions}>
+              <TouchableOpacity
+                style={styles.cancelButton}
+                onPress={() => {
+                  setEditingClient(null);
+                  setIsEditModalOpen(false);
+                }}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.cancelButtonText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.saveButton}
+                onPress={handleSaveEditClient}
+                activeOpacity={0.8}
+              >
+                <Text style={styles.saveButtonText}>Guardar Cambios</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </View>
   );
 };
 
@@ -262,133 +535,324 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     paddingBottom: spacing['5xl'],
   },
-  emptyContainer: {
-    flex: 1,
-    backgroundColor: colors.background,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: spacing.xl,
-  },
-  emptyCard: {
-    backgroundColor: colors.surface,
-    borderRadius: borderRadius.xl,
-    padding: spacing['3xl'],
-    maxWidth: 480,
-    width: '100%',
-    alignItems: 'center',
-    borderWidth: 1.5,
-    borderColor: colors.borderLight,
-    ...shadows.md,
-  },
-  emptyIconCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: colors.primaryTint,
-    borderWidth: 1,
-    borderColor: colors.primaryBorder,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: spacing.lg,
-  },
-  emptyTitle: {
-    fontSize: typography.fontSizes.xl,
-    fontWeight: typography.fontWeights.heavy,
-    color: colors.textPrimary,
-    marginBottom: spacing.xs,
-  },
-  emptyDescription: {
-    fontSize: typography.fontSizes.sm,
-    color: colors.textMuted,
-    textAlign: 'center',
-    lineHeight: typography.lineHeights.base,
-    marginBottom: spacing.xl,
-  },
-  emptyButton: {
-    width: '100%',
-  },
-  sectionHeader: {
+  filterActionRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    gap: spacing.sm,
     marginBottom: spacing.md,
     flexWrap: 'wrap',
-    gap: spacing.sm,
   },
-  sectionHeaderLeft: {
+  newClientButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.xs,
-  },
-  sectionTitle: {
-    fontSize: typography.fontSizes.sm,
-    fontWeight: typography.fontWeights.heavy,
-    color: colors.textPrimary,
-    letterSpacing: 0.8,
-  },
-  headerActionsRight: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  clearCartBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FEF2F2',
-    borderWidth: 1,
-    borderColor: '#FECACA',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: borderRadius.md,
-    gap: 4,
-  },
-  clearCartText: {
-    fontSize: typography.fontSizes.xs,
-    fontWeight: typography.fontWeights.bold,
-    color: colors.danger,
-  },
-  addMoreButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#0F4C81',
+    gap: 6,
+    backgroundColor: colors.primary,
     borderWidth: 1,
     borderColor: '#D4AF37',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
     borderRadius: borderRadius.md,
-    gap: 4,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
     ...shadows.sm,
   },
-  addMoreText: {
+  newClientButtonText: {
     fontSize: typography.fontSizes.xs,
     fontWeight: typography.fontWeights.bold,
     color: '#FFFFFF',
   },
-  finalActionCard: {
+  searchBox: {
+    flex: 1,
+    minWidth: 220,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    borderRadius: borderRadius.md,
+    paddingHorizontal: spacing.md,
+    height: 40,
+  },
+  searchInput: {
+    flex: 1,
+    paddingVertical: 10,
+    fontSize: typography.fontSizes.sm,
+    color: colors.textPrimary,
+  },
+
+  tableCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: '#E2E8F0',
+    overflow: 'hidden',
+    ...shadows.sm,
+  },
+  tableCardHeader: {
+    backgroundColor: '#F8FAFC',
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E2E8F0',
+  },
+  tableCardTitle: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#475569',
+    letterSpacing: 0.8,
+  },
+  clientsList: {
+    width: '100%',
+  },
+  clientRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 18,
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F1F5F9',
+  },
+  clientRowEven: {
+    backgroundColor: '#FAFAFA',
+  },
+  clientMain: {
+    flex: 1,
+    paddingRight: 16,
+  },
+  codeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 8,
+    marginBottom: 4,
+  },
+  clientCode: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#0F4C81',
+    letterSpacing: 0.5,
+  },
+  categoryBadge: {
+    backgroundColor: '#E2E8F0',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+  },
+  categoryBadgeText: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#475569',
+    textTransform: 'uppercase',
+  },
+  statusBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 4,
+    gap: 4,
+    borderWidth: 1,
+  },
+  statusBadgeActive: {
+    backgroundColor: '#ECFDF5',
+    borderColor: '#A7F3D0',
+  },
+  statusBadgeDefault: {
+    backgroundColor: '#F8FAFC',
+    borderColor: '#E2E8F0',
+  },
+  statusBadgeText: {
+    fontSize: 10,
+    fontWeight: '700',
+  },
+  statusTextActive: {
+    color: '#059669',
+  },
+  statusTextDefault: {
+    color: '#64748B',
+  },
+  clientName: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#0F172A',
+    marginBottom: 3,
+  },
+  contactRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    marginBottom: 3,
+  },
+  contactText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#475569',
+  },
+  clientDesc: {
+    fontSize: 11,
+    color: '#64748B',
+    lineHeight: 15,
+  },
+  clientRightBlock: {
+    alignItems: 'flex-end',
+    minWidth: 130,
+    gap: 8,
+  },
+  contactContainer: {
+    alignItems: 'flex-end',
+    maxWidth: 160,
+  },
+  contactValue: {
+    fontSize: 13,
+    fontWeight: '800',
+    color: '#0F4C81',
+  },
+  contactLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#94A3B8',
+    marginTop: 1,
+  },
+  actionIconsRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  iconBtnView: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    backgroundColor: '#F0F9FF',
+    borderWidth: 1,
+    borderColor: '#BAE6FD',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconBtnEdit: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    backgroundColor: '#EFF6FF',
+    borderWidth: 1,
+    borderColor: '#BFDBFE',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconBtnDelete: {
+    width: 32,
+    height: 32,
+    borderRadius: 6,
+    backgroundColor: '#FEF2F2',
+    borderWidth: 1,
+    borderColor: '#FECACA',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyStateCard: {
+    backgroundColor: colors.surface,
+    padding: spacing.xl,
+    alignItems: 'center',
+    gap: spacing.xs,
+  },
+  emptyStateTitle: {
+    fontSize: typography.fontSizes.md,
+    fontWeight: typography.fontWeights.bold,
+    color: colors.textPrimary,
+  },
+  emptyStateText: {
+    fontSize: typography.fontSizes.xs,
+    color: colors.textMuted,
+    textAlign: 'center',
+  },
+  detailList: {
+    gap: spacing.sm,
+  },
+  detailRow: {
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    borderRadius: borderRadius.md,
+    padding: spacing.sm,
+  },
+  detailLabel: {
+    fontSize: 10,
+    fontWeight: typography.fontWeights.bold,
+    color: colors.textMuted,
+    marginBottom: 2,
+    textTransform: 'uppercase',
+  },
+  detailValue: {
+    fontSize: typography.fontSizes.sm,
+    color: colors.textPrimary,
+    fontWeight: typography.fontWeights.semibold,
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(15, 23, 42, 0.45)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: spacing.lg,
+  },
+  modalCard: {
+    width: '100%',
+    maxWidth: 520,
     backgroundColor: colors.surface,
     borderRadius: borderRadius.lg,
-    padding: spacing.xl,
     borderWidth: 1.5,
-    borderColor: colors.primaryBorder,
-    marginTop: spacing.md,
+    borderColor: colors.borderLight,
+    padding: spacing.lg,
     ...shadows.md,
   },
-  finalActionInfo: {
-    marginBottom: spacing.lg,
-  },
-  finalActionTitle: {
+  modalTitle: {
     fontSize: typography.fontSizes.lg,
     fontWeight: typography.fontWeights.heavy,
     color: colors.textPrimary,
+    marginBottom: spacing.sm,
   },
-  finalActionSubtitle: {
-    fontSize: typography.fontSizes.xs,
-    color: colors.textMuted,
-    marginTop: 2,
+  formInput: {
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.borderLight,
+    borderRadius: borderRadius.md,
+    paddingHorizontal: spacing.md,
+    paddingVertical: 10,
+    fontSize: typography.fontSizes.sm,
+    color: colors.textPrimary,
+    marginTop: spacing.sm,
   },
-  finalActionButtons: {
+  formInputMultiline: {
+    minHeight: 90,
+  },
+  modalActions: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
+    justifyContent: 'flex-end',
+    gap: spacing.sm,
+    marginTop: spacing.md,
+  },
+  cancelButton: {
+    borderWidth: 1,
+    borderColor: colors.borderMedium,
+    borderRadius: borderRadius.md,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    backgroundColor: colors.surface,
+  },
+  cancelButtonText: {
+    color: colors.textSecondary,
+    fontSize: typography.fontSizes.xs,
+    fontWeight: typography.fontWeights.bold,
+  },
+  saveButton: {
+    borderWidth: 1,
+    borderColor: '#D4AF37',
+    borderRadius: borderRadius.md,
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    backgroundColor: colors.primary,
+  },
+  saveButtonText: {
+    color: '#FFFFFF',
+    fontSize: typography.fontSizes.xs,
+    fontWeight: typography.fontWeights.bold,
   },
 });

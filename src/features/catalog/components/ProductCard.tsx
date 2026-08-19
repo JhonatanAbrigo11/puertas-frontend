@@ -8,6 +8,7 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Product } from '../../../core/domain/entities/Product';
 import { TechnicalIllustration } from '../../../shared/components/TechnicalIllustration';
+import { getProductImageUri } from '../../../shared/utils/getProductImageUri';
 import { colors } from '../../../shared/theme/colors';
 import { typography } from '../../../shared/theme/typography';
 import { borderRadius, spacing } from '../../../shared/theme/spacing';
@@ -61,6 +62,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       <View style={styles.thumbnailContainer}>
         <TechnicalIllustration
           type={product.illustrationType}
+          imageUri={getProductImageUri(product)}
           height={68}
           isThumbnail={true}
         />

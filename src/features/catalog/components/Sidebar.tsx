@@ -15,6 +15,7 @@ import { mockProducts } from '../../../data/mock/products';
 import { CategorySelector } from './CategorySelector';
 import { ProductCard } from './ProductCard';
 import { TechnicalIllustration } from '../../../shared/components/TechnicalIllustration';
+import { getProductImageUri } from '../../../shared/utils/getProductImageUri';
 import { colors } from '../../../shared/theme/colors';
 import { typography } from '../../../shared/theme/typography';
 import { borderRadius, spacing } from '../../../shared/theme/spacing';
@@ -95,6 +96,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
               >
                 <TechnicalIllustration
                   type={item.illustrationType}
+                  imageUri={getProductImageUri(item)}
                   height={38}
                   isThumbnail={true}
                 />
