@@ -1,72 +1,70 @@
 /**
- * Paleta del panel de control — ALUX carpintería aluminio & vidrio.
- * Tonos cálidos suaves, sin contrastes fuertes.
+ * Paleta del panel — #FE4648 + blanco
  */
 export const dashboardColors = {
   background: '#FFFFFF',
   surface: '#FFFFFF',
-  surfaceMuted: '#F8FAFC',
-  border: '#E2E8F0',
-  borderLight: '#F1F5F9',
+  surfaceMuted: '#FFF8F8',
+  border: '#F0F0F0',
+  borderLight: '#F5F5F5',
 
-  // Hero claro — sin bloque oscuro pesado
   hero: '#FFFFFF',
-  heroAccent: '#C9A87C',
-  heroAccentMuted: 'rgba(201, 168, 124, 0.35)',
-  heroText: '#3D3835',
-  heroTextMuted: '#78716C',
-  heroDateBg: '#F8FAFC',
-  heroDateBorder: '#E2E8F0',
-  heroDateLabel: '#9A7B4F',
+  heroAccent: '#FE4648',
+  heroAccentMuted: 'rgba(254, 70, 72, 0.12)',
+  heroText: '#1A1A1A',
+  heroTextMuted: '#737373',
+  heroDateBg: '#FFF0F0',
+  heroDateBorder: '#FFCACA',
+  heroDateLabel: '#FE4648',
 
   kpi: {
-    proforma: { icon: '#B45309', bg: '#FFF7ED', text: '#92400E' },
-    units: { icon: '#0369A1', bg: '#F0F9FF', text: '#075985' },
-    clients: { icon: '#7C3AED', bg: '#F5F3FF', text: '#6D28D9' },
-    catalog: { icon: '#A16207', bg: '#FEFCE8', text: '#854D0E' },
-    stockOk: { icon: '#15803D', bg: '#F0FDF4', text: '#166534' },
+    proforma: { icon: '#FE4648', bg: '#FFF0F0', text: '#D93638' },
+    units: { icon: '#FF7072', bg: '#FFF5F5', text: '#D93638' },
+    clients: { icon: '#D93638', bg: '#FFE8E8', text: '#B91C1C' },
+    catalog: { icon: '#FE4648', bg: '#FFF0F0', text: '#D93638' },
+    stockOk: { icon: '#16A34A', bg: '#F0FDF4', text: '#166534' },
     stockLow: { icon: '#DC2626', bg: '#FEF2F2', text: '#B91C1C' },
   },
 
   chart: {
-    materials: '#D97706',
-    labor: '#7C3AED',
-    trend: '#B45309',
-    grid: '#F1F5F9',
-    badge: '#FEF9EE',
-    badgeText: '#92400E',
+    materials: '#FE4648',
+    labor: '#FF7072',
+    trend: '#D93638',
+    grid: '#F5F5F5',
+    badge: '#FFF0F0',
+    badgeText: '#D93638',
   },
 
   category: {
-    ventanas: '#3B82F6',
-    mamparas: '#0891B2',
-    fachadas: '#78716C',
-    vitrinas: '#D97706',
-    pergolas: '#059669',
-    puertas: '#7C3AED',
+    ventanas: '#FE4648',
+    mamparas: '#FF7072',
+    fachadas: '#737373',
+    vitrinas: '#D93638',
+    pergolas: '#16A34A',
+    puertas: '#FF5859',
   },
 
-  accent: '#B8956A',
-  accentBright: '#C9A87C',
-  accentLink: '#92400E',
-  headerIcon: '#9A7B4F',
+  accent: '#FE4648',
+  accentBright: '#FF7072',
+  accentLink: '#D93638',
+  headerIcon: '#FE4648',
 
   text: {
-    primary: '#3D3835',
-    secondary: '#57534E',
-    muted: '#78716C',
-    light: '#A8A29E',
+    primary: '#1A1A1A',
+    secondary: '#525252',
+    muted: '#737373',
+    light: '#A3A3A3',
   },
 
   gauge: {
     healthy: '#16A34A',
-    warning: '#D97706',
-    danger: '#DC2626',
-    neutral: '#A8A29E',
+    warning: '#F59E0B',
+    danger: '#FE4648',
+    neutral: '#A3A3A3',
   },
 
   bar: {
-    primary: '#B8956A',
-    secondary: '#C9A87C',
+    primary: '#FE4648',
+    secondary: '#FF7072',
   },
 } as const;

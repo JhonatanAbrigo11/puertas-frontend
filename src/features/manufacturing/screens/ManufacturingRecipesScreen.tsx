@@ -487,7 +487,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                 <MaterialCommunityIcons
                   name="arrow-left"
                   size={20}
-                  color="#0F4C81"
+                  color="#FE4648"
                 />
                 <Text style={styles.backRowText}>Volver a fichas</Text>
               </TouchableOpacity>
@@ -598,7 +598,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                   ) : (
                     <>
                       <TouchableOpacity style={styles.editSheetBtn} onPress={handleStartEditSheet} activeOpacity={0.8}>
-                        <MaterialCommunityIcons name="pencil-outline" size={16} color="#0F4C81" />
+                        <MaterialCommunityIcons name="pencil-outline" size={16} color="#FE4648" />
                         <Text style={styles.editSheetBtnText}>Editar ficha</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.printSheetBtn} onPress={handlePrint} activeOpacity={0.8}>
@@ -1040,7 +1040,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
 const styles = StyleSheet.create({
   screenWrapper: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     position: 'relative',
   },
   container: {
@@ -1070,9 +1070,9 @@ const styles = StyleSheet.create({
   createProductBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0F4C81',
+    backgroundColor: '#FE4648',
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderRadius: 8,
@@ -1118,8 +1118,8 @@ const styles = StyleSheet.create({
     borderColor: '#E2E8F0',
   },
   categoryChipSelected: {
-    backgroundColor: '#FDF8ED',
-    borderColor: '#D4AF37',
+    backgroundColor: '#FFF0F0',
+    borderColor: '#FE4648',
   },
   categoryChipText: {
     fontSize: 12,
@@ -1158,7 +1158,7 @@ const styles = StyleSheet.create({
   emptyGridTitle: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#0A2540',
+    color: '#1A1A1A',
   },
   emptyGridDesc: {
     fontSize: 13,
@@ -1179,13 +1179,13 @@ const styles = StyleSheet.create({
   backRowText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   sheetImageBanner: {
     height: 180,
     borderRadius: 12,
     overflow: 'hidden',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#E2E8F0',
   },
@@ -1218,11 +1218,11 @@ const styles = StyleSheet.create({
   sheetCode: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
     letterSpacing: 0.5,
   },
   sheetBadge: {
-    backgroundColor: '#FDF8ED',
+    backgroundColor: '#FFF0F0',
     borderWidth: 1,
     borderColor: '#E8D28E',
     paddingHorizontal: 8,
@@ -1248,7 +1248,7 @@ const styles = StyleSheet.create({
   sheetTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#0A2540',
+    color: '#1A1A1A',
     marginBottom: 4,
   },
   sheetDesc: {
@@ -1259,9 +1259,9 @@ const styles = StyleSheet.create({
   printSheetBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0F4C81',
+    backgroundColor: '#FE4648',
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderRadius: 8,
@@ -1283,9 +1283,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#F0F6FD',
+    backgroundColor: '#FFF0F0',
     borderWidth: 1,
-    borderColor: '#BBD8F5',
+    borderColor: '#FFCACA',
     paddingHorizontal: 12,
     paddingVertical: 9,
     borderRadius: 8,
@@ -1293,7 +1293,7 @@ const styles = StyleSheet.create({
   editSheetBtnText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   saveEditBtn: {
     flexDirection: 'row',
@@ -1313,7 +1313,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#E2E8F0',
     paddingHorizontal: 12,
@@ -1326,7 +1326,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
   },
   recipeDetailCardEditing: {
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
     backgroundColor: '#FFFDF8',
   },
   editingBanner: {
@@ -1371,7 +1371,7 @@ const styles = StyleSheet.create({
   },
   cellInputSmall: {
     fontSize: 11,
-    color: '#0A2540',
+    color: '#1A1A1A',
     borderWidth: 1,
     borderColor: '#CBD5E1',
     borderRadius: 6,
@@ -1397,7 +1397,7 @@ const styles = StyleSheet.create({
   cellInputQty: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0A2540',
+    color: '#1A1A1A',
     borderWidth: 1,
     borderColor: '#CBD5E1',
     borderRadius: 6,
@@ -1410,7 +1410,7 @@ const styles = StyleSheet.create({
   cellInputPrice: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0A2540',
+    color: '#1A1A1A',
     borderWidth: 1,
     borderColor: '#CBD5E1',
     borderRadius: 6,
@@ -1439,13 +1439,13 @@ const styles = StyleSheet.create({
   specChipText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#0A2540',
+    color: '#1A1A1A',
   },
   simulatorBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FDF8ED',
+    backgroundColor: '#FFF0F0',
     borderWidth: 1.5,
     borderColor: '#E8D28E',
     borderRadius: 10,
@@ -1484,19 +1484,19 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
     alignItems: 'center',
     justifyContent: 'center',
   },
   miniStepBtnText: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   miniStepVal: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#0A2540',
+    color: '#1A1A1A',
     minWidth: 46,
     textAlign: 'center',
   },
@@ -1522,9 +1522,9 @@ const styles = StyleSheet.create({
   addMaterialBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0F4C81',
+    backgroundColor: '#FE4648',
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 6,
@@ -1552,7 +1552,7 @@ const styles = StyleSheet.create({
   recipeTableHead: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     paddingVertical: 10,
     paddingHorizontal: 12,
     borderBottomWidth: 1.5,
@@ -1615,18 +1615,18 @@ const styles = StyleSheet.create({
   matCodeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   matNameText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0A2540',
+    color: '#1A1A1A',
   },
   formulaBadge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FDF8ED',
+    backgroundColor: '#FFF0F0',
     borderWidth: 1,
     borderColor: '#E8D28E',
     paddingHorizontal: 6,
@@ -1667,7 +1667,7 @@ const styles = StyleSheet.create({
   subtotalText: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   deleteRecipeItemBtn: {
     width: 28,
@@ -1683,7 +1683,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     paddingVertical: 12,
     paddingHorizontal: 14,
     borderTopWidth: 1.5,
@@ -1710,6 +1710,6 @@ const styles = StyleSheet.create({
   footerTotalValue: {
     fontSize: 16,
     fontWeight: '900',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
 });

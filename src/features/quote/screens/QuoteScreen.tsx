@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
   clientCode: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
     letterSpacing: 0.5,
   },
   categoryBadge: {
@@ -705,7 +705,7 @@ const styles = StyleSheet.create({
   contactValue: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   contactLabel: {
     fontSize: 11,

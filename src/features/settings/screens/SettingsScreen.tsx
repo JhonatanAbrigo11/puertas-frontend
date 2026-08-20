@@ -492,7 +492,7 @@ const styles = StyleSheet.create({
   createBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0F4C81',
+    backgroundColor: '#FE4648',
     borderWidth: 1,
     borderColor: '#D4AF37',
     paddingHorizontal: 14,
@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
   materialCode: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
     letterSpacing: 0.5,
   },
   categoryBadge: {
@@ -688,7 +688,7 @@ const styles = StyleSheet.create({
   priceValue: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   unitLabel: {
     fontSize: 11,
