@@ -1,8 +1,17 @@
 import { Platform } from 'react-native';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
-import { Quote, ConsolidatedMaterial } from '../entities/Quote';
+import { Quote } from '../entities/Quote';
+import { QuoteItem } from '../entities/QuoteItem';
 import { QuoteTotals } from './quoteCalculator';
+
+export function buildWarehouseOrderNumber(
+  quoteNumber: string,
+  itemIndex: number
+): string {
+  const numericPart = quoteNumber.replace(/^PRO-/, '');
+  return `BOD-${numericPart}-${String(itemIndex + 1).padStart(2, '0')}`;
+}
 
 export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
   const currentDate = new Date().toLocaleDateString('es-ES', {
@@ -406,16 +415,13 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
   `;
 }
 
-export async function generateAndDownloadPdf(
-  quote: Quote,
-  totals: QuoteTotals
+async function printHtmlDocument(
+  html: string,
+  dialogTitle: string
 ): Promise<{ success: boolean; uri?: string; error?: string }> {
   try {
-    const html = generateQuoteHtml(quote, totals);
-
     if (Platform.OS === 'web') {
       if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-        // Create an isolated hidden iframe specifically for printing the proforma HTML
         const iframe = document.createElement('iframe');
         iframe.style.position = 'fixed';
         iframe.style.right = '0';
@@ -435,13 +441,15 @@ export async function generateAndDownloadPdf(
           frameDoc.write(html);
           frameDoc.close();
 
-          // Wait for CSS styles and fonts to render
           setTimeout(() => {
             try {
               iframe.contentWindow?.focus();
               iframe.contentWindow?.print();
             } catch (frameErr) {
-              console.warn('Iframe print fallback, opening dedicated window:', frameErr);
+              console.warn(
+                'Iframe print fallback, opening dedicated window:',
+                frameErr
+              );
               const printWindow = window.open('', '_blank');
               if (printWindow) {
                 printWindow.document.open();
@@ -465,24 +473,23 @@ export async function generateAndDownloadPdf(
         }
       }
       return { success: true };
-    } else {
-      // In Android / iOS:
-      const { uri } = await Print.printToFileAsync({
-        html,
-        base64: false,
-      });
-
-      const isAvailable = await Sharing.isAvailableAsync();
-      if (isAvailable) {
-        await Sharing.shareAsync(uri, {
-          mimeType: 'application/pdf',
-          dialogTitle: `Descargar Proforma ${quote.quoteNumber}`,
-          UTI: 'com.adobe.pdf',
-        });
-      }
-
-      return { success: true, uri };
     }
+
+    const { uri } = await Print.printToFileAsync({
+      html,
+      base64: false,
+    });
+
+    const isAvailable = await Sharing.isAvailableAsync();
+    if (isAvailable) {
+      await Sharing.shareAsync(uri, {
+        mimeType: 'application/pdf',
+        dialogTitle,
+        UTI: 'com.adobe.pdf',
+      });
+    }
+
+    return { success: true, uri };
   } catch (error: any) {
     console.error('Error generating PDF:', error);
     return {
@@ -490,4 +497,304 @@ export async function generateAndDownloadPdf(
       error: error?.message || 'No se pudo generar el archivo PDF.',
     };
   }
+}
+
+export function generateWarehouseOrderHtml(
+  item: QuoteItem,
+  quoteNumber: string,
+  warehouseNumber: string
+): string {
+  const currentDate = new Date().toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+  });
+  const areaM2 = ((item.widthCm * item.heightCm) / 10000).toFixed(2);
+
+  const materialsHtml = item.calculatedMaterials
+    .map((mat, index) => {
+      const formattedQty =
+        mat.unit === 'und' || mat.unit === 'juego'
+          ? Math.ceil(mat.quantity).toString()
+          : mat.quantity.toFixed(2);
+      return `
+        <tr style="border-bottom: 1px solid #F0F0F0; ${
+          index % 2 === 1 ? 'background-color: #FAFAFA;' : ''
+        }">
+          <td style="padding: 9px 10px; text-align: center; font-weight: 700; color: #B45309;">${
+            index + 1
+          }</td>
+          <td style="padding: 9px 10px; font-size: 12px; font-weight: 600; color: #0F172A;">
+            ${mat.materialName}
+            ${
+              mat.notes
+                ? `<div style="font-size: 10px; color: #64748B; margin-top: 2px;">${mat.notes}</div>`
+                : ''
+            }
+          </td>
+          <td style="padding: 9px 10px; text-align: right; font-size: 13px; font-weight: 800; color: #0F172A;">
+            ${formattedQty}
+          </td>
+          <td style="padding: 9px 10px; text-align: center;">
+            <span style="background: #FEF3C7; color: #B45309; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">
+              ${mat.unit}
+            </span>
+          </td>
+        </tr>
+      `;
+    })
+    .join('');
+
+  return `
+    <!DOCTYPE html>
+    <html lang="es">
+    <head>
+      <meta charset="utf-8" />
+      <title>Orden de Bodega ${warehouseNumber}</title>
+      <style>
+        @page { size: A4; margin: 15mm; }
+        body {
+          font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+          color: #0F172A;
+          background: #FFFFFF;
+          margin: 0;
+          padding: 0;
+          font-size: 12px;
+          line-height: 1.4;
+        }
+        .header-container {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          border-bottom: 3px solid #C98A16;
+          padding-bottom: 16px;
+          margin-bottom: 20px;
+        }
+        .company-name {
+          font-size: 24px;
+          font-weight: 900;
+          color: #0A192F;
+          margin: 0 0 4px 0;
+        }
+        .company-tagline {
+          font-size: 12px;
+          font-weight: 600;
+          color: #475569;
+          margin: 0 0 8px 0;
+        }
+        .company-meta {
+          font-size: 10px;
+          color: #64748B;
+          line-height: 1.5;
+        }
+        .order-badge {
+          text-align: right;
+          background: #FFFBEB;
+          border: 1px solid #FDE68A;
+          border-radius: 8px;
+          padding: 12px 16px;
+          min-width: 220px;
+        }
+        .order-title {
+          font-size: 11px;
+          font-weight: 800;
+          color: #B45309;
+          letter-spacing: 1px;
+          margin: 0 0 4px 0;
+        }
+        .order-number {
+          font-size: 20px;
+          font-weight: 900;
+          color: #0F172A;
+          margin: 0 0 6px 0;
+        }
+        .product-card {
+          background: #FFFFFF;
+          border: 1.5px solid #F0F0F0;
+          border-radius: 8px;
+          padding: 14px 16px;
+          margin-bottom: 18px;
+        }
+        .product-label {
+          font-size: 10px;
+          font-weight: 700;
+          color: #64748B;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+        .product-name {
+          font-size: 18px;
+          font-weight: 800;
+          color: #0A192F;
+          margin: 2px 0 8px 0;
+        }
+        .meta-row {
+          display: flex;
+          gap: 28px;
+          flex-wrap: wrap;
+        }
+        .meta-value {
+          font-size: 13px;
+          font-weight: 700;
+          color: #0F172A;
+          margin-top: 2px;
+        }
+        .section-heading {
+          font-size: 13px;
+          font-weight: 800;
+          color: #B45309;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          border-left: 4px solid #C98A16;
+          padding-left: 8px;
+          margin: 8px 0 10px 0;
+        }
+        table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+        th {
+          background: #0A192F;
+          color: #FFFFFF;
+          font-size: 11px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          padding: 8px 10px;
+        }
+        .note {
+          background: #FFFBEB;
+          border: 1px solid #FDE68A;
+          border-radius: 8px;
+          padding: 12px 16px;
+          font-size: 10px;
+          color: #64748B;
+          margin-top: 8px;
+        }
+        .signatures-row {
+          display: flex;
+          justify-content: space-between;
+          margin-top: 48px;
+          padding-top: 12px;
+        }
+        .sign-box {
+          width: 30%;
+          text-align: center;
+          border-top: 1px solid #94A3B8;
+          padding-top: 6px;
+          font-size: 11px;
+          font-weight: 700;
+          color: #334155;
+        }
+        .sign-sub {
+          font-size: 9px;
+          color: #94A3B8;
+          font-weight: 400;
+          margin-top: 2px;
+        }
+      </style>
+    </head>
+    <body>
+      <div class="header-container">
+        <div>
+          <div class="company-name">ALUX <span style="font-size: 18px; color: #C98A16;">PRO</span></div>
+          <div class="company-tagline">Carpintería de Aluminio &amp; Vidrio Arquitectónico</div>
+          <div class="company-meta">
+            <strong>RUC:</strong> 1792837461001 &nbsp;|&nbsp; <strong>PBX / WhatsApp:</strong> +593 99 123 4567<br/>
+            <strong>Planta:</strong> Parque Industrial Metalmecánico, Lote 14
+          </div>
+        </div>
+        <div class="order-badge">
+          <div class="order-title">ORDEN DE BODEGA</div>
+          <div class="order-number">${warehouseNumber}</div>
+          <div style="font-size: 10px; color: #475569;">
+            <strong>Proforma:</strong> ${quoteNumber}<br/>
+            <strong>Fecha:</strong> ${currentDate}
+          </div>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-label">Producto a fabricar</div>
+        <div class="product-name">${item.product.name}</div>
+        <div class="meta-row">
+          <div>
+            <div class="product-label">Código</div>
+            <div class="meta-value">${item.product.code}</div>
+          </div>
+          <div>
+            <div class="product-label">Cantidad</div>
+            <div class="meta-value">${item.quantity} und</div>
+          </div>
+          <div>
+            <div class="product-label">Medidas</div>
+            <div class="meta-value">${item.widthCm} × ${item.heightCm} cm (${areaM2} m²)</div>
+          </div>
+          <div>
+            <div class="product-label">Serie / Cristal</div>
+            <div class="meta-value">${item.product.aluminumSeries} · ${item.product.glassType}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-heading">Materiales a despachar</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width: 40px; text-align: center;">#</th>
+            <th style="text-align: left;">Material / Insumo</th>
+            <th style="width: 110px; text-align: right;">Cantidad</th>
+            <th style="width: 90px; text-align: center;">Unidad</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${materialsHtml || `
+            <tr>
+              <td colspan="4" style="padding: 16px; text-align: center; color: #94A3B8;">
+                Sin materiales calculados para este producto.
+              </td>
+            </tr>
+          `}
+        </tbody>
+      </table>
+
+      <div class="note">
+        <strong>INSTRUCCIONES DE BODEGA:</strong><br/>
+        Despachar únicamente los materiales y cantidades listados para la orden
+        <strong>${warehouseNumber}</strong>, vinculada a la proforma
+        <strong>${quoteNumber}</strong>. Verificar existencias antes de corte.
+      </div>
+
+      <div class="signatures-row">
+        <div class="sign-box">
+          SOLICITADO POR
+          <div class="sign-sub">Producción / Taller</div>
+        </div>
+        <div class="sign-box">
+          DESPACHADO BODEGA
+          <div class="sign-sub">Nombre y firma</div>
+        </div>
+        <div class="sign-box">
+          RECIBIDO TALLER
+          <div class="sign-sub">Nombre y firma</div>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+}
+
+export async function generateAndDownloadPdf(
+  quote: Quote,
+  totals: QuoteTotals
+): Promise<{ success: boolean; uri?: string; error?: string }> {
+  const html = generateQuoteHtml(quote, totals);
+  return printHtmlDocument(html, `Descargar Proforma ${quote.quoteNumber}`);
+}
+
+export async function generateAndDownloadWarehouseOrderPdf(
+  item: QuoteItem,
+  quoteNumber: string,
+  itemIndex: number
+): Promise<{ success: boolean; uri?: string; error?: string }> {
+  const warehouseNumber = buildWarehouseOrderNumber(quoteNumber, itemIndex);
+  const html = generateWarehouseOrderHtml(item, quoteNumber, warehouseNumber);
+  return printHtmlDocument(html, `Orden de Bodega ${warehouseNumber}`);
 }

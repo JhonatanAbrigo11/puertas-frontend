@@ -27,7 +27,7 @@ import { borderRadius, spacing } from '../../../shared/theme/spacing';
 import { shadows } from '../../../shared/theme/shadows';
 import { useQuote } from '../../quote/context/QuoteContext';
 import { consolidateMaterials } from '../../../core/domain/services/materialConsolidator';
-import { generateAndDownloadPdf } from '../../../core/domain/services/pdfGenerator';
+import { generateAndDownloadPdf, generateAndDownloadWarehouseOrderPdf } from '../../../core/domain/services/pdfGenerator';
 
 interface CatalogScreenProps {
   isMobileSidebarOpen?: boolean;
@@ -243,6 +243,25 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
     }
   };
 
+  const handleGenerateWarehouseOrder = async (
+    item: typeof items[0],
+    index: number
+  ) => {
+    try {
+      const result = await generateAndDownloadWarehouseOrderPdf(
+        item,
+        quoteNumber,
+        index
+      );
+      if (!result.success && result.error) {
+        alert(`Error al generar la orden de bodega: ${result.error}`);
+      }
+    } catch (err: any) {
+      console.error(err);
+      alert('Ocurrió un error al preparar la orden de bodega.');
+    }
+  };
+
   // Reusable Segmented Tabs Header
   const renderSegmentedTabs = () => (
     <View style={styles.topTabBar}>
@@ -406,6 +425,9 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                   }
                   onRemove={() => removeItem(item.id)}
                   onDownloadPdf={() => handleDownloadItemPdf(item)}
+                  onGenerateWarehouseOrder={() =>
+                    handleGenerateWarehouseOrder(item, index)
+                  }
                 />
               ))}
             </View>

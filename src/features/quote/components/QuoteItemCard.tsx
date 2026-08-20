@@ -21,6 +21,7 @@ interface QuoteItemCardProps {
   onUpdateQuantity: (newQty: number) => void;
   onRemove: () => void;
   onDownloadPdf?: () => void;
+  onGenerateWarehouseOrder?: () => void;
 }
 
 export const QuoteItemCard: React.FC<QuoteItemCardProps> = ({
@@ -29,6 +30,7 @@ export const QuoteItemCard: React.FC<QuoteItemCardProps> = ({
   onUpdateQuantity,
   onRemove,
   onDownloadPdf,
+  onGenerateWarehouseOrder,
 }) => {
   const [expanded, setExpanded] = useState(false);
 
@@ -142,6 +144,27 @@ export const QuoteItemCard: React.FC<QuoteItemCardProps> = ({
               </Text>
             </TouchableOpacity>
           </View>
+
+          {onGenerateWarehouseOrder && (
+            <TouchableOpacity
+              style={styles.warehouseOrderButton}
+              onPress={onGenerateWarehouseOrder}
+              activeOpacity={0.8}
+            >
+              <MaterialCommunityIcons
+                name="warehouse"
+                size={18}
+                color="#FFFFFF"
+              />
+              <Text
+                style={styles.warehouseOrderButtonText}
+                numberOfLines={1}
+                ellipsizeMode="clip"
+              >
+                Generar orden de bodega
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
       </View>
 
@@ -365,6 +388,26 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: colors.danger,
     fontWeight: '700',
+    flexShrink: 0,
+  },
+  warehouseOrderButton: {
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.gold,
+    borderWidth: 1,
+    borderColor: colors.goldDark,
+    paddingHorizontal: 10,
+    paddingVertical: 9,
+    borderRadius: borderRadius.md,
+    gap: 6,
+    ...shadows.sm,
+  },
+  warehouseOrderButtonText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#FFFFFF',
     flexShrink: 0,
   },
   toggleMaterialsButton: {
