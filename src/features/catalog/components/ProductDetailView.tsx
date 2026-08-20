@@ -28,12 +28,18 @@ import { shadows } from '../../../shared/theme/shadows';
 
 interface ProductDetailViewProps {
   product: Product;
+  onAddToCartAnimation?: (
+    startCoords: { x: number; y: number },
+    count: number
+  ) => void;
 }
 
 export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
   product,
+  onAddToCartAnimation,
 }) => {
   const { isTablet, isDesktop } = useResponsive();
+  const addBtnRef = React.useRef<View>(null);
   const {
     widthCm,
     heightCm,
@@ -93,11 +99,29 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
     setter(newVal);
   };
 
-  const handleAddToQuote = () => {
+  const handleAddToQuote = (e: any) => {
     if (!isValid) return;
     addItem(product, widthCm, heightCm, quantity);
     setIsAddedRecently(true);
     setTimeout(() => setIsAddedRecently(false), 1200);
+
+    if (onAddToCartAnimation) {
+      if (e?.nativeEvent?.pageX && e?.nativeEvent?.pageY) {
+        onAddToCartAnimation(
+          { x: e.nativeEvent.pageX, y: e.nativeEvent.pageY },
+          quantity
+        );
+      } else if (addBtnRef.current?.measureInWindow) {
+        addBtnRef.current.measureInWindow((x, y, width, height) => {
+          onAddToCartAnimation(
+            { x: x + width / 2, y: y + height / 2 },
+            quantity
+          );
+        });
+      } else {
+        onAddToCartAnimation({ x: 300, y: 500 }, quantity);
+      }
+    }
   };
 
   return (
@@ -460,6 +484,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             </View>
 
             <TouchableOpacity
+              ref={addBtnRef as any}
               style={[
                 styles.primaryAddBtn,
                 !isValid && styles.btnDisabled,
