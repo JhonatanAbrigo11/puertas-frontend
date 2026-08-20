@@ -63,12 +63,14 @@ export const AppNavigator: React.FC = () => {
       />
 
       {/* Main Active Screen */}
-      <View style={styles.screenContainer}>
+      <View
+        style={[
+          styles.screenContainer,
+          activeTab === 'dashboard' && styles.screenContainerDashboard,
+        ]}
+      >
         {activeTab === 'dashboard' && (
-          <DashboardScreen
-            onNavigate={setActiveTab}
-            onCreateProduct={() => setIsCreateProductModalOpen(true)}
-          />
+          <DashboardScreen onNavigate={setActiveTab} />
         )}
         {activeTab === 'catalog' && (
           <CatalogScreen
@@ -112,5 +114,8 @@ const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     backgroundColor: colors.background,
+  },
+  screenContainerDashboard: {
+    backgroundColor: '#FFFFFF',
   },
 });

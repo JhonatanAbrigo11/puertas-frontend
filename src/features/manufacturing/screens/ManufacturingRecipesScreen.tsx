@@ -19,20 +19,32 @@ import { getProductImageUri } from '../../../shared/utils/getProductImageUri';
 import { generateAndDownloadPdf } from '../../../core/domain/services/pdfGenerator';
 import { CreateProductModal } from '../components/CreateProductModal';
 import { AddRecipeMaterialModal } from '../components/AddRecipeMaterialModal';
+import { ManufacturingProductGridCard } from '../components/ManufacturingProductGridCard';
+import {
+  buildSheetDraftFromProduct,
+  applySheetDraftToProduct,
+  draftToPreviewProduct,
+  SheetEditDraft,
+} from '../utils/sheetEditDraft';
+import { Input } from '../../../shared/components/Input';
 import { Toast } from '../../../shared/components/Toast';
+import { useResponsive } from '../../../shared/hooks/useResponsive';
 import { colors } from '../../../shared/theme/colors';
 import { typography } from '../../../shared/theme/typography';
 import { borderRadius, spacing } from '../../../shared/theme/spacing';
 import { shadows } from '../../../shared/theme/shadows';
 
 export const ManufacturingRecipesScreen: React.FC = () => {
+  const { isTablet, isDesktop } = useResponsive();
+  const gridColumns = isDesktop ? 4 : isTablet ? 3 : 2;
+
   const [productsList, setProductsList] = useState<Product[]>(mockProducts);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [selectedProductId, setSelectedProductId] = useState<string>(
-    mockProducts[0]?.id || ''
-  );
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
+  const [selectedProductId, setSelectedProductId] = useState<string>('');
+  const [viewMode, setViewMode] = useState<'grid' | 'detail'>('grid');
+  const [isEditingSheet, setIsEditingSheet] = useState(false);
+  const [sheetDraft, setSheetDraft] = useState<SheetEditDraft | null>(null);
 
   // Modals state
   const [isCreateProductOpen, setIsCreateProductOpen] = useState(false);
@@ -62,15 +74,25 @@ export const ManufacturingRecipesScreen: React.FC = () => {
 
   // Current active product
   const activeProduct = useMemo(() => {
-    const found = productsList.find((p) => p.id === selectedProductId);
-    return found || filteredProducts[0] || productsList[0];
-  }, [productsList, selectedProductId, filteredProducts]);
+    if (!selectedProductId) return undefined;
+    return productsList.find((p) => p.id === selectedProductId);
+  }, [productsList, selectedProductId]);
+
+  const displayProduct = useMemo(() => {
+    if (!activeProduct) return undefined;
+    if (isEditingSheet && sheetDraft) {
+      return draftToPreviewProduct(activeProduct, sheetDraft);
+    }
+    return activeProduct;
+  }, [activeProduct, isEditingSheet, sheetDraft]);
 
   // Sync simulation dimensions when product changes
   React.useEffect(() => {
     if (activeProduct) {
       setSimWidth(activeProduct.defaultWidthCm);
       setSimHeight(activeProduct.defaultHeightCm);
+      setIsEditingSheet(false);
+      setSheetDraft(null);
     }
   }, [activeProduct?.id]);
 
@@ -78,15 +100,76 @@ export const ManufacturingRecipesScreen: React.FC = () => {
   const handleSaveNewProduct = (newProduct: Product) => {
     setProductsList((prev) => [newProduct, ...prev]);
     setSelectedProductId(newProduct.id);
+    setViewMode('detail');
     setToastMessage(`Ficha del producto "${newProduct.name}" creada exitosamente.`);
+  };
+
+  const handleOpenProductSheet = (product: Product) => {
+    setSelectedProductId(product.id);
+    setViewMode('detail');
+  };
+
+  const handleBackToGrid = () => {
+    setIsEditingSheet(false);
+    setSheetDraft(null);
+    setViewMode('grid');
+  };
+
+  const handleStartEditSheet = () => {
+    if (!activeProduct) return;
+    setSheetDraft(buildSheetDraftFromProduct(activeProduct));
+    setIsEditingSheet(true);
+  };
+
+  const handleCancelEditSheet = () => {
+    if (activeProduct) {
+      setSimWidth(activeProduct.defaultWidthCm);
+      setSimHeight(activeProduct.defaultHeightCm);
+    }
+    setIsEditingSheet(false);
+    setSheetDraft(null);
+  };
+
+  const handleSaveEditSheet = () => {
+    if (!activeProduct || !sheetDraft) return;
+
+    const updated = applySheetDraftToProduct(activeProduct, sheetDraft);
+    setProductsList((prev) =>
+      prev.map((p) => (p.id === updated.id ? updated : p))
+    );
+    setSimWidth(updated.defaultWidthCm);
+    setSimHeight(updated.defaultHeightCm);
+    setIsEditingSheet(false);
+    setSheetDraft(null);
+    setToastMessage(`Ficha "${updated.name}" actualizada correctamente.`);
+  };
+
+  const updateDraftField = <K extends keyof SheetEditDraft>(
+    field: K,
+    value: SheetEditDraft[K]
+  ) => {
+    setSheetDraft((prev) => (prev ? { ...prev, [field]: value } : prev));
+  };
+
+  const updateRecipeItemDraft = (
+    index: number,
+    field: keyof SheetEditDraft['recipeItems'][number],
+    value: string
+  ) => {
+    setSheetDraft((prev) => {
+      if (!prev) return prev;
+      const recipeItems = [...prev.recipeItems];
+      recipeItems[index] = { ...recipeItems[index], [field]: value };
+      return { ...prev, recipeItems };
+    });
   };
 
   // Handler: Add material to current product's recipe
   const handleAddMaterialToActiveRecipe = (newItem: RecipeItem) => {
     if (!activeProduct) return;
 
-    setProductsList((prev) =>
-      prev.map((prod) => {
+    setProductsList((prev) => {
+      const next = prev.map((prod) => {
         if (prod.id !== activeProduct.id) return prod;
 
         const currentItems = prod.recipe?.items ? [...prod.recipe.items] : [];
@@ -97,8 +180,15 @@ export const ManufacturingRecipesScreen: React.FC = () => {
             items: [...currentItems, newItem],
           },
         };
-      })
-    );
+      });
+
+      if (isEditingSheet) {
+        const updated = next.find((p) => p.id === activeProduct.id);
+        if (updated) setSheetDraft(buildSheetDraftFromProduct(updated));
+      }
+
+      return next;
+    });
 
     const mat = materialsMap[newItem.materialId];
     setToastMessage(
@@ -110,8 +200,8 @@ export const ManufacturingRecipesScreen: React.FC = () => {
   const handleRemoveMaterialFromRecipe = (indexToRemove: number) => {
     if (!activeProduct || !activeProduct.recipe) return;
 
-    setProductsList((prev) =>
-      prev.map((prod) => {
+    setProductsList((prev) => {
+      const next = prev.map((prod) => {
         if (prod.id !== activeProduct.id) return prod;
 
         const currentItems = prod.recipe?.items ? [...prod.recipe.items] : [];
@@ -124,28 +214,39 @@ export const ManufacturingRecipesScreen: React.FC = () => {
             items: currentItems,
           },
         };
-      })
-    );
+      });
+
+      if (isEditingSheet) {
+        const updated = next.find((p) => p.id === activeProduct.id);
+        if (updated) setSheetDraft(buildSheetDraftFromProduct(updated));
+      }
+
+      return next;
+    });
 
     setToastMessage('Insumo removido de la ficha.');
   };
 
   // Calculate dynamic recipe outputs for the simulation
   const simulatedItems = useMemo(() => {
-    if (!activeProduct || !activeProduct.recipe || !activeProduct.recipe.items) {
+    const product = displayProduct;
+    if (!product || !product.recipe || !product.recipe.items) {
       return [];
     }
 
-    return activeProduct.recipe.items.map((item) => {
-      const rawQty = item.calculate({
-        widthCm: simWidth,
-        heightCm: simHeight,
-        quantity: 1,
-      });
+    return product.recipe.items.map((item) => {
+      const rawQty =
+        item.manualQuantityOverride ??
+        item.calculate({
+          widthCm: simWidth,
+          heightCm: simHeight,
+          quantity: 1,
+        });
 
       const mat = materialsMap[item.materialId];
       const unit = mat ? mat.unit : 'und';
-      const unitPrice = mat ? mat.unitPriceDemo : 0;
+      const unitPrice =
+        item.manualUnitPriceOverride ?? (mat ? mat.unitPriceDemo : 0);
       const roundedQty =
         unit === 'und' || unit === 'juego'
           ? Math.ceil(rawQty)
@@ -161,34 +262,36 @@ export const ManufacturingRecipesScreen: React.FC = () => {
         unit,
         unitPrice,
         subtotal,
+        notes: item.notes || '',
       };
     });
-  }, [activeProduct, simWidth, simHeight]);
+  }, [displayProduct, simWidth, simHeight]);
 
   const totalSimulatedPrice = useMemo(() => {
     return simulatedItems.reduce((acc, curr) => acc + curr.subtotal, 0);
   }, [simulatedItems]);
 
   const handlePrint = async () => {
-    if (!activeProduct) return;
+    const product = displayProduct || activeProduct;
+    if (!product) return;
 
     const singleItemQuote = {
       id: `sheet-${Date.now()}`,
-      quoteNumber: `FICHA-${activeProduct.code}`,
+      quoteNumber: `FICHA-${product.code}`,
       customer: {
         name: 'Taller de Producción / Fabricación ALUX',
         phone: '+593 99 123 4567',
         email: 'taller@alux.com',
         address: 'Planta Metalmecánica - Área de Corte & Ensamble',
-        notes: `Ficha técnica generada para ${activeProduct.name}`,
+        notes: `Ficha técnica generada para ${product.name}`,
       },
       items: [
         {
           id: `item-${Date.now()}`,
-          productId: activeProduct.id,
-          product: activeProduct,
-          productName: activeProduct.name,
-          productCode: activeProduct.code,
+          productId: product.id,
+          product: product,
+          productName: product.name,
+          productCode: product.code,
           widthCm: simWidth,
           heightCm: simHeight,
           quantity: 1,
@@ -220,7 +323,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
         unitPriceDemo: m.unitPrice,
         totalPriceDemo: m.subtotal,
         usedInProductsCount: 1,
-        productNames: [activeProduct.name],
+        productNames: [product.name],
       })),
       createdAt: new Date().toISOString(),
       validUntil: new Date(Date.now() + 15 * 86400000).toISOString(),
@@ -335,192 +438,196 @@ export const ManufacturingRecipesScreen: React.FC = () => {
           </ScrollView>
         </View>
 
-        {/* 2. Main Workspace Layout */}
-        <View style={styles.workspaceLayout}>
-          {/* Left Column: Product Selector Sidebar (Collapsible) */}
-          {isSidebarCollapsed ? (
-            /* Mini Collapsed Rail (64px) */
-            <View style={styles.miniRail}>
+        {/* 2. Grid de fichas o detalle del producto */}
+        {viewMode === 'grid' ? (
+          <View>
+            <Text style={styles.gridSectionTitle}>
+              Fichas de fabricación ({filteredProducts.length})
+            </Text>
+
+            {filteredProducts.length === 0 ? (
+              <View style={styles.emptyGrid}>
+                <MaterialCommunityIcons
+                  name="clipboard-search-outline"
+                  size={40}
+                  color="#94A3B8"
+                />
+                <Text style={styles.emptyGridTitle}>Sin resultados</Text>
+                <Text style={styles.emptyGridDesc}>
+                  Prueba otro término de búsqueda o categoría.
+                </Text>
+              </View>
+            ) : (
+              <View style={styles.productGrid}>
+                {filteredProducts.map((prod) => (
+                  <View
+                    key={prod.id}
+                    style={[
+                      styles.gridItem,
+                      { width: `${100 / gridColumns}%` },
+                    ]}
+                  >
+                    <ManufacturingProductGridCard
+                      product={prod}
+                      onPress={handleOpenProductSheet}
+                    />
+                  </View>
+                ))}
+              </View>
+            )}
+          </View>
+        ) : (
+          activeProduct && displayProduct && (
+            <View style={styles.detailWrapper}>
               <TouchableOpacity
-                style={styles.miniToggleBtn}
-                onPress={() => setIsSidebarCollapsed(false)}
+                style={styles.backRow}
+                onPress={handleBackToGrid}
                 activeOpacity={0.7}
-                accessibilityLabel="Expandir productos"
               >
                 <MaterialCommunityIcons
-                  name="chevron-double-right"
+                  name="arrow-left"
                   size={20}
-                  color="#2563EB"
+                  color="#0F4C81"
                 />
+                <Text style={styles.backRowText}>Volver a fichas</Text>
               </TouchableOpacity>
 
-              <View style={styles.miniDivider} />
+          {/* Ficha técnica del producto seleccionado */}
+            <View style={[styles.recipeDetailCard, isEditingSheet && styles.recipeDetailCardEditing]}>
+              {isEditingSheet && (
+                <View style={styles.editingBanner}>
+                  <MaterialCommunityIcons name="pencil" size={16} color="#92400E" />
+                  <Text style={styles.editingBannerText}>Modo edición — modifica los campos y guarda</Text>
+                </View>
+              )}
 
-              <ScrollView
-                style={styles.miniScroll}
-                showsVerticalScrollIndicator={false}
-              >
-                {filteredProducts.map((prod) => {
-                  const isSelected = prod.id === activeProduct?.id;
-                  return (
-                    <TouchableOpacity
-                      key={prod.id}
-                      style={[
-                        styles.miniThumbCard,
-                        isSelected && styles.miniThumbCardSelected,
-                      ]}
-                      onPress={() => setSelectedProductId(prod.id)}
-                      activeOpacity={0.8}
-                    >
-                      <TechnicalIllustration
-                        type={prod.illustrationType}
-                        imageUri={getProductImageUri(prod)}
-                        width={42}
-                        height={36}
-                        isThumbnail={true}
-                      />
-                      {isSelected && <View style={styles.miniSelectedDot} />}
-                    </TouchableOpacity>
-                  );
-                })}
-              </ScrollView>
-            </View>
-          ) : (
-            /* Full Expanded Sidebar (290px) */
-            <View style={styles.productsSidebar}>
-              <View style={styles.sidebarHeader}>
-                <Text style={styles.sidebarTitle}>
-                  PRODUCTOS DISPONIBLES ({filteredProducts.length})
-                </Text>
-                <TouchableOpacity
-                  style={styles.collapseBtn}
-                  onPress={() => setIsSidebarCollapsed(true)}
-                  activeOpacity={0.7}
-                  accessibilityLabel="Encoger panel de productos"
-                >
-                  <MaterialCommunityIcons
-                    name="chevron-double-left"
-                    size={18}
-                    color="#64748B"
-                  />
-                </TouchableOpacity>
+              {/* Imagen del producto */}
+              <View style={styles.sheetImageBanner}>
+                <TechnicalIllustration
+                  type={displayProduct.illustrationType}
+                  imageUri={
+                    isEditingSheet && sheetDraft?.customImageUri.trim()
+                      ? sheetDraft.customImageUri.trim()
+                      : getProductImageUri(displayProduct)
+                  }
+                  height={180}
+                  isThumbnail
+                />
               </View>
 
-              <ScrollView
-                style={styles.productsListScroll}
-                showsVerticalScrollIndicator={false}
-              >
-                {filteredProducts.map((prod) => {
-                  const isSelected = prod.id === activeProduct?.id;
-                  return (
-                    <TouchableOpacity
-                      key={prod.id}
-                      style={[
-                        styles.productItemCard,
-                        isSelected && styles.productItemCardActive,
-                      ]}
-                      onPress={() => setSelectedProductId(prod.id)}
-                      activeOpacity={0.7}
-                    >
-                      <View style={styles.itemThumb}>
-                        <TechnicalIllustration
-                          type={prod.illustrationType}
-                          imageUri={getProductImageUri(prod)}
-                          width={50}
-                          height={42}
-                          isThumbnail={true}
-                        />
-                      </View>
+              {isEditingSheet && sheetDraft && (
+                <Input
+                  label="URL de imagen (opcional)"
+                  value={sheetDraft.customImageUri}
+                  onChangeText={(v) => updateDraftField('customImageUri', v)}
+                  placeholder="https://..."
+                  autoCapitalize="none"
+                  containerStyle={styles.compactInput}
+                />
+              )}
 
-                      <View style={styles.itemDetails}>
-                        <Text style={styles.itemCode}>{prod.code}</Text>
-                        <Text
-                          style={[
-                            styles.itemName,
-                            isSelected && styles.itemNameActive,
-                          ]}
-                          numberOfLines={1}
-                        >
-                          {prod.name}
-                        </Text>
-                        <Text style={styles.itemSeries} numberOfLines={1}>
-                          {prod.aluminumSeries}
-                        </Text>
-                      </View>
-
-                      {isSelected && (
-                        <MaterialCommunityIcons
-                          name="chevron-right"
-                          size={20}
-                          color="#2563EB"
-                        />
-                      )}
-                    </TouchableOpacity>
-                  );
-                })}
-              </ScrollView>
-            </View>
-          )}
-
-          {/* Right Column: Selected Product Full Recipe & Sheet */}
-          {activeProduct && (
-            <View style={styles.recipeDetailCard}>
               {/* Product Sheet Header */}
               <View style={styles.sheetHeader}>
                 <View style={styles.sheetHeaderLeft}>
-                  <View style={styles.sheetCodeRow}>
-                    <Text style={styles.sheetCode}>{activeProduct.code}</Text>
-                    <View style={styles.sheetBadge}>
-                      <Text style={styles.sheetBadgeText}>
-                        {activeProduct.fabricationType}
-                      </Text>
+                  {isEditingSheet && sheetDraft ? (
+                    <View style={styles.editFieldsBlock}>
+                      <View style={styles.editRow2}>
+                        <View style={styles.editFieldHalf}>
+                          <Input
+                            label="Código"
+                            value={sheetDraft.code}
+                            onChangeText={(v) => updateDraftField('code', v)}
+                            containerStyle={styles.compactInput}
+                          />
+                        </View>
+                        <View style={styles.editFieldHalf}>
+                          <Input
+                            label="Tipo fabricación"
+                            value={sheetDraft.fabricationType}
+                            onChangeText={(v) => updateDraftField('fabricationType', v)}
+                            containerStyle={styles.compactInput}
+                          />
+                        </View>
+                      </View>
+                      <View style={styles.editRow4}>
+                        <Input label="Ancho mín." value={sheetDraft.minWidthCm} onChangeText={(v) => updateDraftField('minWidthCm', v)} keyboardType="numeric" unitSuffix="cm" containerStyle={styles.compactInput} />
+                        <Input label="Ancho máx." value={sheetDraft.maxWidthCm} onChangeText={(v) => updateDraftField('maxWidthCm', v)} keyboardType="numeric" unitSuffix="cm" containerStyle={styles.compactInput} />
+                        <Input label="Alto mín." value={sheetDraft.minHeightCm} onChangeText={(v) => updateDraftField('minHeightCm', v)} keyboardType="numeric" unitSuffix="cm" containerStyle={styles.compactInput} />
+                        <Input label="Alto máx." value={sheetDraft.maxHeightCm} onChangeText={(v) => updateDraftField('maxHeightCm', v)} keyboardType="numeric" unitSuffix="cm" containerStyle={styles.compactInput} />
+                      </View>
+                      <Input label="Nombre del producto" value={sheetDraft.name} onChangeText={(v) => updateDraftField('name', v)} containerStyle={styles.compactInput} />
+                      <Input label="Descripción corta" value={sheetDraft.shortDescription} onChangeText={(v) => updateDraftField('shortDescription', v)} containerStyle={styles.compactInput} />
+                      <Input label="Descripción completa" value={sheetDraft.fullDescription} onChangeText={(v) => updateDraftField('fullDescription', v)} multiline numberOfLines={4} containerStyle={styles.compactInput} inputContainerStyle={styles.textAreaInput} />
                     </View>
-                    <View style={styles.sheetBadgeGray}>
-                      <Text style={styles.sheetBadgeGrayText}>
-                        Rango: {activeProduct.minWidthCm}-
-                        {activeProduct.maxWidthCm}cm ×{' '}
-                        {activeProduct.minHeightCm}-
-                        {activeProduct.maxHeightCm}cm
-                      </Text>
-                    </View>
-                  </View>
-
-                  <Text style={styles.sheetTitle}>{activeProduct.name}</Text>
-                  <Text style={styles.sheetDesc}>
-                    {activeProduct.fullDescription}
-                  </Text>
+                  ) : (
+                    <>
+                      <View style={styles.sheetCodeRow}>
+                        <Text style={styles.sheetCode}>{displayProduct.code}</Text>
+                        <View style={styles.sheetBadge}>
+                          <Text style={styles.sheetBadgeText}>
+                            {displayProduct.fabricationType}
+                          </Text>
+                        </View>
+                        <View style={styles.sheetBadgeGray}>
+                          <Text style={styles.sheetBadgeGrayText}>
+                            Rango: {displayProduct.minWidthCm}-
+                            {displayProduct.maxWidthCm}cm ×{' '}
+                            {displayProduct.minHeightCm}-
+                            {displayProduct.maxHeightCm}cm
+                          </Text>
+                        </View>
+                      </View>
+                      <Text style={styles.sheetTitle}>{displayProduct.name}</Text>
+                      <Text style={styles.sheetDesc}>{displayProduct.fullDescription}</Text>
+                    </>
+                  )}
                 </View>
 
-                {/* Print Sheet Button */}
-                <TouchableOpacity
-                  style={styles.printSheetBtn}
-                  onPress={handlePrint}
-                  activeOpacity={0.8}
-                >
-                  <MaterialCommunityIcons
-                    name="printer"
-                    size={16}
-                    color="#FFFFFF"
-                    style={{ marginRight: 6 }}
-                  />
-                  <Text style={styles.printSheetBtnText}>Imprimir Ficha</Text>
-                </TouchableOpacity>
+                <View style={styles.sheetHeaderActions}>
+                  {isEditingSheet ? (
+                    <>
+                      <TouchableOpacity style={styles.cancelEditBtn} onPress={handleCancelEditSheet} activeOpacity={0.8}>
+                        <MaterialCommunityIcons name="close" size={16} color="#64748B" />
+                        <Text style={styles.cancelEditBtnText}>Cancelar</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.saveEditBtn} onPress={handleSaveEditSheet} activeOpacity={0.8}>
+                        <MaterialCommunityIcons name="content-save" size={16} color="#FFFFFF" />
+                        <Text style={styles.saveEditBtnText}>Guardar</Text>
+                      </TouchableOpacity>
+                    </>
+                  ) : (
+                    <>
+                      <TouchableOpacity style={styles.editSheetBtn} onPress={handleStartEditSheet} activeOpacity={0.8}>
+                        <MaterialCommunityIcons name="pencil-outline" size={16} color="#0F4C81" />
+                        <Text style={styles.editSheetBtnText}>Editar ficha</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity style={styles.printSheetBtn} onPress={handlePrint} activeOpacity={0.8}>
+                        <MaterialCommunityIcons name="printer" size={16} color="#FFFFFF" style={{ marginRight: 6 }} />
+                        <Text style={styles.printSheetBtnText}>Imprimir Ficha</Text>
+                      </TouchableOpacity>
+                    </>
+                  )}
+                </View>
               </View>
 
               {/* Technical Specifications Summary Row */}
-              <View style={styles.specChipsRow}>
-                <View style={styles.specChip}>
-                  <Text style={styles.specChipText}>
-                    {activeProduct.aluminumSeries}
-                  </Text>
+              {isEditingSheet && sheetDraft ? (
+                <View style={styles.editFieldsBlock}>
+                  <Input label="Serie de aluminio" value={sheetDraft.aluminumSeries} onChangeText={(v) => updateDraftField('aluminumSeries', v)} containerStyle={styles.compactInput} />
+                  <Input label="Tipo de vidrio" value={sheetDraft.glassType} onChangeText={(v) => updateDraftField('glassType', v)} containerStyle={styles.compactInput} />
+                  <Input label="Material principal" value={sheetDraft.mainMaterial} onChangeText={(v) => updateDraftField('mainMaterial', v)} containerStyle={styles.compactInput} />
+                  <Input label="% desperdicio corte" value={sheetDraft.wastePercentage} onChangeText={(v) => updateDraftField('wastePercentage', v)} keyboardType="numeric" unitSuffix="%" containerStyle={styles.compactInput} />
                 </View>
-
-                <View style={styles.specChip}>
-                  <Text style={styles.specChipText}>
-                    {activeProduct.glassType}
-                  </Text>
+              ) : (
+                <View style={styles.specChipsRow}>
+                  <View style={styles.specChip}>
+                    <Text style={styles.specChipText}>{displayProduct.aluminumSeries}</Text>
+                  </View>
+                  <View style={styles.specChip}>
+                    <Text style={styles.specChipText}>{displayProduct.glassType}</Text>
+                  </View>
                 </View>
-              </View>
+              )}
 
               {/* Interactive Simulation Dimensions Bar */}
               <View style={styles.simulatorBar}>
@@ -538,7 +645,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                       style={styles.miniStepBtn}
                       onPress={() =>
                         setSimWidth((w) =>
-                          Math.max(activeProduct.minWidthCm, w - 10)
+                          Math.max(displayProduct.minWidthCm, w - 10)
                         )
                       }
                     >
@@ -549,7 +656,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                       style={styles.miniStepBtn}
                       onPress={() =>
                         setSimWidth((w) =>
-                          Math.min(activeProduct.maxWidthCm, w + 10)
+                          Math.min(displayProduct.maxWidthCm, w + 10)
                         )
                       }
                     >
@@ -564,7 +671,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                       style={styles.miniStepBtn}
                       onPress={() =>
                         setSimHeight((h) =>
-                          Math.max(activeProduct.minHeightCm, h - 10)
+                          Math.max(displayProduct.minHeightCm, h - 10)
                         )
                       }
                     >
@@ -575,7 +682,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                       style={styles.miniStepBtn}
                       onPress={() =>
                         setSimHeight((h) =>
-                          Math.min(activeProduct.maxHeightCm, h + 10)
+                          Math.min(displayProduct.maxHeightCm, h + 10)
                         )
                       }
                     >
@@ -584,6 +691,35 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                   </View>
                 </View>
               </View>
+
+              {isEditingSheet && sheetDraft && (
+                <View style={styles.editRow2}>
+                  <Input
+                    label="Ancho por defecto"
+                    value={sheetDraft.defaultWidthCm}
+                    onChangeText={(v) => {
+                      updateDraftField('defaultWidthCm', v);
+                      const n = parseFloat(v.replace(',', '.'));
+                      if (Number.isFinite(n)) setSimWidth(n);
+                    }}
+                    keyboardType="numeric"
+                    unitSuffix="cm"
+                    containerStyle={styles.compactInput}
+                  />
+                  <Input
+                    label="Alto por defecto"
+                    value={sheetDraft.defaultHeightCm}
+                    onChangeText={(v) => {
+                      updateDraftField('defaultHeightCm', v);
+                      const n = parseFloat(v.replace(',', '.'));
+                      if (Number.isFinite(n)) setSimHeight(n);
+                    }}
+                    keyboardType="numeric"
+                    unitSuffix="cm"
+                    containerStyle={styles.compactInput}
+                  />
+                </View>
+              )}
 
               {/* Recipe Header with "+ AGREGAR MATERIAL" Button */}
               <View style={styles.recipeHeaderRow}>
@@ -697,6 +833,15 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                             >
                               {item.materialName}
                             </Text>
+                            {isEditingSheet && sheetDraft?.recipeItems[idx] && (
+                              <TextInput
+                                style={styles.cellInputSmall}
+                                value={sheetDraft.recipeItems[idx].notes}
+                                onChangeText={(v) => updateRecipeItemDraft(idx, 'notes', v)}
+                                placeholder="Notas adicionales"
+                                placeholderTextColor="#94A3B8"
+                              />
+                            )}
                           </View>
 
                           {/* Col 2: Formula */}
@@ -707,15 +852,28 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                               { justifyContent: 'center' },
                             ]}
                           >
-                            <View style={styles.formulaBadge}>
-                              <Text
-                                style={styles.formulaText}
-                                numberOfLines={1}
-                                ellipsizeMode="tail"
-                              >
-                                {item.formulaDescription}
-                              </Text>
-                            </View>
+                            {isEditingSheet && sheetDraft?.recipeItems[idx] ? (
+                              <TextInput
+                                style={styles.cellInputFormula}
+                                value={sheetDraft.recipeItems[idx].formulaDescription}
+                                onChangeText={(v) =>
+                                  updateRecipeItemDraft(idx, 'formulaDescription', v)
+                                }
+                                multiline
+                                placeholder="Fórmula de corte"
+                                placeholderTextColor="#92400E"
+                              />
+                            ) : (
+                              <View style={styles.formulaBadge}>
+                                <Text
+                                  style={styles.formulaText}
+                                  numberOfLines={2}
+                                  ellipsizeMode="tail"
+                                >
+                                  {item.formulaDescription}
+                                </Text>
+                              </View>
+                            )}
                           </View>
 
                           {/* Col 3: Quantity */}
@@ -726,13 +884,28 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                               { alignItems: 'flex-end' },
                             ]}
                           >
-                            <Text style={styles.qtyText}>
-                              {item.quantity.toFixed(
-                                item.unit === 'und' || item.unit === 'juego'
-                                  ? 0
-                                  : 2
-                              )}
-                            </Text>
+                            {isEditingSheet && sheetDraft?.recipeItems[idx] ? (
+                              <TextInput
+                                style={styles.cellInputQty}
+                                value={sheetDraft.recipeItems[idx].manualQuantity}
+                                onChangeText={(v) =>
+                                  updateRecipeItemDraft(idx, 'manualQuantity', v)
+                                }
+                                placeholder={item.quantity.toFixed(
+                                  item.unit === 'und' || item.unit === 'juego' ? 0 : 2
+                                )}
+                                placeholderTextColor="#94A3B8"
+                                keyboardType="decimal-pad"
+                              />
+                            ) : (
+                              <Text style={styles.qtyText}>
+                                {item.quantity.toFixed(
+                                  item.unit === 'und' || item.unit === 'juego'
+                                    ? 0
+                                    : 2
+                                )}
+                              </Text>
+                            )}
                           </View>
 
                           {/* Col 4: Unit */}
@@ -758,9 +931,22 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                               { alignItems: 'flex-end' },
                             ]}
                           >
-                            <Text style={styles.unitPriceText}>
-                              ${item.unitPrice.toFixed(2)}
-                            </Text>
+                            {isEditingSheet && sheetDraft?.recipeItems[idx] ? (
+                              <TextInput
+                                style={styles.cellInputPrice}
+                                value={sheetDraft.recipeItems[idx].manualUnitPrice}
+                                onChangeText={(v) =>
+                                  updateRecipeItemDraft(idx, 'manualUnitPrice', v)
+                                }
+                                placeholder={item.unitPrice.toFixed(2)}
+                                placeholderTextColor="#94A3B8"
+                                keyboardType="decimal-pad"
+                              />
+                            ) : (
+                              <Text style={styles.unitPriceText}>
+                                ${item.unitPrice.toFixed(2)}
+                              </Text>
+                            )}
                           </View>
 
                           {/* Col 6: Subtotal */}
@@ -822,8 +1008,9 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                 </ScrollView>
               </View>
             </View>
-          )}
-        </View>
+            </View>
+          )
+        )}
       </ScrollView>
 
       {/* Modal 1: Create New Product */}
@@ -943,150 +1130,64 @@ const styles = StyleSheet.create({
     color: '#997316',
     fontWeight: '800',
   },
-  workspaceLayout: {
-    flexDirection: 'row',
-    gap: 16,
-    alignItems: 'flex-start',
-  },
-  miniRail: {
-    width: 64,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    alignItems: 'center',
-    paddingVertical: 10,
-    ...shadows.sm,
-  },
-  miniToggleBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 10,
-    backgroundColor: '#F0F6FD',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#BBD8F5',
-  },
-  miniDivider: {
-    width: 36,
-    height: 1.5,
-    backgroundColor: '#E2E8F0',
-    marginVertical: 10,
-  },
-  miniScroll: {
-    maxHeight: 600,
-    width: '100%',
-  },
-  miniThumbCard: {
-    width: 48,
-    height: 44,
-    alignSelf: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 8,
-    position: 'relative',
-  },
-  miniThumbCardSelected: {
-    borderColor: '#0F4C81',
-    backgroundColor: '#FDF8ED',
-    borderWidth: 2,
-  },
-  miniSelectedDot: {
-    position: 'absolute',
-    bottom: 2,
-    right: 2,
-    width: 7,
-    height: 7,
-    borderRadius: 4,
-    backgroundColor: '#D4AF37',
-    borderWidth: 1,
-    borderColor: '#FFFFFF',
-  },
-  productsSidebar: {
-    width: 290,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    overflow: 'hidden',
-    ...shadows.sm,
-  },
-  sidebarHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#F8FAFC',
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
-  },
-  sidebarTitle: {
-    fontSize: 10,
+  gridSectionTitle: {
+    fontSize: 13,
     fontWeight: '800',
     color: '#64748B',
-    letterSpacing: 0.8,
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+    marginBottom: 12,
   },
-  collapseBtn: {
-    width: 28,
-    height: 28,
-    borderRadius: 6,
-    backgroundColor: '#F1F5F9',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  productsListScroll: {
-    maxHeight: 640,
-  },
-  productItemCard: {
+  productGrid: {
     flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
-    gap: 10,
+    flexWrap: 'wrap',
   },
-  productItemCardActive: {
-    backgroundColor: '#FDF8ED',
-    borderLeftWidth: 4,
-    borderLeftColor: '#0F4C81',
+  gridItem: {
+    padding: 6,
   },
-  itemThumb: {
-    width: 48,
-    height: 40,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 6,
+  emptyGrid: {
     alignItems: 'center',
     justifyContent: 'center',
+    paddingVertical: 48,
+    gap: 8,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
     borderWidth: 1,
     borderColor: '#E2E8F0',
-    overflow: 'hidden',
   },
-  itemDetails: {
-    flex: 1,
-  },
-  itemCode: {
-    fontSize: 10,
-    fontWeight: '800',
-    color: '#0F4C81',
-  },
-  itemName: {
-    fontSize: 12,
+  emptyGridTitle: {
+    fontSize: 16,
     fontWeight: '700',
     color: '#0A2540',
   },
-  itemNameActive: {
-    color: '#0A2540',
-    fontWeight: '800',
-  },
-  itemSeries: {
-    fontSize: 10,
+  emptyGridDesc: {
+    fontSize: 13,
     color: '#64748B',
+    textAlign: 'center',
+    maxWidth: 280,
+  },
+  detailWrapper: {
+    gap: 12,
+  },
+  backRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    alignSelf: 'flex-start',
+    paddingVertical: 4,
+  },
+  backRowText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#0F4C81',
+  },
+  sheetImageBanner: {
+    height: 180,
+    borderRadius: 12,
+    overflow: 'hidden',
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
   recipeDetailCard: {
     flex: 1,
@@ -1170,6 +1271,154 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: '#FFFFFF',
+  },
+  sheetHeaderActions: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
+  },
+  editSheetBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#F0F6FD',
+    borderWidth: 1,
+    borderColor: '#BBD8F5',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    borderRadius: 8,
+  },
+  editSheetBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#0F4C81',
+  },
+  saveEditBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#15803D',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    borderRadius: 8,
+  },
+  saveEditBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+  cancelEditBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    borderRadius: 8,
+  },
+  cancelEditBtnText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#64748B',
+  },
+  recipeDetailCardEditing: {
+    borderColor: '#D4AF37',
+    backgroundColor: '#FFFDF8',
+  },
+  editingBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: '#FEF3C7',
+    borderWidth: 1,
+    borderColor: '#FDE68A',
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  editingBannerText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#92400E',
+  },
+  editFieldsBlock: {
+    gap: 4,
+  },
+  editRow2: {
+    flexDirection: 'row',
+    gap: 10,
+    flexWrap: 'wrap',
+  },
+  editRow4: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  editFieldHalf: {
+    flex: 1,
+    minWidth: 140,
+  },
+  compactInput: {
+    marginBottom: 8,
+  },
+  textAreaInput: {
+    minHeight: 88,
+    alignItems: 'flex-start',
+  },
+  cellInputSmall: {
+    fontSize: 11,
+    color: '#0A2540',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    marginTop: 4,
+    backgroundColor: '#FFFFFF',
+    minWidth: 120,
+  },
+  cellInputFormula: {
+    fontSize: 11,
+    color: '#92400E',
+    borderWidth: 1,
+    borderColor: '#FDE68A',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 6,
+    backgroundColor: '#FFFBEB',
+    minWidth: 180,
+    minHeight: 36,
+    textAlignVertical: 'top',
+  },
+  cellInputQty: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#0A2540',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#FFFFFF',
+    minWidth: 64,
+    textAlign: 'right',
+  },
+  cellInputPrice: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#0A2540',
+    borderWidth: 1,
+    borderColor: '#CBD5E1',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: '#FFFFFF',
+    minWidth: 72,
+    textAlign: 'right',
   },
   specChipsRow: {
     flexDirection: 'row',

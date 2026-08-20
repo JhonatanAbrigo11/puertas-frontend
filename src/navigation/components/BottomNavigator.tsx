@@ -169,7 +169,8 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
       }),
     ]);
 
-    Animated.parallel([moveAnimation, dipAnimation]).start();
+    moveAnimation.start();
+    dipAnimation.start();
   }, [activeSlotIndex]);
 
   // Center "+" Button press handler: Tactile dip animation & open Create Product modal
@@ -422,40 +423,49 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
         </View>
 
         {/* Floating Active Tab Burbujita with Dynamic Glide & Dip */}
+        {/* Outer: horizontal glide (JS driver — syncs SVG notch listener) */}
         <Animated.View
           style={[
             styles.activeBubbleWrapper,
             {
               width: BUBBLE_SIZE,
               height: BUBBLE_SIZE,
-              transform: [
-                { translateX: activeBubbleTranslateX },
-                { translateY: activeBubbleTranslateY },
-                { scale: activeBubbleScale },
-              ],
+              transform: [{ translateX: activeBubbleTranslateX }],
             },
           ]}
           pointerEvents="none"
         >
-          <View style={styles.activeBubble}>
-            <MaterialCommunityIcons
-              name={activeTabItem.iconActive}
-              size={24}
-              color="#FFFFFF"
-            />
+          {/* Inner: vertical dip & bounce (native driver) */}
+          <Animated.View
+            style={{
+              width: BUBBLE_SIZE,
+              height: BUBBLE_SIZE,
+              transform: [
+                { translateY: activeBubbleTranslateY },
+                { scale: activeBubbleScale },
+              ],
+            }}
+          >
+            <View style={styles.activeBubble}>
+              <MaterialCommunityIcons
+                name={activeTabItem.iconActive}
+                size={24}
+                color="#FFFFFF"
+              />
 
-            {/* Active Badge if applicable (e.g. Carrito count) */}
-            {activeTabItem.badgeCount !== undefined &&
-              activeTabItem.badgeCount > 0 && (
-                <View style={styles.activeBadge}>
-                  <Text style={styles.activeBadgeText}>
-                    {activeTabItem.badgeCount > 99
-                      ? '99+'
-                      : activeTabItem.badgeCount}
-                  </Text>
-                </View>
-              )}
-          </View>
+              {/* Active Badge if applicable (e.g. Carrito count) */}
+              {activeTabItem.badgeCount !== undefined &&
+                activeTabItem.badgeCount > 0 && (
+                  <View style={styles.activeBadge}>
+                    <Text style={styles.activeBadgeText}>
+                      {activeTabItem.badgeCount > 99
+                        ? '99+'
+                        : activeTabItem.badgeCount}
+                    </Text>
+                  </View>
+                )}
+            </View>
+          </Animated.View>
         </Animated.View>
 
         {/* Tab Row: 3 Tabs Left | Center Spacer | 2 Tabs Right */}

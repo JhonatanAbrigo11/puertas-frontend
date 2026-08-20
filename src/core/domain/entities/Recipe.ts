@@ -11,6 +11,10 @@ export interface RecipeItem {
   formulaDescription: string;
   calculate: (params: RecipeItemFormulaParams) => number;
   notes?: string;
+  /** Si se define, reemplaza el consumo calculado por la fórmula */
+  manualQuantityOverride?: number;
+  /** Si se define, reemplaza el precio unitario del material */
+  manualUnitPriceOverride?: number;
 }
 
 export interface Recipe {
