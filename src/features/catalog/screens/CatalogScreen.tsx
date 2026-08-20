@@ -167,11 +167,6 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
           accessibilityRole="tab"
           accessibilityState={{ selected: activeSubTab === 'products' }}
         >
-          <MaterialCommunityIcons
-            name="format-list-bulleted"
-            size={16}
-            color={activeSubTab === 'products' ? '#FFFFFF' : '#475569'}
-          />
           <Text
             style={[
               styles.segmentButtonText,
@@ -193,11 +188,6 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
           accessibilityRole="tab"
           accessibilityState={{ selected: activeSubTab === 'quotes' }}
         >
-          <MaterialCommunityIcons
-            name="cart-outline"
-            size={16}
-            color={activeSubTab === 'quotes' ? '#FFFFFF' : '#475569'}
-          />
           <Text
             style={[
               styles.segmentButtonText,
@@ -206,29 +196,17 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
           >
             Cotización
           </Text>
-          {items.length > 0 && (
-            <View
-              style={[
-                styles.tabBadge,
-                activeSubTab === 'quotes'
-                  ? styles.tabBadgeActive
-                  : styles.tabBadgeInactive,
-              ]}
-            >
-              <Text
-                style={[
-                  styles.tabBadgeText,
-                  activeSubTab === 'quotes'
-                    ? styles.tabBadgeTextActive
-                    : styles.tabBadgeTextInactive,
-                ]}
-              >
-                {items.length > 99 ? '99+' : items.length}
-              </Text>
-            </View>
-          )}
         </TouchableOpacity>
       </View>
+
+      {/* Right Sun / Theme Toggle Button */}
+      <TouchableOpacity style={styles.sunToggleBtn} activeOpacity={0.8}>
+        <MaterialCommunityIcons
+          name="white-balance-sunny"
+          size={18}
+          color="#111827"
+        />
+      </TouchableOpacity>
     </View>
   );
 
@@ -882,7 +860,11 @@ const styles = StyleSheet.create({
     width: 280,
   },
   sidebarWrapperCollapsed: {
-    width: 64,
+    width: 72,
+    height: '100%',
+    backgroundColor: '#FFFFFF',
+    borderRightWidth: 1,
+    borderRightColor: '#E5E7EB',
   },
   mainContentWrapper: {
     flex: 1,
@@ -893,13 +875,78 @@ const styles = StyleSheet.create({
   topTabBar: {
     backgroundColor: '#FFFFFF',
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: '#E5E7EB',
     paddingHorizontal: 20,
     paddingVertical: 12,
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-between',
     zIndex: 10,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.03,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 1,
+      },
+      web: {
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.02)',
+      } as any,
+    }),
+  },
+  segmentedContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F3F4F6',
+    borderRadius: 14,
+    padding: 3,
+    gap: 4,
+  },
+  segmentButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 18,
+    paddingVertical: 8,
+    borderRadius: 11,
+  },
+  segmentButtonActive: {
+    backgroundColor: '#1E3A2B', // Forest Green
+    ...Platform.select({
+      ios: {
+        shadowColor: '#1E3A2B',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 2,
+      },
+      web: {
+        boxShadow: '0 2px 6px rgba(30, 58, 43, 0.2)',
+      } as any,
+    }),
+  },
+  segmentButtonText: {
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#4B5563',
+  },
+  segmentButtonTextActive: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+  },
+  sunToggleBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -911,53 +958,9 @@ const styles = StyleSheet.create({
         elevation: 1,
       },
       web: {
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.03)',
+        boxShadow: '0 1px 2px rgba(0, 0, 0, 0.04)',
       } as any,
     }),
-  },
-  segmentedContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F1F5F9',
-    borderRadius: 12,
-    padding: 4,
-    borderWidth: 1,
-    borderColor: '#E2E8F0',
-    gap: 6,
-  },
-  segmentButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: 18,
-    paddingVertical: 9,
-    borderRadius: 9,
-    gap: 8,
-  },
-  segmentButtonActive: {
-    backgroundColor: '#1D4ED8',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#2563EB',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 5,
-      },
-      android: {
-        elevation: 3,
-      },
-      web: {
-        boxShadow: '0 2px 8px rgba(37, 99, 235, 0.28)',
-      } as any,
-    }),
-  },
-  segmentButtonText: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: '#64748B',
-  },
-  segmentButtonTextActive: {
-    color: '#FFFFFF',
-    fontWeight: '800',
   },
   tabBadge: {
     minWidth: 20,

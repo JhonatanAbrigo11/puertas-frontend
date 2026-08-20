@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import { View, StyleSheet, Text, Image, Platform } from 'react-native';
 import Svg, {
   Rect,
   Line,
@@ -66,18 +66,33 @@ export const TechnicalIllustration: React.FC<TechnicalIllustrationProps> = ({
 
         {/* Center Dimension Labels */}
         {showDimensions && widthDimension && heightDimension && (
-          <>
-            <View style={styles.bottomDimensionTag}>
-              <Text style={styles.dimensionTagText}>
-                Ancho: {widthDimension} cm
-              </Text>
+          <View style={styles.dimensionOverlay} pointerEvents="none">
+            {/* Width guideline (bottom) */}
+            <View style={styles.widthGuidelineRow}>
+              <View style={styles.guidelineDot} />
+              <View style={styles.guidelineLine} />
+              <View style={styles.dimensionPill}>
+                <Text style={styles.dimensionPillText}>
+                  Ancho: {widthDimension} cm
+                </Text>
+              </View>
+              <View style={styles.guidelineLine} />
+              <View style={styles.guidelineDot} />
             </View>
-            <View style={styles.rightDimensionTag}>
-              <Text style={styles.dimensionTagText}>
-                Alto: {heightDimension} cm
-              </Text>
+
+            {/* Height guideline (right) */}
+            <View style={styles.heightGuidelineCol}>
+              <View style={styles.guidelineDot} />
+              <View style={styles.guidelineLineVertical} />
+              <View style={styles.dimensionPill}>
+                <Text style={styles.dimensionPillText}>
+                  Alto: {heightDimension} cm
+                </Text>
+              </View>
+              <View style={styles.guidelineLineVertical} />
+              <View style={styles.guidelineDot} />
             </View>
-          </>
+          </View>
         )}
       </View>
     );
@@ -1791,6 +1806,92 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     overflow: 'hidden',
     position: 'relative',
+  },
+  dimensionOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+  },
+  widthGuidelineRow: {
+    position: 'absolute',
+    bottom: 12,
+    left: 20,
+    right: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  heightGuidelineCol: {
+    position: 'absolute',
+    right: 14,
+    top: 20,
+    bottom: 20,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  guidelineDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#FFFFFF',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 2,
+      },
+      web: {
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.4)',
+      } as any,
+    }),
+  },
+  guidelineLine: {
+    flex: 1,
+    height: 1.5,
+    borderStyle: 'dashed',
+    borderWidth: 0.8,
+    borderColor: 'rgba(255, 255, 255, 0.9)',
+  },
+  guidelineLineVertical: {
+    flex: 1,
+    width: 1.5,
+    borderStyle: 'dashed',
+    borderWidth: 0.8,
+    borderColor: 'rgba(255, 255, 255, 0.9)',
+  },
+  dimensionPill: {
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 10,
+    paddingVertical: 3,
+    borderRadius: 6,
+    marginHorizontal: 6,
+    marginVertical: 6,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 3,
+      },
+      web: {
+        boxShadow: '0 2px 5px rgba(0, 0, 0, 0.25)',
+      } as any,
+    }),
+  },
+  dimensionPillText: {
+    color: '#111827',
+    fontSize: 11,
+    fontWeight: '700',
   },
   bottomDimensionTag: {
     position: 'absolute',

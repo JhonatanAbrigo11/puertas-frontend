@@ -8,6 +8,7 @@ import {
   TextInput,
   Image,
   Modal,
+  Platform,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Product } from '../../../core/domain/entities/Product';
@@ -107,26 +108,16 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
         showsVerticalScrollIndicator={true}
       >
         <View style={styles.unifiedCard}>
-          {/* 1. TOP HEADER: Product Title & Benefits Button (Centered) */}
+          {/* 1. TOP HEADER: Product Title & Subtitle */}
           <View style={styles.topHeaderBlock}>
-            <View style={styles.titleAndBenefitRow}>
-              <Text style={styles.productTitle}>{product.name}</Text>
-              <TouchableOpacity
-                style={styles.benefitsIconButton}
-                onPress={() => setIsBenefitsModalOpen(true)}
-                activeOpacity={0.8}
-                accessibilityLabel="Más beneficios"
-              >
-                <MaterialCommunityIcons
-                  name="lightbulb-on-outline"
-                  size={20}
-                  color="#F59E0B"
-                />
-              </TouchableOpacity>
-            </View>
+            <Text style={styles.productTitle}>{product.name}</Text>
+            <Text style={styles.productSubtitle}>
+              {product.shortDescription ||
+                'Sistema de ventanas corredizas de alta calidad, diseñado para brindar elegancia y funcionalidad.'}
+            </Text>
           </View>
 
-          {/* 2. CENTER IMAGE CAROUSEL WITH WARM CREAM BACKGROUND */}
+          {/* 2. CENTER IMAGE CAROUSEL WITH CLEAN WHITE DESIGN */}
           <View style={styles.carouselSection}>
             <View style={styles.carouselRow}>
               {/* Left Side Reference Card (Tablet / Desktop) */}
@@ -146,7 +137,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                     <MaterialCommunityIcons
                       name="chevron-left"
                       size={20}
-                      color="#2563EB"
+                      color="#111827"
                     />
                   </View>
                 </TouchableOpacity>
@@ -174,7 +165,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                       <MaterialCommunityIcons
                         name="chevron-left"
                         size={20}
-                        color="#2563EB"
+                        color="#111827"
                       />
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -185,7 +176,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                       <MaterialCommunityIcons
                         name="chevron-right"
                         size={20}
-                        color="#2563EB"
+                        color="#111827"
                       />
                     </TouchableOpacity>
                   </>
@@ -209,7 +200,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                     <MaterialCommunityIcons
                       name="chevron-right"
                       size={20}
-                      color="#2563EB"
+                      color="#111827"
                     />
                   </View>
                 </TouchableOpacity>
@@ -217,8 +208,12 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             </View>
           </View>
 
-          {/* 3. INPUTS DE MEDIDAS (Diseño Táctil y Limpio) */}
+          {/* 3. INPUTS DE MEDIDAS (Section Title: Dimensiones) */}
           <View style={styles.configuratorSection}>
+            <View style={styles.dimensionsSectionHeader}>
+              <Text style={styles.dimensionsSectionTitle}>Dimensiones</Text>
+            </View>
+
             <View
               style={[
                 styles.steppersContainer,
@@ -251,8 +246,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="minus"
-                      size={18}
-                      color="#1D4ED8"
+                      size={16}
+                      color="#374151"
                     />
                   </TouchableOpacity>
 
@@ -284,8 +279,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="plus"
-                      size={18}
-                      color="#1D4ED8"
+                      size={16}
+                      color="#374151"
                     />
                   </TouchableOpacity>
                 </View>
@@ -318,8 +313,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="minus"
-                      size={18}
-                      color="#1D4ED8"
+                      size={16}
+                      color="#374151"
                     />
                   </TouchableOpacity>
 
@@ -351,8 +346,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="plus"
-                      size={18}
-                      color="#1D4ED8"
+                      size={16}
+                      color="#374151"
                     />
                   </TouchableOpacity>
                 </View>
@@ -378,8 +373,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="minus"
-                      size={18}
-                      color={quantity <= 1 ? '#CBD5E1' : '#1D4ED8'}
+                      size={16}
+                      color={quantity <= 1 ? '#D1D5DB' : '#374151'}
                     />
                   </TouchableOpacity>
 
@@ -405,8 +400,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="plus"
-                      size={18}
-                      color="#1D4ED8"
+                      size={16}
+                      color="#374151"
                     />
                   </TouchableOpacity>
                 </View>
@@ -420,7 +415,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
           {/* 4. TOTAL ESTIMADO Y BOTÓN AGREGAR */}
           <View style={styles.priceAndActionCard}>
             <View style={styles.priceBlock}>
-              <Text style={styles.priceLabel}>TOTAL ESTIMADO</Text>
+              <Text style={styles.priceLabel}>Total estimado</Text>
               <View style={styles.priceValueGroup}>
                 <Text style={styles.priceValue}>${subtotalDemo.toFixed(2)}</Text>
                 {quantity > 1 && (
@@ -465,9 +460,9 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             >
               <View style={styles.accordionLeft}>
                 <MaterialCommunityIcons
-                  name="hammer-wrench"
+                  name="view-grid-plus-outline"
                   size={18}
-                  color="#4F46E5"
+                  color="#111827"
                 />
                 <Text style={styles.accordionTitle}>Detalle de materiales</Text>
                 <View style={styles.materialCountBadge}>
@@ -478,9 +473,9 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
               </View>
 
               <MaterialCommunityIcons
-                name={isMaterialsOpen ? 'chevron-up' : 'chevron-down'}
+                name={isMaterialsOpen ? 'chevron-up' : 'chevron-right'}
                 size={20}
-                color="#6366F1"
+                color="#6B7280"
               />
             </TouchableOpacity>
 
@@ -592,10 +587,10 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#F8F9FA',
   },
   contentContainer: {
-    padding: 24,
+    padding: 20,
     paddingBottom: 80,
     alignItems: 'center',
   },
@@ -603,12 +598,24 @@ const styles = StyleSheet.create({
     maxWidth: 860,
     width: '100%',
     backgroundColor: '#FFFFFF',
-    borderRadius: 20,
+    borderRadius: 24,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
-    padding: 26,
-    overflow: 'hidden',
-    ...shadows.sm,
+    borderColor: '#EDEDED',
+    padding: 28,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.04,
+        shadowRadius: 6,
+      },
+      android: {
+        elevation: 2,
+      },
+      web: {
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.03)',
+      } as any,
+    }),
   },
   topHeaderBlock: {
     width: '100%',
@@ -616,39 +623,25 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  titleAndBenefitRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 12,
-  },
   productTitle: {
     fontSize: 26,
     fontWeight: '800',
-    color: '#0F172A',
+    color: '#111827',
     letterSpacing: -0.4,
     textAlign: 'center',
   },
-  benefitsIconButton: {
-    width: 36,
-    height: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FEF3C7',
-    borderWidth: 1,
-    borderColor: '#FDE68A',
-    borderRadius: 18,
+  productSubtitle: {
+    fontSize: 13,
+    color: '#6B7280',
+    textAlign: 'center',
+    marginTop: 6,
+    lineHeight: 19,
+    maxWidth: 460,
   },
   carouselSection: {
-    marginHorizontal: -26,
-    marginVertical: 18,
+    width: '100%',
+    marginVertical: 14,
     alignItems: 'center',
-    backgroundColor: '#FAF6EF',
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: '#EFE8DE',
-    paddingVertical: 20,
-    paddingHorizontal: 26,
   },
   carouselRow: {
     width: '100%',
@@ -658,19 +651,19 @@ const styles = StyleSheet.create({
     gap: 14,
   },
   sidePreviewCard: {
-    width: 105,
+    width: 95,
     height: 270,
-    borderRadius: 14,
+    borderRadius: 16,
     overflow: 'hidden',
-    borderWidth: 1.5,
-    borderColor: '#E2DACD',
-    backgroundColor: '#F0EBE1',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    backgroundColor: '#F3F4F6',
     position: 'relative',
   },
   sidePreviewImage: {
     width: '100%',
     height: '100%',
-    opacity: 0.6,
+    opacity: 0.65,
   },
   sidePreviewDimOverlay: {
     position: 'absolute',
@@ -678,48 +671,67 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(15, 23, 42, 0.12)',
+    backgroundColor: 'rgba(15, 23, 42, 0.1)',
   },
   sideNavBubbleLeft: {
     position: 'absolute',
     top: '50%',
     right: 8,
-    marginTop: -18,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    marginTop: -19,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E2DACD',
     alignItems: 'center',
     justifyContent: 'center',
-    ...shadows.md,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+      web: {
+        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
+      } as any,
+    }),
   },
   sideNavBubbleRight: {
     position: 'absolute',
     top: '50%',
     left: 8,
-    marginTop: -18,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
+    marginTop: -19,
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E2DACD',
     alignItems: 'center',
     justifyContent: 'center',
-    ...shadows.md,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+      web: {
+        boxShadow: '0 2px 6px rgba(0, 0, 0, 0.15)',
+      } as any,
+    }),
   },
   heroPreviewContainer: {
     flex: 1,
-    maxWidth: 640,
+    maxWidth: 620,
     backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 10,
+    borderRadius: 18,
+    overflow: 'hidden',
     position: 'relative',
-    borderWidth: 1.5,
-    borderColor: '#EAE3D8',
-    ...shadows.sm,
   },
   mobileChevronLeft: {
     position: 'absolute',
@@ -729,9 +741,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(255, 255, 255, 0.92)',
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     alignItems: 'center',
     justifyContent: 'center',
     ...shadows.sm,
@@ -744,16 +754,23 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 18,
-    backgroundColor: 'rgba(255, 255, 255, 0.92)',
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
     alignItems: 'center',
     justifyContent: 'center',
     ...shadows.sm,
   },
   configuratorSection: {
     width: '100%',
-    marginTop: 22,
+    marginTop: 18,
+  },
+  dimensionsSectionHeader: {
+    width: '100%',
+    marginBottom: 10,
+  },
+  dimensionsSectionTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: '#111827',
   },
   steppersContainer: {
     width: '100%',
@@ -770,11 +787,10 @@ const styles = StyleSheet.create({
     flex: 1,
     minWidth: 160,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
     borderRadius: 14,
     padding: 14,
-    ...shadows.sm,
   },
   stepperHeader: {
     flexDirection: 'row',
@@ -785,33 +801,33 @@ const styles = StyleSheet.create({
   stepperLabel: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#0F172A',
+    color: '#111827',
   },
   rangeHintText: {
     fontSize: 11,
-    color: '#94A3B8',
-    fontWeight: '600',
+    color: '#9CA3AF',
+    fontWeight: '500',
   },
   stepperInputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
     borderRadius: 10,
     overflow: 'hidden',
-    height: 46,
+    height: 44,
   },
   stepBtn: {
-    width: 44,
+    width: 40,
     height: '100%',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FAFAFA',
     alignItems: 'center',
     justifyContent: 'center',
     borderRightWidth: 1,
-    borderRightColor: '#E2E8F0',
+    borderRightColor: '#E5E7EB',
     borderLeftWidth: 1,
-    borderLeftColor: '#E2E8F0',
+    borderLeftColor: '#E5E7EB',
   },
   stepValueWrapper: {
     flex: 1,
@@ -820,21 +836,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: '#FFFFFF',
     paddingHorizontal: 8,
-    gap: 4,
+    gap: 3,
   },
   stepTextInput: {
     textAlign: 'center',
-    fontSize: 17,
+    fontSize: 16,
     fontWeight: '800',
-    color: '#0F172A',
+    color: '#111827',
     paddingVertical: 0,
     backgroundColor: 'transparent',
     minWidth: 36,
   },
   stepUnitText: {
     fontSize: 13,
-    fontWeight: '700',
-    color: '#64748B',
+    fontWeight: '600',
+    color: '#4B5563',
   },
   errorHintText: {
     fontSize: 10,
@@ -850,68 +866,78 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 16,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
     borderRadius: 16,
-    paddingHorizontal: 24,
-    paddingVertical: 20,
-    marginTop: 20,
-    ...shadows.sm,
+    paddingHorizontal: 22,
+    paddingVertical: 18,
+    marginTop: 18,
   },
   priceBlock: {
     flexDirection: 'column',
   },
   priceLabel: {
-    fontSize: 11,
-    fontWeight: '800',
-    color: '#64748B',
-    letterSpacing: 1.2,
-    textTransform: 'uppercase',
+    fontSize: 13,
+    fontWeight: '600',
+    color: '#4B5563',
   },
   priceValueGroup: {
     flexDirection: 'row',
     alignItems: 'baseline',
     gap: 8,
-    marginTop: 4,
+    marginTop: 3,
   },
   priceValue: {
     fontSize: 30,
     fontWeight: '900',
-    color: '#0F172A',
+    color: '#111827',
   },
   pricePerUnit: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#6B7280',
   },
   primaryAddBtn: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#2563EB',
-    paddingVertical: 15,
-    paddingHorizontal: 36,
+    backgroundColor: '#1E3A2B', // Forest Green
+    paddingVertical: 14,
+    paddingHorizontal: 30,
     borderRadius: 12,
-    ...shadows.sm,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#1E3A2B',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+      web: {
+        boxShadow: '0 2px 6px rgba(30, 58, 43, 0.25)',
+      } as any,
+    }),
   },
   btnSuccess: {
     backgroundColor: '#10B981',
   },
   primaryAddBtnText: {
     fontSize: 15,
-    fontWeight: '800',
+    fontWeight: '700',
     color: '#FFFFFF',
-    letterSpacing: 0.3,
+    letterSpacing: 0.2,
   },
   btnDisabled: {
     opacity: 0.5,
   },
   accordionContainer: {
     width: '100%',
-    marginTop: 18,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    marginTop: 16,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
     backgroundColor: '#FFFFFF',
     overflow: 'hidden',
   },
@@ -921,12 +947,11 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingHorizontal: 18,
     paddingVertical: 14,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
   },
   accordionHeaderOpen: {
-    borderBottomWidth: 1.5,
-    borderBottomColor: '#E2E8F0',
-    backgroundColor: '#F1F5F9',
+    borderBottomWidth: 1,
+    borderBottomColor: '#E5E7EB',
   },
   accordionLeft: {
     flexDirection: 'row',
@@ -936,18 +961,18 @@ const styles = StyleSheet.create({
   accordionTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#0F172A',
+    color: '#111827',
   },
   materialCountBadge: {
-    backgroundColor: '#EEF2FF',
+    backgroundColor: '#F3F4F6',
     paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 10,
+    paddingVertical: 3,
+    borderRadius: 8,
   },
   materialCountText: {
     fontSize: 11,
-    fontWeight: '700',
-    color: '#4F46E5',
+    fontWeight: '600',
+    color: '#4B5563',
   },
   accordionBody: {
     padding: 16,
