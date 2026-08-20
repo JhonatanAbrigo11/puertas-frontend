@@ -59,7 +59,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   if (isCollapsed) {
     return (
       <View style={styles.miniRail}>
-        {/* Expand Toggle Button */}
+        {/* Top Collapse/Expand Toggle Button */}
         {onToggleCollapse && (
           <TouchableOpacity
             style={styles.miniToggleBtn}
@@ -68,9 +68,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             accessibilityLabel="Expandir Catálogo"
           >
             <MaterialCommunityIcons
-              name="chevron-double-right"
+              name="chevron-double-left"
               size={18}
-              color="#FFFFFF"
+              color="#0A192F"
             />
           </TouchableOpacity>
         )}
@@ -97,7 +97,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 <TechnicalIllustration
                   type={item.illustrationType}
                   imageUri={getProductImageUri(item)}
-                  height={38}
+                  height={44}
                   isThumbnail={true}
                 />
                 {isSelected && (
@@ -107,6 +107,22 @@ export const Sidebar: React.FC<SidebarProps> = ({
             );
           }}
         />
+
+        {/* Bottom 'Ver Catálogo' Trigger */}
+        {onToggleCollapse && (
+          <TouchableOpacity
+            style={styles.viewCatalogMiniBtn}
+            onPress={onToggleCollapse}
+            activeOpacity={0.7}
+          >
+            <MaterialCommunityIcons
+              name="file-document-outline"
+              size={18}
+              color="#0A192F"
+            />
+            <Text style={styles.viewCatalogMiniText}>Ver{'\n'}catálogo</Text>
+          </TouchableOpacity>
+        )}
       </View>
     );
   }
@@ -132,7 +148,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <MaterialCommunityIcons
               name="chevron-double-left"
               size={18}
-              color="#FFFFFF"
+              color="#0A192F"
             />
           </TouchableOpacity>
         )}
@@ -239,9 +255,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 36,
     borderRadius: 8,
-    backgroundColor: '#FE4648', // Forest Green
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: '#E5E7EB',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -253,6 +269,7 @@ const styles = StyleSheet.create({
     borderRightColor: '#E5E7EB',
     paddingVertical: 14,
     alignItems: 'center',
+    justifyContent: 'space-between',
     ...Platform.select({
       ios: {
         shadowColor: '#000',
@@ -269,46 +286,46 @@ const styles = StyleSheet.create({
     }),
   },
   miniToggleBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 10,
-    backgroundColor: '#FE4648', // Forest Green
+    width: 44,
+    height: 44,
+    borderRadius: 12,
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: '#E5E7EB',
     alignItems: 'center',
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#FE4648',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
-        shadowRadius: 3,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
       },
       android: {
-        elevation: 2,
+        elevation: 1,
       },
       web: {
-        boxShadow: '0 2px 5px rgba(30, 58, 43, 0.25)',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
       } as any,
     }),
   },
   miniDivider: {
     width: 32,
-    height: 1.5,
+    height: 1,
     backgroundColor: '#E5E7EB',
-    marginVertical: 12,
+    marginVertical: 10,
   },
   miniListContent: {
     alignItems: 'center',
-    gap: 10,
-    paddingBottom: 24,
+    gap: 12,
+    paddingBottom: 16,
   },
   miniThumbCard: {
-    width: 48,
-    height: 48,
-    borderRadius: 10,
+    width: 52,
+    height: 52,
+    borderRadius: 12,
     backgroundColor: '#FFFFFF',
-    borderWidth: 1.5,
+    borderWidth: 1,
     borderColor: '#E5E7EB',
     alignItems: 'center',
     justifyContent: 'center',
@@ -330,12 +347,12 @@ const styles = StyleSheet.create({
     }),
   },
   miniThumbCardSelected: {
-    borderColor: '#FE4648',
-    backgroundColor: '#F3F4F6',
+    borderColor: '#C98A16', // Warm Gold
+    backgroundColor: '#FFFDF5',
     borderWidth: 2.5,
     ...Platform.select({
       ios: {
-        shadowColor: '#FE4648',
+        shadowColor: '#C98A16',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
@@ -344,7 +361,7 @@ const styles = StyleSheet.create({
         elevation: 3,
       },
       web: {
-        boxShadow: '0 2px 6px rgba(30, 58, 43, 0.25)',
+        boxShadow: '0 2px 6px rgba(201, 138, 22, 0.25)',
       } as any,
     }),
   },
@@ -352,12 +369,32 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 3,
     right: 3,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#FE4648',
+    width: 7,
+    height: 7,
+    borderRadius: 3.5,
+    backgroundColor: '#C98A16',
     borderWidth: 1,
     borderColor: '#FFFFFF',
+  },
+  viewCatalogMiniBtn: {
+    width: 52,
+    paddingVertical: 8,
+    borderRadius: 12,
+    backgroundColor: '#F8FAFC',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 'auto',
+    marginBottom: 6,
+  },
+  viewCatalogMiniText: {
+    fontSize: 9,
+    fontWeight: '700',
+    color: '#0A192F',
+    textAlign: 'center',
+    marginTop: 2,
+    lineHeight: 11,
   },
   searchContainer: {
     flexDirection: 'row',
@@ -376,7 +413,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 12,
-    color: '#1A1A1A',
+    color: '#0A192F',
     paddingVertical: 0,
     backgroundColor: 'transparent',
     borderWidth: 0,
@@ -394,7 +431,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#737373',
+    color: '#64748B',
     letterSpacing: 0.8,
   },
   listContent: {

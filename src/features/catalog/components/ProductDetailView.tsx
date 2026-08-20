@@ -108,16 +108,34 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
         showsVerticalScrollIndicator={true}
       >
         <View style={styles.unifiedCard}>
-          {/* 1. TOP HEADER: Product Title & Subtitle */}
+          {/* 1. TOP HEADER: Product Title, Subtitle & Alta Calidad Badge */}
           <View style={styles.topHeaderBlock}>
-            <Text style={styles.productTitle}>{product.name}</Text>
-            <Text style={styles.productSubtitle}>
-              {product.shortDescription ||
-                'Sistema de ventanas corredizas de alta calidad, diseñado para brindar elegancia y funcionalidad.'}
-            </Text>
+            <View style={styles.titleRow}>
+              <View style={styles.titleTextGroup}>
+                <Text style={styles.productTitle}>{product.name}</Text>
+                <Text style={styles.productSubtitle}>
+                  {product.shortDescription ||
+                    'Sistema de ventanas corredizas de alta calidad, diseñado para brindar elegancia y funcionalidad.'}
+                </Text>
+              </View>
+
+              {/* Alta Calidad Badge */}
+              <TouchableOpacity
+                style={styles.qualityBadge}
+                onPress={() => setIsBenefitsModalOpen(true)}
+                activeOpacity={0.8}
+              >
+                <MaterialCommunityIcons
+                  name="shield-check-outline"
+                  size={15}
+                  color="#C98A16"
+                />
+                <Text style={styles.qualityBadgeText}>Alta calidad</Text>
+              </TouchableOpacity>
+            </View>
           </View>
 
-          {/* 2. CENTER IMAGE CAROUSEL WITH CLEAN WHITE DESIGN */}
+          {/* 2. CENTER IMAGE CAROUSEL WITH CLEAN DESIGN */}
           <View style={styles.carouselSection}>
             <View style={styles.carouselRow}>
               {/* Left Side Reference Card (Tablet / Desktop) */}
@@ -137,7 +155,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                     <MaterialCommunityIcons
                       name="chevron-left"
                       size={20}
-                      color="#111827"
+                      color="#0A192F"
                     />
                   </View>
                 </TouchableOpacity>
@@ -165,7 +183,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                       <MaterialCommunityIcons
                         name="chevron-left"
                         size={20}
-                        color="#111827"
+                        color="#0A192F"
                       />
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -176,7 +194,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                       <MaterialCommunityIcons
                         name="chevron-right"
                         size={20}
-                        color="#111827"
+                        color="#0A192F"
                       />
                     </TouchableOpacity>
                   </>
@@ -200,7 +218,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                     <MaterialCommunityIcons
                       name="chevron-right"
                       size={20}
-                      color="#111827"
+                      color="#0A192F"
                     />
                   </View>
                 </TouchableOpacity>
@@ -208,10 +226,18 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             </View>
           </View>
 
-          {/* 3. INPUTS DE MEDIDAS (Section Title: Dimensiones) */}
+          {/* 3. INPUTS DE MEDIDAS (Section Title: Dimensiones y cantidad) */}
           <View style={styles.configuratorSection}>
             <View style={styles.dimensionsSectionHeader}>
-              <Text style={styles.dimensionsSectionTitle}>Dimensiones</Text>
+              <MaterialCommunityIcons
+                name="ruler"
+                size={18}
+                color="#C98A16"
+                style={{ marginRight: 6 }}
+              />
+              <Text style={styles.dimensionsSectionTitle}>
+                Dimensiones y cantidad
+              </Text>
             </View>
 
             <View
@@ -246,8 +272,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="minus"
-                      size={16}
-                      color="#374151"
+                      size={18}
+                      color="#C98A16"
                     />
                   </TouchableOpacity>
 
@@ -279,8 +305,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="plus"
-                      size={16}
-                      color="#374151"
+                      size={18}
+                      color="#C98A16"
                     />
                   </TouchableOpacity>
                 </View>
@@ -313,8 +339,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="minus"
-                      size={16}
-                      color="#374151"
+                      size={18}
+                      color="#C98A16"
                     />
                   </TouchableOpacity>
 
@@ -346,8 +372,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="plus"
-                      size={16}
-                      color="#374151"
+                      size={18}
+                      color="#C98A16"
                     />
                   </TouchableOpacity>
                 </View>
@@ -373,8 +399,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="minus"
-                      size={16}
-                      color={quantity <= 1 ? '#D1D5DB' : '#374151'}
+                      size={18}
+                      color={quantity <= 1 ? '#D1D5DB' : '#C98A16'}
                     />
                   </TouchableOpacity>
 
@@ -400,8 +426,8 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   >
                     <MaterialCommunityIcons
                       name="plus"
-                      size={16}
-                      color="#374151"
+                      size={18}
+                      color="#C98A16"
                     />
                   </TouchableOpacity>
                 </View>
@@ -415,7 +441,14 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
           {/* 4. TOTAL ESTIMADO Y BOTÓN AGREGAR */}
           <View style={styles.priceAndActionCard}>
             <View style={styles.priceBlock}>
-              <Text style={styles.priceLabel}>Total estimado</Text>
+              <View style={styles.priceLabelRow}>
+                <Text style={styles.priceLabel}>Total estimado</Text>
+                <MaterialCommunityIcons
+                  name="information-outline"
+                  size={15}
+                  color="#C98A16"
+                />
+              </View>
               <View style={styles.priceValueGroup}>
                 <Text style={styles.priceValue}>${subtotalDemo.toFixed(2)}</Text>
                 {quantity > 1 && (
@@ -438,7 +471,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             >
               <MaterialCommunityIcons
                 name={isAddedRecently ? 'check' : 'cart-outline'}
-                size={18}
+                size={19}
                 color="#FFFFFF"
                 style={{ marginRight: 8 }}
               />
@@ -460,9 +493,9 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             >
               <View style={styles.accordionLeft}>
                 <MaterialCommunityIcons
-                  name="view-grid-plus-outline"
+                  name="layers-outline"
                   size={18}
-                  color="#111827"
+                  color="#C98A16"
                 />
                 <Text style={styles.accordionTitle}>Detalle de materiales</Text>
                 <View style={styles.materialCountBadge}>
@@ -504,11 +537,11 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
             <View style={styles.benefitsModalHeader}>
               <View style={styles.benefitsModalTitleRow}>
                 <MaterialCommunityIcons
-                  name="lightbulb-on-outline"
+                  name="shield-check-outline"
                   size={20}
-                  color="#D97706"
+                  color="#C98A16"
                 />
-                <Text style={styles.benefitsModalTitle}>Más beneficios</Text>
+                <Text style={styles.benefitsModalTitle}>Alta calidad garantizada</Text>
               </View>
               <TouchableOpacity
                 onPress={() => setIsBenefitsModalOpen(false)}
@@ -538,7 +571,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   <MaterialCommunityIcons
                     name="check-circle-outline"
                     size={16}
-                    color="#FE4648"
+                    color="#C98A16"
                   />
                   <Text style={styles.benefitText}>
                     Perfilería {product.aluminumSeries}
@@ -549,7 +582,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   <MaterialCommunityIcons
                     name="check-circle-outline"
                     size={16}
-                    color="#FE4648"
+                    color="#C98A16"
                   />
                   <Text style={styles.benefitText}>{product.glassType}</Text>
                 </View>
@@ -559,7 +592,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                     <MaterialCommunityIcons
                       name="check-circle-outline"
                       size={16}
-                      color="#FE4648"
+                      color="#C98A16"
                     />
                     <Text style={styles.benefitText}>{feat}</Text>
                   </View>
@@ -570,10 +603,10 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                 <MaterialCommunityIcons
                   name="information-outline"
                   size={16}
-                  color="#FE4648"
+                  color="#C98A16"
                 />
                 <Text style={styles.infoBannerText}>
-                  Producto fabricado a la medida según tus necesidades
+                  Producto fabricado a la medida según los más altos estándares de calidad.
                 </Text>
               </View>
             </ScrollView>
@@ -587,7 +620,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F8F9FA',
   },
   contentContainer: {
     padding: 20,
@@ -620,23 +653,45 @@ const styles = StyleSheet.create({
   topHeaderBlock: {
     width: '100%',
     marginBottom: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  titleRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  titleTextGroup: {
+    flex: 1,
   },
   productTitle: {
     fontSize: 26,
     fontWeight: '800',
-    color: '#111827',
+    color: '#0A192F', // Deep Midnight Navy
     letterSpacing: -0.4,
-    textAlign: 'center',
   },
   productSubtitle: {
     fontSize: 13,
     color: '#6B7280',
-    textAlign: 'center',
     marginTop: 6,
     lineHeight: 19,
-    maxWidth: 460,
+    maxWidth: 520,
+  },
+  qualityBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    backgroundColor: '#FEF3C7', // Amber Tint
+    borderWidth: 1,
+    borderColor: '#FDE68A',
+    borderRadius: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    alignSelf: 'flex-start',
+  },
+  qualityBadgeText: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#B45309', // Warm Ochre
   },
   carouselSection: {
     width: '100%',
@@ -671,7 +726,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(15, 23, 42, 0.1)',
+    backgroundColor: 'rgba(10, 25, 47, 0.1)',
   },
   sideNavBubbleLeft: {
     position: 'absolute',
@@ -765,12 +820,14 @@ const styles = StyleSheet.create({
   },
   dimensionsSectionHeader: {
     width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 10,
   },
   dimensionsSectionTitle: {
     fontSize: 15,
     fontWeight: '800',
-    color: '#111827',
+    color: '#0A192F',
   },
   steppersContainer: {
     width: '100%',
@@ -801,7 +858,7 @@ const styles = StyleSheet.create({
   stepperLabel: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#111827',
+    color: '#0A192F',
   },
   rangeHintText: {
     fontSize: 11,
@@ -821,7 +878,7 @@ const styles = StyleSheet.create({
   stepBtn: {
     width: 40,
     height: '100%',
-    backgroundColor: '#FAFAFA',
+    backgroundColor: '#FFFDF5',
     alignItems: 'center',
     justifyContent: 'center',
     borderRightWidth: 1,
@@ -842,7 +899,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 16,
     fontWeight: '800',
-    color: '#111827',
+    color: '#0A192F',
     paddingVertical: 0,
     backgroundColor: 'transparent',
     minWidth: 36,
@@ -876,6 +933,11 @@ const styles = StyleSheet.create({
   priceBlock: {
     flexDirection: 'column',
   },
+  priceLabelRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+  },
   priceLabel: {
     fontSize: 13,
     fontWeight: '600',
@@ -890,7 +952,7 @@ const styles = StyleSheet.create({
   priceValue: {
     fontSize: 30,
     fontWeight: '900',
-    color: '#111827',
+    color: '#0A192F',
   },
   pricePerUnit: {
     fontSize: 13,
@@ -901,30 +963,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FE4648', // Forest Green
+    backgroundColor: '#C98A16', // Warm Gold
     paddingVertical: 14,
-    paddingHorizontal: 30,
+    paddingHorizontal: 32,
     borderRadius: 12,
     ...Platform.select({
       ios: {
-        shadowColor: '#FE4648',
+        shadowColor: '#C98A16',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.25,
+        shadowOpacity: 0.3,
         shadowRadius: 4,
       },
       android: {
         elevation: 3,
       },
       web: {
-        boxShadow: '0 2px 6px rgba(254, 70, 72, 0.25)',
+        boxShadow: '0 2px 6px rgba(201, 138, 22, 0.3)',
       } as any,
     }),
   },
   btnSuccess: {
-    backgroundColor: '#16A34A',
+    backgroundColor: '#10B981',
   },
   primaryAddBtnText: {
-    fontSize: 15,
+    fontSize: 16,
     fontWeight: '700',
     color: '#FFFFFF',
     letterSpacing: 0.2,
@@ -961,18 +1023,18 @@ const styles = StyleSheet.create({
   accordionTitle: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#111827',
+    color: '#0A192F',
   },
   materialCountBadge: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#FEF3C7', // Amber Tint
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 8,
   },
   materialCountText: {
     fontSize: 11,
-    fontWeight: '600',
-    color: '#4B5563',
+    fontWeight: '700',
+    color: '#B45309',
   },
   accordionBody: {
     padding: 16,
@@ -980,7 +1042,7 @@ const styles = StyleSheet.create({
   },
   benefitsModalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.45)',
+    backgroundColor: 'rgba(10, 25, 47, 0.5)',
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.lg,
@@ -1013,7 +1075,7 @@ const styles = StyleSheet.create({
   benefitsModalTitle: {
     fontSize: typography.fontSizes.md,
     fontWeight: typography.fontWeights.heavy,
-    color: colors.textPrimary,
+    color: '#0A192F',
   },
   benefitsModalClose: {
     padding: 4,
@@ -1027,11 +1089,11 @@ const styles = StyleSheet.create({
   },
   benefitsDescription: {
     fontSize: 12,
-    color: '#525252',
+    color: '#475569',
     lineHeight: 18,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F8FAFC',
     borderWidth: 1,
-    borderColor: '#F0F0F0',
+    borderColor: '#E2E8F0',
     borderRadius: borderRadius.md,
     padding: spacing.sm,
     marginBottom: spacing.xs,
@@ -1039,7 +1101,7 @@ const styles = StyleSheet.create({
   benefitsTitle: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#737373',
+    color: '#64748B',
     letterSpacing: 0.8,
     marginBottom: 8,
   },
@@ -1059,9 +1121,9 @@ const styles = StyleSheet.create({
   infoBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FFF0F0',
+    backgroundColor: '#FFFBEB',
     borderWidth: 1,
-    borderColor: '#FFCACA',
+    borderColor: '#FDE68A',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,
@@ -1070,7 +1132,7 @@ const styles = StyleSheet.create({
   infoBannerText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#FE4648',
+    color: '#B45309',
     flex: 1,
   },
 });

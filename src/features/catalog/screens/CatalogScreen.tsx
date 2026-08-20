@@ -167,6 +167,12 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
           accessibilityRole="tab"
           accessibilityState={{ selected: activeSubTab === 'products' }}
         >
+          <MaterialCommunityIcons
+            name="apps"
+            size={16}
+            color={activeSubTab === 'products' ? '#C98A16' : '#64748B'}
+            style={{ marginRight: 6 }}
+          />
           <Text
             style={[
               styles.segmentButtonText,
@@ -188,6 +194,12 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
           accessibilityRole="tab"
           accessibilityState={{ selected: activeSubTab === 'quotes' }}
         >
+          <MaterialCommunityIcons
+            name="file-document-outline"
+            size={16}
+            color={activeSubTab === 'quotes' ? '#C98A16' : '#64748B'}
+            style={{ marginRight: 6 }}
+          />
           <Text
             style={[
               styles.segmentButtonText,
@@ -204,7 +216,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
         <MaterialCommunityIcons
           name="white-balance-sunny"
           size={18}
-          color="#111827"
+          color="#C98A16"
         />
       </TouchableOpacity>
     </View>
@@ -218,53 +230,6 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
         contentContainerStyle={styles.quotesContent}
         showsVerticalScrollIndicator={true}
       >
-        {/* Header Row with Title & Quick Info */}
-        <View style={styles.quotesHeaderCard}>
-          <View style={styles.quotesHeaderLeft}>
-            <View style={styles.quotesIconBubble}>
-              <MaterialCommunityIcons
-                name="clipboard-text"
-                size={22}
-                color="#FE4648"
-              />
-            </View>
-            <View>
-              <View style={styles.quoteNumberRow}>
-                <Text style={styles.quotesHeaderTitle}>Proforma & Cotización</Text>
-                <View style={styles.quoteCodeBadge}>
-                  <Text style={styles.quoteCodeText}>{quoteNumber}</Text>
-                </View>
-              </View>
-              <Text style={styles.quotesHeaderSubtitle}>
-                {items.length === 0
-                  ? 'No hay productos en la cotización'
-                  : `${items.length} ${
-                      items.length === 1 ? 'producto configurado' : 'productos configurados'
-                    } (${totals.totalProductsCount} unidades)`}
-              </Text>
-            </View>
-          </View>
-
-          {/* Client Selector Button */}
-          <TouchableOpacity
-            style={styles.clientSelectorTrigger}
-            onPress={() => setIsClientSelectorOpen(true)}
-            activeOpacity={0.8}
-          >
-            <View style={styles.clientTriggerInfo}>
-              <Text style={styles.clientTriggerLabel}>CLIENTE DESTINO</Text>
-              <Text style={styles.clientTriggerName} numberOfLines={1}>
-                {selectedClient ? selectedClient.name : 'Seleccionar cliente...'}
-              </Text>
-            </View>
-            <MaterialCommunityIcons
-              name="account-edit-outline"
-              size={20}
-              color="#FE4648"
-            />
-          </TouchableOpacity>
-        </View>
-
         {items.length === 0 ? (
           /* Empty State */
           <View style={styles.emptyQuoteCard}>
@@ -295,122 +260,8 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
             </TouchableOpacity>
           </View>
         ) : (
-          /* Full Quote Content with KPIs, Items, Consolidated Materials & Actions */
+          /* Full Quote Content: Items & Actions */
           <>
-            {/* Financial KPI Summary Cards */}
-            <View style={styles.kpiCardsRow}>
-              {/* Total Products */}
-              <View style={styles.kpiCardItem}>
-                <View style={styles.kpiIconWrapper}>
-                  <MaterialCommunityIcons
-                    name="package-variant-closed"
-                    size={20}
-                    color="#FE4648"
-                  />
-                </View>
-                <View style={styles.kpiTextGroup}>
-                  <Text style={styles.kpiLabel}>Total Unidades</Text>
-                  <Text style={styles.kpiValue}>
-                    {totals.totalProductsCount}{' '}
-                    <Text style={styles.kpiSubValue}>({totals.itemCount} items)</Text>
-                  </Text>
-                </View>
-              </View>
-
-              {/* Subtotal Materials */}
-              <View style={styles.kpiCardItem}>
-                <View style={styles.kpiIconWrapper}>
-                  <MaterialCommunityIcons
-                    name="hammer-wrench"
-                    size={20}
-                    color="#FE4648"
-                  />
-                </View>
-                <View style={styles.kpiTextGroup}>
-                  <Text style={styles.kpiLabel}>Subtotal Insumos</Text>
-                  <Text style={styles.kpiValue}>
-                    ${totals.subtotalMaterialsDemo.toFixed(2)}
-                  </Text>
-                </View>
-              </View>
-
-              {/* Estimated Labor */}
-              <View style={styles.kpiCardItem}>
-                <View style={styles.kpiIconWrapper}>
-                  <MaterialCommunityIcons
-                    name="account-hard-hat-outline"
-                    size={20}
-                    color="#FE4648"
-                  />
-                </View>
-                <View style={styles.kpiTextGroup}>
-                  <Text style={styles.kpiLabel}>Mano de Obra Estimada</Text>
-                  <Text style={styles.kpiValue}>
-                    ${totals.estimatedLaborDemo.toFixed(2)}
-                  </Text>
-                </View>
-              </View>
-
-              {/* Grand Total Highlight */}
-              <View style={[styles.kpiCardItem, styles.kpiCardHighlight]}>
-                <View
-                  style={[
-                    styles.kpiIconWrapper,
-                    styles.kpiIconWrapperHighlight,
-                  ]}
-                >
-                  <MaterialCommunityIcons
-                    name="cash-check"
-                    size={22}
-                    color="#FFFFFF"
-                  />
-                </View>
-                <View style={styles.kpiTextGroup}>
-                  <Text style={styles.kpiLabelHighlight}>TOTAL PROFORMA</Text>
-                  <Text style={styles.kpiValueHighlight}>
-                    ${totals.totalDemo.toFixed(2)}
-                  </Text>
-                </View>
-              </View>
-            </View>
-
-            {/* Main Action Buttons */}
-            <View style={styles.topActionsBar}>
-              <TouchableOpacity
-                style={styles.clearCartButton}
-                onPress={clearQuote}
-                activeOpacity={0.8}
-              >
-                <MaterialCommunityIcons
-                  name="trash-can-outline"
-                  size={16}
-                  color={colors.danger}
-                />
-                <Text style={styles.clearCartText}>Vaciar Carrito</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.downloadPdfButton,
-                  isGeneratingPdf && styles.btnDisabled,
-                ]}
-                onPress={() => setIsClientSelectorOpen(true)}
-                disabled={isGeneratingPdf}
-                activeOpacity={0.85}
-              >
-                <MaterialCommunityIcons
-                  name="file-pdf-box"
-                  size={20}
-                  color="#FFFFFF"
-                />
-                <Text style={styles.downloadPdfButtonText}>
-                  {isGeneratingPdf
-                    ? 'GENERANDO PDF...'
-                    : `Descargar Proforma PDF ($${totals.totalDemo.toFixed(2)})`}
-                </Text>
-              </TouchableOpacity>
-            </View>
-
             {/* List of Configured Products */}
             <View style={styles.quoteItemsSection}>
               <View style={styles.sectionTitleRow}>
@@ -425,7 +276,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                   <MaterialCommunityIcons
                     name="plus-circle-outline"
                     size={16}
-                    color="#FE4648"
+                    color="#C98A16"
                   />
                   <Text style={styles.addMoreLinkText}>Configurar más productos</Text>
                 </TouchableOpacity>
@@ -444,9 +295,6 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                 />
               ))}
             </View>
-
-            {/* Consolidated Materials Breakdown Table */}
-            <ConsolidatedMaterialsSummary materials={consolidatedMaterials} />
 
             {/* Bottom Actions Bar */}
             <View style={styles.bottomActionsBar}>
@@ -913,19 +761,19 @@ const styles = StyleSheet.create({
     borderRadius: 11,
   },
   segmentButtonActive: {
-    backgroundColor: '#FE4648', // Forest Green
+    backgroundColor: '#0A192F', // Deep Midnight Navy
     ...Platform.select({
       ios: {
-        shadowColor: '#FE4648',
+        shadowColor: '#0A192F',
         shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.2,
+        shadowOpacity: 0.25,
         shadowRadius: 4,
       },
       android: {
         elevation: 2,
       },
       web: {
-        boxShadow: '0 2px 6px rgba(254, 70, 72, 0.2)',
+        boxShadow: '0 2px 6px rgba(10, 25, 47, 0.25)',
       } as any,
     }),
   },
@@ -991,9 +839,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#FFF0F0',
+    backgroundColor: '#FEF3C7',
     borderWidth: 1,
-    borderColor: '#FFCACA',
+    borderColor: '#FDE68A',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -1001,12 +849,12 @@ const styles = StyleSheet.create({
   clientBadgeText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FE4648',
+    color: '#B45309',
     maxWidth: 220,
   },
   quotesContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F8F9FA',
   },
   quotesContent: {
     padding: spacing.lg,
@@ -1016,7 +864,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: borderRadius.lg,
     borderWidth: 1.5,
-    borderColor: '#F0F0F0',
+    borderColor: '#E5E7EB',
     padding: spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
@@ -1037,9 +885,9 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: '#FFF0F0',
+    backgroundColor: '#FEF3C7',
     borderWidth: 1.5,
-    borderColor: '#FFCACA',
+    borderColor: '#FDE68A',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1052,25 +900,25 @@ const styles = StyleSheet.create({
   quotesHeaderTitle: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#0F2942',
+    color: '#0A192F',
   },
   quoteCodeBadge: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: '#FEF3C7',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#FFCACA',
+    borderColor: '#FDE68A',
   },
   quoteCodeText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#FE4648',
+    color: '#B45309',
     letterSpacing: 0.5,
   },
   quotesHeaderSubtitle: {
     fontSize: 12,
-    color: '#737373',
+    color: '#6B7280',
     fontWeight: '500',
     marginTop: 2,
   },
@@ -1080,7 +928,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: '#F0F0F0',
+    borderColor: '#E5E7EB',
     borderRadius: borderRadius.md,
     paddingHorizontal: spacing.md,
     paddingVertical: 8,
@@ -1092,20 +940,20 @@ const styles = StyleSheet.create({
   clientTriggerLabel: {
     fontSize: 9,
     fontWeight: '800',
-    color: '#94A3B8',
+    color: '#9CA3AF',
     letterSpacing: 0.5,
   },
   clientTriggerName: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FE4648',
+    color: '#C98A16',
     marginTop: 1,
   },
   emptyQuoteCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: borderRadius.xl,
     borderWidth: 1.5,
-    borderColor: '#F0F0F0',
+    borderColor: '#E5E7EB',
     padding: spacing['3xl'],
     alignItems: 'center',
     justifyContent: 'center',
@@ -1116,7 +964,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#FAFAFA',
+    backgroundColor: '#F8F9FA',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.md,
@@ -1124,12 +972,12 @@ const styles = StyleSheet.create({
   emptyQuoteTitle: {
     fontSize: 17,
     fontWeight: '800',
-    color: '#1A1A1A',
+    color: '#0A192F',
     marginBottom: 6,
   },
   emptyQuoteSub: {
     fontSize: 13,
-    color: '#737373',
+    color: '#6B7280',
     textAlign: 'center',
     maxWidth: 420,
     lineHeight: 19,
@@ -1139,9 +987,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#FE4648',
+    backgroundColor: '#C98A16',
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: '#B45309',
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: borderRadius.md,
@@ -1152,75 +1000,45 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#FFFFFF',
   },
-  kpiCardsRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.md,
-    marginBottom: spacing.md,
-  },
-  kpiCardItem: {
-    flex: 1,
-    minWidth: 180,
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1.5,
-    borderColor: '#F0F0F0',
-    borderRadius: borderRadius.lg,
-    padding: spacing.md,
+  quoteSummaryBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+    gap: 16,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: '#E5E7EB',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    marginBottom: spacing.md,
     ...shadows.sm,
   },
-  kpiCardHighlight: {
-    backgroundColor: '#FE4648',
-    borderColor: '#FE4648',
+  quoteSummaryInfo: {
+    flexDirection: 'column',
   },
-  kpiIconWrapper: {
-    width: 40,
-    height: 40,
-    borderRadius: 10,
-    backgroundColor: '#FFFFFF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: '#F0F0F0',
-  },
-  kpiIconWrapperHighlight: {
-    backgroundColor: 'rgba(255, 255, 255, 0.18)',
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  kpiTextGroup: {
-    flex: 1,
-  },
-  kpiLabel: {
-    fontSize: 10,
-    color: '#737373',
-    fontWeight: '700',
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
-  },
-  kpiLabelHighlight: {
-    fontSize: 10,
-    color: '#E0EEF9',
-    fontWeight: '800',
-    letterSpacing: 0.5,
-  },
-  kpiValue: {
-    fontSize: 17,
-    fontWeight: '800',
-    color: '#1A1A1A',
-    marginTop: 2,
-  },
-  kpiValueHighlight: {
-    fontSize: 20,
-    fontWeight: '900',
-    color: '#FFFFFF',
-    marginTop: 2,
-  },
-  kpiSubValue: {
+  quoteSummaryLabel: {
     fontSize: 11,
+    fontWeight: '800',
+    color: '#6B7280',
+    letterSpacing: 0.6,
+  },
+  quoteSummaryPriceRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 8,
+    marginTop: 2,
+  },
+  quoteSummaryAmount: {
+    fontSize: 26,
+    fontWeight: '900',
+    color: '#0A192F',
+  },
+  quoteSummaryUnits: {
+    fontSize: 12,
     fontWeight: '600',
-    color: '#737373',
+    color: '#9CA3AF',
   },
   topActionsBar: {
     flexDirection: 'row',
@@ -1228,7 +1046,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     flexWrap: 'wrap',
     gap: spacing.sm,
-    marginBottom: spacing.md,
   },
   bottomActionsBar: {
     flexDirection: 'row',
@@ -1259,9 +1076,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#FE4648',
+    backgroundColor: '#C98A16',
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: '#B45309',
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: borderRadius.md,
@@ -1288,7 +1105,7 @@ const styles = StyleSheet.create({
   sectionTitleText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#737373',
+    color: '#6B7280',
     letterSpacing: 0.8,
   },
   addMoreLink: {
@@ -1299,7 +1116,7 @@ const styles = StyleSheet.create({
   addMoreLinkText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FE4648',
+    color: '#C98A16',
   },
   selectorOverlay: {
     flex: 1,

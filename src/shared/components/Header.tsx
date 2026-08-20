@@ -5,13 +5,9 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
-  Platform,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors } from '../theme/colors';
-import { typography } from '../theme/typography';
-import { borderRadius, spacing } from '../theme/spacing';
-import { shadows } from '../theme/shadows';
 import { useResponsive } from '../hooks/useResponsive';
 
 export type TabType =
@@ -44,9 +40,9 @@ export const Header: React.FC<HeaderProps> = ({
       case 'quote':
         return 'Lista de Clientes';
       case 'settings':
-        return 'Inventario & Control de Stock';
+        return 'Inventario';
       case 'manufacturing':
-        return 'Fichas de Fabricación & Recetas de Corte';
+        return 'Fabricación';
       default:
         return 'ALUX';
     }
@@ -65,12 +61,12 @@ export const Header: React.FC<HeaderProps> = ({
             <MaterialCommunityIcons
               name="menu"
               size={24}
-              color={colors.textPrimary}
+              color="#FFFFFF"
             />
           </TouchableOpacity>
         )}
 
-        {/* Brand Logo with Blue Background Container */}
+        {/* Brand Logo */}
         <View style={styles.logoBadgeContainer}>
           <Image
             source={require('../../../assets/icon copy.png')}
@@ -83,62 +79,80 @@ export const Header: React.FC<HeaderProps> = ({
           <Text style={styles.brandTitle}>{getTabTitle()}</Text>
         </View>
       </View>
+
+      {/* Right: Notifications Bell */}
+      <TouchableOpacity style={styles.bellButton} activeOpacity={0.7}>
+        <MaterialCommunityIcons
+          name="bell-outline"
+          size={22}
+          color="#FFFFFF"
+        />
+        <View style={styles.bellDot} />
+      </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   header: {
-    height: 64,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1.5,
-    borderBottomColor: '#F0F0F0',
+    height: 60,
+    backgroundColor: '#0A192F', // Deep Midnight Navy
+    borderBottomWidth: 1,
+    borderBottomColor: '#1E293B',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.lg,
-    ...shadows.sm,
+    paddingHorizontal: 20,
     zIndex: 100,
   },
   brandContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.md,
+    gap: 12,
   },
   mobileMenuButton: {
-    padding: spacing.xs,
-    marginRight: spacing.xs,
+    padding: 4,
+    marginRight: 4,
   },
   logoBadgeContainer: {
-    width: 42,
-    height: 42,
-    borderRadius: 10,
-    backgroundColor: '#FE4648',
-    borderWidth: 1.5,
-    borderColor: '#FE4648',
+    width: 34,
+    height: 34,
+    borderRadius: 8,
+    backgroundColor: '#C98A16', // Gold Accent
     alignItems: 'center',
     justifyContent: 'center',
     padding: 2,
-    ...shadows.sm,
   },
   brandLogoImage: {
     width: '100%',
     height: '100%',
-    borderRadius: 7,
+    borderRadius: 6,
   },
   brandTextWrapper: {
     justifyContent: 'center',
   },
   brandTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#0F2942',
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#FFFFFF',
     letterSpacing: -0.2,
-    fontFamily: Platform.select({
-      web: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif',
-      ios: 'System',
-      android: 'sans-serif-medium',
-      default: 'normal',
-    }),
+  },
+  bellButton: {
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+  },
+  bellDot: {
+    position: 'absolute',
+    top: 6,
+    right: 8,
+    width: 7,
+    height: 7,
+    borderRadius: 3.5,
+    backgroundColor: '#C98A16', // Gold Amber Dot
+    borderWidth: 1,
+    borderColor: '#0A192F',
   },
 });

@@ -575,14 +575,14 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: '#1E3A2B', // Forest Green
+    backgroundColor: '#0A192F', // Deep Midnight Navy
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
     borderColor: '#FFFFFF',
     ...Platform.select({
       ios: {
-        shadowColor: '#1E3A2B',
+        shadowColor: '#0A192F',
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.35,
         shadowRadius: 10,
@@ -592,7 +592,7 @@ const styles = StyleSheet.create({
       },
       web: {
         boxShadow:
-          '0 10px 20px -2px rgba(30, 58, 43, 0.4), 0 4px 6px -2px rgba(30, 58, 43, 0.2)',
+          '0 10px 20px -2px rgba(10, 25, 47, 0.4), 0 4px 6px -2px rgba(10, 25, 47, 0.2)',
       } as any,
     }),
   },
@@ -603,7 +603,7 @@ const styles = StyleSheet.create({
     minWidth: 17,
     height: 17,
     borderRadius: 8.5,
-    backgroundColor: '#EF4444',
+    backgroundColor: '#C98A16',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 3,
@@ -667,7 +667,7 @@ const styles = StyleSheet.create({
     minWidth: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: '#FE4648',
+    backgroundColor: '#C98A16',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 3,
@@ -698,7 +698,7 @@ const styles = StyleSheet.create({
   activeLabel: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#1E3A2B',
+    color: '#0A192F',
     textAlign: 'center',
     letterSpacing: 0.1,
   },
@@ -715,16 +715,16 @@ const styles = StyleSheet.create({
     width: 62,
     height: 62,
     borderRadius: 31,
-    backgroundColor: '#1E3A2B', // Forest Green
+    backgroundColor: '#0A192F', // Deep Midnight Navy
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3.5,
     borderColor: '#FFFFFF',
     ...Platform.select({
       ios: {
-        shadowColor: '#1E3A2B',
+        shadowColor: '#0A192F',
         shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.4,
+        shadowOpacity: 0.45,
         shadowRadius: 14,
       },
       android: {
@@ -732,7 +732,7 @@ const styles = StyleSheet.create({
       },
       web: {
         boxShadow:
-          '0 14px 28px -4px rgba(30, 58, 43, 0.45), 0 8px 14px -2px rgba(30, 58, 43, 0.3)',
+          '0 14px 28px -4px rgba(10, 25, 47, 0.48), 0 8px 14px -2px rgba(10, 25, 47, 0.32)',
       } as any,
     }),
   },

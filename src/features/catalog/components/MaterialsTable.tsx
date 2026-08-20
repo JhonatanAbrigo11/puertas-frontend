@@ -229,9 +229,9 @@ const styles = StyleSheet.create({
     color: '#1A1A1A',
   },
   unitChip: {
-    backgroundColor: '#FFF0F0',
+    backgroundColor: '#FEF3C7',
     borderWidth: 1,
-    borderColor: '#FFCACA',
+    borderColor: '#FDE68A',
     paddingHorizontal: 7,
     paddingVertical: 2,
     borderRadius: 4,
@@ -239,27 +239,27 @@ const styles = StyleSheet.create({
   unitChipText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#D93638',
+    color: '#B45309',
   },
   priceText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#737373',
+    color: '#64748B',
   },
   subtotalText: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#1A1A1A',
+    color: '#0A192F',
   },
   tableFooter: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFF0F0',
+    backgroundColor: '#FFFDF5',
     paddingVertical: 12,
     paddingHorizontal: spacing.md,
     borderTopWidth: 1.5,
-    borderTopColor: '#FFCACA',
+    borderTopColor: '#FDE68A',
   },
   footerLeft: {
     flex: 1,
@@ -278,11 +278,11 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#D93638',
+    color: '#B45309',
   },
   totalAmount: {
     fontSize: 16,
     fontWeight: '900',
-    color: '#1A1A1A',
+    color: '#0A192F',
   },
 });

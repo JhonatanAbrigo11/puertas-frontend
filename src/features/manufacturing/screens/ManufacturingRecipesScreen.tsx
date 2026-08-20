@@ -1218,13 +1218,13 @@ const styles = StyleSheet.create({
   sheetCode: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#FE4648',
+    color: '#C98A16',
     letterSpacing: 0.5,
   },
   sheetBadge: {
-    backgroundColor: '#FFF0F0',
+    backgroundColor: '#FEF3C7',
     borderWidth: 1,
-    borderColor: '#FFCACA',
+    borderColor: '#FDE68A',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 4,
@@ -1232,7 +1232,7 @@ const styles = StyleSheet.create({
   sheetBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#D93638',
+    color: '#B45309',
   },
   sheetBadgeGray: {
     backgroundColor: '#FAFAFA',
@@ -1248,7 +1248,7 @@ const styles = StyleSheet.create({
   sheetTitle: {
     fontSize: 18,
     fontWeight: '800',
-    color: '#1A1A1A',
+    color: '#0A192F',
     marginBottom: 4,
   },
   sheetDesc: {
@@ -1259,9 +1259,9 @@ const styles = StyleSheet.create({
   printSheetBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FE4648',
+    backgroundColor: '#C98A16',
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: '#B45309',
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderRadius: 8,
@@ -1283,9 +1283,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#FFF0F0',
+    backgroundColor: '#FEF3C7',
     borderWidth: 1,
-    borderColor: '#FFCACA',
+    borderColor: '#FDE68A',
     paddingHorizontal: 12,
     paddingVertical: 9,
     borderRadius: 8,
@@ -1293,7 +1293,7 @@ const styles = StyleSheet.create({
   editSheetBtnText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FE4648',
+    color: '#B45309',
   },
   saveEditBtn: {
     flexDirection: 'row',
@@ -1326,7 +1326,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
   },
   recipeDetailCardEditing: {
-    borderColor: '#FE4648',
+    borderColor: '#C98A16',
     backgroundColor: '#FFFDF8',
   },
   editingBanner: {

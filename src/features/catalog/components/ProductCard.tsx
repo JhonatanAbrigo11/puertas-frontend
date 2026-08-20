@@ -114,13 +114,13 @@ const styles = StyleSheet.create({
   cardDefault: {
     backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: '#F5F5F5',
+    borderColor: '#E5E7EB',
     ...shadows.sm,
   },
   cardSelected: {
-    backgroundColor: '#FFF0F0',
+    backgroundColor: '#FFFDF5',
     borderWidth: 2,
-    borderColor: '#FE4648',
+    borderColor: '#C98A16',
     ...shadows.md,
   },
   thumbnailContainer: {
@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#F0F0F0',
+    borderColor: '#E5E7EB',
   },
   infoContainer: {
     flex: 1,
@@ -140,18 +140,18 @@ const styles = StyleSheet.create({
   productName: {
     fontSize: 13,
     fontWeight: '700',
-    color: '#1A1A1A',
+    color: '#0A192F',
     lineHeight: 17,
     marginBottom: 4,
   },
   productNameSelected: {
-    color: '#1A1A1A',
+    color: '#0A192F',
     fontWeight: '800',
   },
   tagPill: {
-    backgroundColor: '#FFF0F0',
+    backgroundColor: '#FEF3C7',
     borderWidth: 1,
-    borderColor: '#FFCACA',
+    borderColor: '#FDE68A',
     paddingHorizontal: 8,
     paddingVertical: 2,
     borderRadius: 6,
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
   tagPillText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FE4648',
+    color: '#B45309',
   },
   codeText: {
     fontSize: 10,
@@ -176,9 +176,9 @@ const styles = StyleSheet.create({
     width: 22,
     height: 22,
     borderRadius: 11,
-    backgroundColor: '#FE4648',
+    backgroundColor: '#C98A16',
     borderWidth: 1.5,
-    borderColor: '#FE4648',
+    borderColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     ...shadows.sm,

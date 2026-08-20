@@ -546,12 +546,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: colors.primary,
+    backgroundColor: '#C98A16', // Warm Gold
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: '#B45309',
     borderRadius: borderRadius.md,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 9,
     ...shadows.sm,
   },
   newClientButtonText: {
@@ -629,7 +629,7 @@ const styles = StyleSheet.create({
   clientCode: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#FE4648',
+    color: '#C98A16',
     letterSpacing: 0.5,
   },
   categoryBadge: {
@@ -666,7 +666,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   statusTextActive: {
-    color: '#FE4648',
+    color: '#059669',
   },
   statusTextDefault: {
     color: '#737373',
@@ -674,7 +674,7 @@ const styles = StyleSheet.create({
   clientName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#1A1A1A',
+    color: '#0A192F',
     marginBottom: 3,
   },
   contactRow: {
@@ -705,7 +705,7 @@ const styles = StyleSheet.create({
   contactValue: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#FE4648',
+    color: '#C98A16',
   },
   contactLabel: {
     fontSize: 11,
@@ -722,9 +722,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#FFF0F0',
+    backgroundColor: '#FEF3C7',
     borderWidth: 1,
-    borderColor: '#FFCACA',
+    borderColor: '#FDE68A',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -732,9 +732,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: '#F1F5F9',
     borderWidth: 1,
-    borderColor: '#FFCACA',
+    borderColor: '#CBD5E1',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -788,7 +788,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(15, 23, 42, 0.45)',
+    backgroundColor: 'rgba(10, 25, 47, 0.45)',
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.lg,
@@ -806,7 +806,7 @@ const styles = StyleSheet.create({
   modalTitle: {
     fontSize: typography.fontSizes.lg,
     fontWeight: typography.fontWeights.heavy,
-    color: colors.textPrimary,
+    color: '#0A192F',
     marginBottom: spacing.sm,
   },
   formInput: {
@@ -844,11 +844,11 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: '#C98A16',
     borderRadius: borderRadius.md,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    backgroundColor: colors.primary,
+    paddingHorizontal: 16,
+    paddingVertical: 9,
+    backgroundColor: '#C98A16',
   },
   saveButtonText: {
     color: '#FFFFFF',

@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
   dimensionsBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.surfaceActive,
+    backgroundColor: '#FEF3C7',
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: borderRadius.sm,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   dimensionsText: {
     fontSize: 11,
     fontWeight: '600',
-    color: colors.textSecondary,
+    color: '#B45309',
   },
   priceBlock: {
     marginTop: 6,
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
   priceSubtotal: {
     fontSize: typography.fontSizes.lg,
     fontWeight: typography.fontWeights.heavy,
-    color: colors.primary,
+    color: '#0A192F',
   },
   priceUnit: {
     fontSize: 11,
@@ -333,9 +333,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FE4648',
+    backgroundColor: '#C98A16', // Warm Gold
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: '#B45309',
     paddingHorizontal: 10,
     paddingVertical: 9,
     borderRadius: borderRadius.md,

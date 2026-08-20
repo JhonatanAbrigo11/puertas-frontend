@@ -492,9 +492,9 @@ const styles = StyleSheet.create({
   createBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FE4648',
+    backgroundColor: '#C98A16', // Warm Gold
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: '#B45309',
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderRadius: 8,
@@ -521,7 +521,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 13,
-    color: '#0F172A',
+    color: '#0A192F',
     paddingVertical: 0,
     backgroundColor: 'transparent',
     borderWidth: 0,
@@ -540,8 +540,8 @@ const styles = StyleSheet.create({
     borderColor: '#F0F0F0',
   },
   categoryChipSelected: {
-    backgroundColor: '#FFF0F0',
-    borderColor: '#FE4648',
+    backgroundColor: '#FEF3C7',
+    borderColor: '#FDE68A',
   },
   categoryChipText: {
     fontSize: 12,
@@ -549,7 +549,7 @@ const styles = StyleSheet.create({
     color: '#475569',
   },
   categoryChipTextSelected: {
-    color: '#D93638',
+    color: '#B45309',
     fontWeight: '800',
   },
   tableCard: {
@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
   materialCode: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#FE4648',
+    color: '#C98A16',
     letterSpacing: 0.5,
   },
   categoryBadge: {
@@ -658,7 +658,7 @@ const styles = StyleSheet.create({
   materialName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#0F172A',
+    color: '#0A192F',
     marginBottom: 3,
   },
   packagingRow: {
@@ -688,7 +688,7 @@ const styles = StyleSheet.create({
   priceValue: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#FE4648',
+    color: '#0A192F',
   },
   unitLabel: {
     fontSize: 11,
