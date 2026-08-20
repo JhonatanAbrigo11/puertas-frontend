@@ -38,11 +38,10 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
   isMobileSidebarOpen = false,
   onCloseMobileSidebar,
 }) => {
-  const { isTablet, isDesktop } = useResponsive();
+  const { isTablet, isDesktop, isMobile } = useResponsive();
   const {
     items,
     totals,
-    removeItem,
     updateItemQuantity,
     clearQuote,
     customer,
@@ -63,6 +62,12 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [isClientSelectorOpen, setIsClientSelectorOpen] = useState(false);
+  const [clientSelectorMode, setClientSelectorMode] = useState<
+    'assign' | 'full-pdf' | 'item-pdf'
+  >('full-pdf');
+  const [pendingPdfItem, setPendingPdfItem] = useState<typeof items[0] | null>(
+    null
+  );
 
   // Flying Add-to-Quote Animation
   const quotesTabRef = useRef<View>(null);
@@ -200,6 +205,8 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
       const result = await generateAndDownloadPdf(fullQuote, totals);
       if (!result.success && result.error) {
         alert(`Error al generar el PDF: ${result.error}`);
+      } else if (result.success) {
+        alert('PDF guardado en la carpeta que seleccionaste.');
       }
     } catch (err: any) {
       console.error(err);
@@ -236,6 +243,8 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
       const result = await generateAndDownloadPdf(singleItemQuote, singleTotals);
       if (!result.success && result.error) {
         alert(`Error al generar el PDF: ${result.error}`);
+      } else if (result.success) {
+        alert('PDF guardado en la carpeta que seleccionaste.');
       }
     } catch (err: any) {
       console.error(err);
@@ -255,6 +264,8 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
       );
       if (!result.success && result.error) {
         alert(`Error al generar la orden de bodega: ${result.error}`);
+      } else if (result.success) {
+        alert('Orden de bodega guardada en la carpeta que seleccionaste.');
       }
     } catch (err: any) {
       console.error(err);
@@ -262,14 +273,52 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
     }
   };
 
+  const openClientSelector = (
+    mode: 'assign' | 'full-pdf' | 'item-pdf',
+    item?: typeof items[0]
+  ) => {
+    setClientSelectorMode(mode);
+    setPendingPdfItem(item ?? null);
+    setIsClientSelectorOpen(true);
+  };
+
+  const handleConfirmClientSelector = () => {
+    setIsClientSelectorOpen(false);
+    if (clientSelectorMode === 'assign') {
+      return;
+    }
+    if (clientSelectorMode === 'item-pdf' && pendingPdfItem) {
+      handleDownloadItemPdf(pendingPdfItem);
+      return;
+    }
+    if (items.length > 0) {
+      handleDownloadPdf();
+    }
+  };
+
+  const clientSelectorConfirmLabel =
+    clientSelectorMode === 'assign'
+      ? 'Confirmar cliente'
+      : clientSelectorMode === 'item-pdf'
+        ? 'Confirmar y Generar PDF'
+        : items.length > 0
+          ? 'Confirmar y Generar PDF'
+          : 'Guardar Selección';
+
   // Reusable Segmented Tabs Header
   const renderSegmentedTabs = () => (
-    <View style={styles.topTabBar}>
-      <View style={styles.segmentedContainer}>
+    <View style={[styles.topTabBar, isMobile && styles.topTabBarMobile]}>
+      <View
+        style={[
+          styles.segmentedContainer,
+          isMobile && styles.segmentedContainerMobile,
+        ]}
+      >
         {/* Tab 1: Selección de Productos */}
         <TouchableOpacity
           style={[
             styles.segmentButton,
+            isMobile && styles.segmentButtonMobile,
             activeSubTab === 'products' && styles.segmentButtonActive,
           ]}
           onPress={() => setActiveSubTab('products')}
@@ -281,15 +330,16 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
             name="apps"
             size={16}
             color={activeSubTab === 'products' ? '#C98A16' : '#64748B'}
-            style={{ marginRight: 6 }}
+            style={{ marginRight: isMobile ? 4 : 6 }}
           />
           <Text
             style={[
               styles.segmentButtonText,
               activeSubTab === 'products' && styles.segmentButtonTextActive,
             ]}
+            numberOfLines={1}
           >
-            Selección de Productos
+            {isMobile ? 'Productos' : 'Selección de Productos'}
           </Text>
         </TouchableOpacity>
 
@@ -298,6 +348,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
           ref={quotesTabRef as any}
           style={[
             styles.segmentButton,
+            isMobile && styles.segmentButtonMobile,
             activeSubTab === 'quotes' && styles.segmentButtonActive,
           ]}
           onPress={() => setActiveSubTab('quotes')}
@@ -316,13 +367,14 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
             name="file-document-outline"
             size={16}
             color={activeSubTab === 'quotes' ? '#C98A16' : '#64748B'}
-            style={{ marginRight: 6 }}
+            style={{ marginRight: isMobile ? 4 : 6 }}
           />
           <Text
             style={[
               styles.segmentButtonText,
               activeSubTab === 'quotes' && styles.segmentButtonTextActive,
             ]}
+            numberOfLines={1}
           >
             Cotización
           </Text>
@@ -344,7 +396,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
         </TouchableOpacity>
       </View>
 
-      {/* Right Sun / Theme Toggle Button */}
+      {!isMobile && (
       <TouchableOpacity style={styles.sunToggleBtn} activeOpacity={0.8}>
         <MaterialCommunityIcons
           name="white-balance-sunny"
@@ -352,6 +404,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
           color="#C98A16"
         />
       </TouchableOpacity>
+      )}
     </View>
   );
 
@@ -360,7 +413,10 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
     return (
       <ScrollView
         style={styles.quotesContainer}
-        contentContainerStyle={styles.quotesContent}
+        contentContainerStyle={[
+          styles.quotesContent,
+          isMobile && styles.quotesContentMobile,
+        ]}
         showsVerticalScrollIndicator={true}
       >
         {items.length === 0 ? (
@@ -397,23 +453,9 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
           <>
             {/* List of Configured Products */}
             <View style={styles.quoteItemsSection}>
-              <View style={styles.sectionTitleRow}>
-                <Text style={styles.sectionTitleText}>
-                  PRODUCTOS EN LA COTIZACIÓN ({items.length})
-                </Text>
-                <TouchableOpacity
-                  style={styles.addMoreLink}
-                  onPress={() => setActiveSubTab('products')}
-                  activeOpacity={0.7}
-                >
-                  <MaterialCommunityIcons
-                    name="plus-circle-outline"
-                    size={16}
-                    color="#C98A16"
-                  />
-                  <Text style={styles.addMoreLinkText}>Configurar más productos</Text>
-                </TouchableOpacity>
-              </View>
+              <Text style={styles.sectionTitleText}>
+                PRODUCTOS EN LA COTIZACIÓN ({items.length})
+              </Text>
 
               {items.map((item, index) => (
                 <QuoteItemCard
@@ -423,8 +465,8 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                   onUpdateQuantity={(newQty) =>
                     updateItemQuantity(item.id, newQty)
                   }
-                  onRemove={() => removeItem(item.id)}
-                  onDownloadPdf={() => handleDownloadItemPdf(item)}
+                  onSelectClient={() => openClientSelector('assign')}
+                  onDownloadPdf={() => openClientSelector('item-pdf', item)}
                   onGenerateWarehouseOrder={() =>
                     handleGenerateWarehouseOrder(item, index)
                   }
@@ -433,9 +475,17 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
             </View>
 
             {/* Bottom Actions Bar */}
-            <View style={styles.bottomActionsBar}>
+            <View
+              style={[
+                styles.bottomActionsBar,
+                isMobile && styles.bottomActionsBarMobile,
+              ]}
+            >
               <TouchableOpacity
-                style={styles.clearCartButton}
+                style={[
+                  styles.clearCartButton,
+                  isMobile && styles.bottomActionBtnMobile,
+                ]}
                 onPress={clearQuote}
                 activeOpacity={0.8}
               >
@@ -445,27 +495,6 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                   color={colors.danger}
                 />
                 <Text style={styles.clearCartText}>Vaciar Carrito</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity
-                style={[
-                  styles.downloadPdfButton,
-                  isGeneratingPdf && styles.btnDisabled,
-                ]}
-                onPress={() => setIsClientSelectorOpen(true)}
-                disabled={isGeneratingPdf}
-                activeOpacity={0.85}
-              >
-                <MaterialCommunityIcons
-                  name="file-pdf-box"
-                  size={20}
-                  color="#FFFFFF"
-                />
-                <Text style={styles.downloadPdfButtonText}>
-                  {isGeneratingPdf
-                    ? 'GENERANDO PDF...'
-                    : `Descargar Proforma PDF ($${totals.totalDemo.toFixed(2)})`}
-                </Text>
               </TouchableOpacity>
             </View>
           </>
@@ -638,15 +667,12 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                 <TouchableOpacity
                   style={styles.saveButton}
                   onPress={() => {
-                    setIsClientSelectorOpen(false);
-                    if (items.length > 0) {
-                      handleDownloadPdf();
-                    }
+                    handleConfirmClientSelector();
                   }}
                   activeOpacity={0.8}
                 >
                   <Text style={styles.saveButtonText}>
-                    {items.length > 0 ? 'Confirmar y Generar PDF' : 'Guardar Selección'}
+                    {clientSelectorConfirmLabel}
                   </Text>
                 </TouchableOpacity>
               </View>
@@ -857,15 +883,12 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
               <TouchableOpacity
                 style={styles.saveButton}
                 onPress={() => {
-                  setIsClientSelectorOpen(false);
-                  if (items.length > 0) {
-                    handleDownloadPdf();
-                  }
+                  handleConfirmClientSelector();
                 }}
                 activeOpacity={0.8}
               >
                 <Text style={styles.saveButtonText}>
-                  {items.length > 0 ? 'Generar Proforma' : 'Confirmar'}
+                  {clientSelectorConfirmLabel}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -956,6 +979,10 @@ const styles = StyleSheet.create({
       } as any,
     }),
   },
+  topTabBarMobile: {
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
   segmentedContainer: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -964,12 +991,22 @@ const styles = StyleSheet.create({
     padding: 3,
     gap: 4,
   },
+  segmentedContainerMobile: {
+    flex: 1,
+    minWidth: 0,
+  },
   segmentButton: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: 18,
     paddingVertical: 8,
     borderRadius: 11,
+  },
+  segmentButtonMobile: {
+    flex: 1,
+    minWidth: 0,
+    justifyContent: 'center',
+    paddingHorizontal: 8,
   },
   segmentButtonActive: {
     backgroundColor: '#0A192F', // Deep Midnight Navy
@@ -992,6 +1029,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     color: '#4B5563',
+    flexShrink: 1,
   },
   segmentButtonTextActive: {
     color: '#FFFFFF',
@@ -1022,14 +1060,14 @@ const styles = StyleSheet.create({
     }),
   },
   cotizacionTabBadge: {
-    minWidth: 22,
-    height: 22,
-    borderRadius: 11,
-    backgroundColor: '#C98A16', // Warm Gold
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: '#C98A16',
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 6,
-    marginLeft: 8,
+    paddingHorizontal: 4,
+    marginLeft: 4,
     borderWidth: 1.5,
     borderColor: '#FFFFFF',
     ...Platform.select({
@@ -1115,6 +1153,10 @@ const styles = StyleSheet.create({
   },
   quotesContent: {
     padding: spacing.lg,
+    paddingBottom: spacing['5xl'],
+  },
+  quotesContentMobile: {
+    padding: spacing.md,
     paddingBottom: spacing['5xl'],
   },
   quotesHeaderCard: {
@@ -1313,6 +1355,14 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     marginBottom: spacing.xl,
   },
+  bottomActionsBarMobile: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
+  },
+  bottomActionBtnMobile: {
+    width: '100%',
+    justifyContent: 'center',
+  },
   clearCartButton: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -1352,28 +1402,13 @@ const styles = StyleSheet.create({
   quoteItemsSection: {
     marginBottom: spacing.md,
   },
-  sectionTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginBottom: spacing.sm,
-    paddingHorizontal: 2,
-  },
   sectionTitleText: {
     fontSize: 11,
     fontWeight: '800',
     color: '#6B7280',
     letterSpacing: 0.8,
-  },
-  addMoreLink: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 5,
-  },
-  addMoreLinkText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#C98A16',
+    marginBottom: spacing.sm,
+    paddingHorizontal: 2,
   },
   selectorOverlay: {
     flex: 1,

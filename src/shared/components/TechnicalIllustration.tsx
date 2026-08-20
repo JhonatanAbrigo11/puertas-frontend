@@ -1825,12 +1825,13 @@ const styles = StyleSheet.create({
   },
   heightGuidelineCol: {
     position: 'absolute',
-    right: 14,
-    top: 20,
-    bottom: 20,
+    right: 8,
+    top: 28,
+    bottom: 48,
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
+    maxWidth: 72,
   },
   guidelineDot: {
     width: 6,

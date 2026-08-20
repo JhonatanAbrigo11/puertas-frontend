@@ -35,7 +35,7 @@ import { borderRadius, spacing } from '../../../shared/theme/spacing';
 import { shadows } from '../../../shared/theme/shadows';
 
 export const ManufacturingRecipesScreen: React.FC = () => {
-  const { isTablet, isDesktop } = useResponsive();
+  const { isTablet, isDesktop, isMobile } = useResponsive();
   const gridColumns = isDesktop ? 4 : isTablet ? 3 : 2;
 
   const [productsList, setProductsList] = useState<Product[]>(mockProducts);
@@ -342,10 +342,13 @@ export const ManufacturingRecipesScreen: React.FC = () => {
     <View style={styles.screenWrapper}>
       <ScrollView
         style={styles.container}
-        contentContainerStyle={styles.contentContainer}
+        contentContainerStyle={[
+          styles.contentContainer,
+          isMobile && styles.contentContainerMobile,
+        ]}
         showsVerticalScrollIndicator={true}
       >
-        {/* 1. Filters & Action Button Card */}
+        {viewMode === 'grid' && (
         <View style={styles.headerCard}>
           {/* Top Row: Search Input + New Product Button */}
           <View style={styles.filterActionRow}>
@@ -437,6 +440,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
             })}
           </ScrollView>
         </View>
+        )}
 
         {/* 2. Grid de fichas o detalle del producto */}
         {viewMode === 'grid' ? (
@@ -493,7 +497,13 @@ export const ManufacturingRecipesScreen: React.FC = () => {
               </TouchableOpacity>
 
           {/* Ficha técnica del producto seleccionado */}
-            <View style={[styles.recipeDetailCard, isEditingSheet && styles.recipeDetailCardEditing]}>
+            <View
+              style={[
+                styles.recipeDetailCard,
+                isEditingSheet && styles.recipeDetailCardEditing,
+                isMobile && styles.recipeDetailCardMobile,
+              ]}
+            >
               {isEditingSheet && (
                 <View style={styles.editingBanner}>
                   <MaterialCommunityIcons name="pencil" size={16} color="#92400E" />
@@ -527,8 +537,18 @@ export const ManufacturingRecipesScreen: React.FC = () => {
               )}
 
               {/* Product Sheet Header */}
-              <View style={styles.sheetHeader}>
-                <View style={styles.sheetHeaderLeft}>
+              <View
+                style={[
+                  styles.sheetHeader,
+                  isMobile && styles.sheetHeaderMobile,
+                ]}
+              >
+                <View
+                  style={[
+                    styles.sheetHeaderLeft,
+                    isMobile && styles.sheetHeaderLeftMobile,
+                  ]}
+                >
                   {isEditingSheet && sheetDraft ? (
                     <View style={styles.editFieldsBlock}>
                       <View style={styles.editRow2}>
@@ -583,7 +603,12 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                   )}
                 </View>
 
-                <View style={styles.sheetHeaderActions}>
+                <View
+                  style={[
+                    styles.sheetHeaderActions,
+                    isMobile && styles.sheetHeaderActionsMobile,
+                  ]}
+                >
                   {isEditingSheet ? (
                     <>
                       <TouchableOpacity style={styles.cancelEditBtn} onPress={handleCancelEditSheet} activeOpacity={0.8}>
@@ -597,11 +622,25 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                     </>
                   ) : (
                     <>
-                      <TouchableOpacity style={styles.editSheetBtn} onPress={handleStartEditSheet} activeOpacity={0.8}>
+                      <TouchableOpacity
+                        style={[
+                          styles.editSheetBtn,
+                          isMobile && styles.sheetActionBtnMobile,
+                        ]}
+                        onPress={handleStartEditSheet}
+                        activeOpacity={0.8}
+                      >
                         <MaterialCommunityIcons name="pencil-outline" size={16} color={colors.gold} />
                         <Text style={styles.editSheetBtnText}>Editar ficha</Text>
                       </TouchableOpacity>
-                      <TouchableOpacity style={styles.printSheetBtn} onPress={handlePrint} activeOpacity={0.8}>
+                      <TouchableOpacity
+                        style={[
+                          styles.printSheetBtn,
+                          isMobile && styles.sheetActionBtnMobile,
+                        ]}
+                        onPress={handlePrint}
+                        activeOpacity={0.8}
+                      >
                         <MaterialCommunityIcons name="printer" size={16} color="#FFFFFF" style={{ marginRight: 6 }} />
                         <Text style={styles.printSheetBtnText}>Imprimir Ficha</Text>
                       </TouchableOpacity>
@@ -630,64 +669,86 @@ export const ManufacturingRecipesScreen: React.FC = () => {
               )}
 
               {/* Interactive Simulation Dimensions Bar */}
-              <View style={styles.simulatorBar}>
+              <View
+                style={[
+                  styles.simulatorBar,
+                  isMobile && styles.simulatorBarMobile,
+                ]}
+              >
                 <View style={styles.simBarLeft}>
-                  <Text style={styles.simBarTitle}>
+                  <Text style={[styles.simBarTitle, isMobile && styles.simBarTitleMobile]}>
                     Simulador de Corte Paramétrico
                   </Text>
                 </View>
 
-                <View style={styles.steppersInline}>
-                  {/* Stepper Ancho */}
-                  <View style={styles.stepperMini}>
+                <View
+                  style={[
+                    styles.steppersInline,
+                    isMobile && styles.steppersInlineMobile,
+                  ]}
+                >
+                  <View
+                    style={[
+                      styles.stepperMini,
+                      isMobile && styles.stepperMiniMobile,
+                    ]}
+                  >
                     <Text style={styles.stepperLabel}>Ancho (W):</Text>
-                    <TouchableOpacity
-                      style={styles.miniStepBtn}
-                      onPress={() =>
-                        setSimWidth((w) =>
-                          Math.max(displayProduct.minWidthCm, w - 10)
-                        )
-                      }
-                    >
-                      <Text style={styles.miniStepBtnText}>−</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.miniStepVal}>{simWidth} cm</Text>
-                    <TouchableOpacity
-                      style={styles.miniStepBtn}
-                      onPress={() =>
-                        setSimWidth((w) =>
-                          Math.min(displayProduct.maxWidthCm, w + 10)
-                        )
-                      }
-                    >
-                      <Text style={styles.miniStepBtnText}>+</Text>
-                    </TouchableOpacity>
+                    <View style={styles.stepperControls}>
+                      <TouchableOpacity
+                        style={styles.miniStepBtn}
+                        onPress={() =>
+                          setSimWidth((w) =>
+                            Math.max(displayProduct.minWidthCm, w - 10)
+                          )
+                        }
+                      >
+                        <Text style={styles.miniStepBtnText}>−</Text>
+                      </TouchableOpacity>
+                      <Text style={styles.miniStepVal}>{simWidth} cm</Text>
+                      <TouchableOpacity
+                        style={styles.miniStepBtn}
+                        onPress={() =>
+                          setSimWidth((w) =>
+                            Math.min(displayProduct.maxWidthCm, w + 10)
+                          )
+                        }
+                      >
+                        <Text style={styles.miniStepBtnText}>+</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
 
-                  {/* Stepper Alto */}
-                  <View style={styles.stepperMini}>
+                  <View
+                    style={[
+                      styles.stepperMini,
+                      isMobile && styles.stepperMiniMobile,
+                    ]}
+                  >
                     <Text style={styles.stepperLabel}>Alto (H):</Text>
-                    <TouchableOpacity
-                      style={styles.miniStepBtn}
-                      onPress={() =>
-                        setSimHeight((h) =>
-                          Math.max(displayProduct.minHeightCm, h - 10)
-                        )
-                      }
-                    >
-                      <Text style={styles.miniStepBtnText}>−</Text>
-                    </TouchableOpacity>
-                    <Text style={styles.miniStepVal}>{simHeight} cm</Text>
-                    <TouchableOpacity
-                      style={styles.miniStepBtn}
-                      onPress={() =>
-                        setSimHeight((h) =>
-                          Math.min(displayProduct.maxHeightCm, h + 10)
-                        )
-                      }
-                    >
-                      <Text style={styles.miniStepBtnText}>+</Text>
-                    </TouchableOpacity>
+                    <View style={styles.stepperControls}>
+                      <TouchableOpacity
+                        style={styles.miniStepBtn}
+                        onPress={() =>
+                          setSimHeight((h) =>
+                            Math.max(displayProduct.minHeightCm, h - 10)
+                          )
+                        }
+                      >
+                        <Text style={styles.miniStepBtnText}>−</Text>
+                      </TouchableOpacity>
+                      <Text style={styles.miniStepVal}>{simHeight} cm</Text>
+                      <TouchableOpacity
+                        style={styles.miniStepBtn}
+                        onPress={() =>
+                          setSimHeight((h) =>
+                            Math.min(displayProduct.maxHeightCm, h + 10)
+                          )
+                        }
+                      >
+                        <Text style={styles.miniStepBtnText}>+</Text>
+                      </TouchableOpacity>
+                    </View>
                   </View>
                 </View>
               </View>
@@ -722,7 +783,12 @@ export const ManufacturingRecipesScreen: React.FC = () => {
               )}
 
               {/* Recipe Header with "+ AGREGAR MATERIAL" Button */}
-              <View style={styles.recipeHeaderRow}>
+              <View
+                style={[
+                  styles.recipeHeaderRow,
+                  isMobile && styles.recipeHeaderRowMobile,
+                ]}
+              >
                 <View style={styles.recipeHeaderLeft}>
                   <Text style={styles.recipeHeaderTitle}>
                     RECETA DE MATERIALES & REGLAS DE CORTE ({simulatedItems.length})
@@ -730,7 +796,10 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                 </View>
 
                 <TouchableOpacity
-                  style={styles.addMaterialBtn}
+                  style={[
+                    styles.addMaterialBtn,
+                    isMobile && styles.addMaterialBtnMobile,
+                  ]}
                   onPress={() => setIsAddMaterialOpen(true)}
                   activeOpacity={0.8}
                 >
@@ -1051,6 +1120,10 @@ const styles = StyleSheet.create({
     paddingBottom: spacing['5xl'],
     gap: spacing.lg,
   },
+  contentContainerMobile: {
+    padding: spacing.md,
+    paddingBottom: spacing['5xl'],
+  },
   headerCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
@@ -1190,7 +1263,8 @@ const styles = StyleSheet.create({
     borderColor: '#F0F0F0',
   },
   recipeDetailCard: {
-    flex: 1,
+    width: '100%',
+    alignSelf: 'stretch',
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     borderWidth: 1.5,
@@ -1199,14 +1273,31 @@ const styles = StyleSheet.create({
     gap: 14,
     ...shadows.sm,
   },
+  recipeDetailCardMobile: {
+    padding: 12,
+    borderRadius: 12,
+  },
   sheetHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
+    flexWrap: 'wrap',
     gap: 14,
+    width: '100%',
+  },
+  sheetHeaderMobile: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
   },
   sheetHeaderLeft: {
     flex: 1,
+    minWidth: 220,
+  },
+  sheetHeaderLeftMobile: {
+    flexGrow: 0,
+    flexShrink: 0,
+    width: '100%',
+    minWidth: 0,
   },
   sheetCodeRow: {
     flexDirection: 'row',
@@ -1214,12 +1305,14 @@ const styles = StyleSheet.create({
     gap: 8,
     marginBottom: 6,
     flexWrap: 'wrap',
+    width: '100%',
   },
   sheetCode: {
     fontSize: 12,
     fontWeight: '800',
     color: '#C98A16',
     letterSpacing: 0.5,
+    flexShrink: 0,
   },
   sheetBadge: {
     backgroundColor: '#FEF3C7',
@@ -1250,11 +1343,14 @@ const styles = StyleSheet.create({
     fontWeight: '800',
     color: '#0A192F',
     marginBottom: 4,
+    width: '100%',
+    flexShrink: 1,
   },
   sheetDesc: {
     fontSize: 12,
     color: '#64748B',
     lineHeight: 17,
+    width: '100%',
   },
   printSheetBtn: {
     flexDirection: 'row',
@@ -1278,6 +1374,17 @@ const styles = StyleSheet.create({
     gap: 8,
     alignItems: 'flex-start',
     justifyContent: 'flex-end',
+    flexShrink: 0,
+  },
+  sheetHeaderActionsMobile: {
+    width: '100%',
+    justifyContent: 'stretch',
+    flexShrink: 1,
+  },
+  sheetActionBtnMobile: {
+    flex: 1,
+    minWidth: 0,
+    justifyContent: 'center',
   },
   editSheetBtn: {
     flexDirection: 'row',
@@ -1453,40 +1560,72 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     flexWrap: 'wrap',
     gap: 10,
+    width: '100%',
+    overflow: 'hidden',
   },
   simBarLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    width: '100%',
   },
   simBarTitle: {
     fontSize: 12,
     fontWeight: '800',
     color: colors.goldText,
+    flexShrink: 1,
+  },
+  simBarTitleMobile: {
+    fontSize: 11,
+  },
+  simulatorBarMobile: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
+    paddingHorizontal: 10,
   },
   steppersInline: {
     flexDirection: 'row',
     gap: 16,
+    flexWrap: 'wrap',
+  },
+  steppersInlineMobile: {
+    width: '100%',
+    flexDirection: 'column',
+    gap: 10,
   },
   stepperMini: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+    flexShrink: 1,
+  },
+  stepperMiniMobile: {
+    width: '100%',
+    justifyContent: 'space-between',
+    flexWrap: 'nowrap',
+  },
+  stepperControls: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    flexShrink: 0,
   },
   stepperLabel: {
     fontSize: 11,
     fontWeight: '700',
     color: colors.goldText,
+    flexShrink: 0,
   },
   miniStepBtn: {
-    width: 26,
-    height: 26,
+    width: 28,
+    height: 28,
     borderRadius: 4,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: colors.gold,
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
   miniStepBtnText: {
     fontSize: 14,
@@ -1497,8 +1636,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '800',
     color: '#1A1A1A',
-    minWidth: 46,
+    minWidth: 58,
     textAlign: 'center',
+    flexShrink: 0,
   },
   recipeHeaderRow: {
     flexDirection: 'row',
@@ -1507,17 +1647,25 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     flexWrap: 'wrap',
     gap: 10,
+    width: '100%',
+  },
+  recipeHeaderRowMobile: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
   },
   recipeHeaderLeft: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
+    flex: 1,
+    minWidth: 0,
   },
   recipeHeaderTitle: {
     fontSize: 11,
     fontWeight: '800',
     color: '#475569',
     letterSpacing: 0.8,
+    flexShrink: 1,
   },
   addMaterialBtn: {
     flexDirection: 'row',
@@ -1529,6 +1677,10 @@ const styles = StyleSheet.create({
     paddingVertical: 7,
     borderRadius: 6,
     gap: 4,
+  },
+  addMaterialBtnMobile: {
+    width: '100%',
+    justifyContent: 'center',
   },
   addMaterialBtnText: {
     fontSize: 11,

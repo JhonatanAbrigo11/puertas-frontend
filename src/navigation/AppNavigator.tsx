@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, SafeAreaView, StatusBar, Platform } from 'react-native';
+import { View, StyleSheet, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Header, TabType } from '../shared/components/Header';
 import { Toast } from '../shared/components/Toast';
 import { DashboardScreen } from '../features/dashboard/screens/DashboardScreen';
@@ -17,7 +18,7 @@ export const AppNavigator: React.FC = () => {
   const { items, totals, toast, hideToast } = useQuote();
 
   return (
-    <SafeAreaView style={styles.safeArea}>
+    <SafeAreaView style={styles.safeArea} edges={['top', 'left', 'right']}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.surface} />
 
       {/* Floating Global Toast for confirmation */}
@@ -86,7 +87,6 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: colors.surface,
-    paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
   },
   screenContainer: {
     flex: 1,

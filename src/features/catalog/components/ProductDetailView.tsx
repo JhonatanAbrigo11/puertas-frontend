@@ -195,35 +195,34 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   heightDimension={heightCm}
                   showDimensions={true}
                 />
-
-                {/* Mobile Floating Chevrons */}
-                {!isTablet && !isDesktop && galleryUris.length > 1 && (
-                  <>
-                    <TouchableOpacity
-                      style={styles.mobileChevronLeft}
-                      onPress={handlePrevImage}
-                      activeOpacity={0.7}
-                    >
-                      <MaterialCommunityIcons
-                        name="chevron-left"
-                        size={20}
-                        color="#0A192F"
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={styles.mobileChevronRight}
-                      onPress={handleNextImage}
-                      activeOpacity={0.7}
-                    >
-                      <MaterialCommunityIcons
-                        name="chevron-right"
-                        size={20}
-                        color="#0A192F"
-                      />
-                    </TouchableOpacity>
-                  </>
-                )}
               </View>
+
+              {!isTablet && !isDesktop && galleryUris.length > 1 && (
+                <View style={styles.mobileCarouselNav}>
+                  <TouchableOpacity
+                    style={styles.mobileChevronBtn}
+                    onPress={handlePrevImage}
+                    activeOpacity={0.7}
+                  >
+                    <MaterialCommunityIcons
+                      name="chevron-left"
+                      size={22}
+                      color="#0A192F"
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.mobileChevronBtn}
+                    onPress={handleNextImage}
+                    activeOpacity={0.7}
+                  >
+                    <MaterialCommunityIcons
+                      name="chevron-right"
+                      size={22}
+                      color="#0A192F"
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
 
               {/* Right Side Reference Card (Tablet / Desktop) */}
               {(isTablet || isDesktop) && galleryUris.length > 1 && (
@@ -728,6 +727,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    flexWrap: 'wrap',
     gap: 14,
   },
   sidePreviewCard: {
@@ -808,33 +808,27 @@ const styles = StyleSheet.create({
   heroPreviewContainer: {
     flex: 1,
     maxWidth: 620,
+    width: '100%',
     backgroundColor: '#FFFFFF',
     borderRadius: 18,
     overflow: 'hidden',
     position: 'relative',
   },
-  mobileChevronLeft: {
-    position: 'absolute',
-    top: '50%',
-    left: 14,
-    marginTop: -18,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
-    alignItems: 'center',
+  mobileCarouselNav: {
+    width: '100%',
+    flexDirection: 'row',
     justifyContent: 'center',
-    ...shadows.sm,
+    alignItems: 'center',
+    gap: 16,
+    marginTop: 4,
   },
-  mobileChevronRight: {
-    position: 'absolute',
-    top: '50%',
-    right: 14,
-    marginTop: -18,
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+  mobileChevronBtn: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
     alignItems: 'center',
     justifyContent: 'center',
     ...shadows.sm,

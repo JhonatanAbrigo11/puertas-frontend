@@ -1,6 +1,6 @@
 import { Platform } from 'react-native';
 import * as Print from 'expo-print';
-import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system/legacy';
 import { Quote } from '../entities/Quote';
 import { QuoteItem } from '../entities/QuoteItem';
 import { QuoteTotals } from './quoteCalculator';
@@ -415,81 +415,110 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
   `;
 }
 
+function buildPdfFileName(dialogTitle: string): string {
+  const safeName = dialogTitle
+    .replace(/[^a-zA-Z0-9-_áéíóúÁÉÍÓÚñÑ ]/g, '')
+    .trim()
+    .replace(/\s+/g, '_')
+    .slice(0, 48);
+  return `${safeName || 'documento'}.pdf`;
+}
+
+function downloadBase64PdfOnWeb(base64: string, fileName: string) {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) {
+    bytes[i] = binary.charCodeAt(i);
+  }
+  const blob = new Blob([bytes], { type: 'application/pdf' });
+  const objectUrl = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = objectUrl;
+  link.download = fileName;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(objectUrl);
+}
+
+async function savePdfOnAndroid(base64: string, fileName: string): Promise<string> {
+  const permissions =
+    await FileSystem.StorageAccessFramework.requestDirectoryPermissionsAsync();
+
+  if (!permissions.granted) {
+    throw new Error('Se necesita permiso para guardar el PDF en el dispositivo.');
+  }
+
+  const fileUri = await FileSystem.StorageAccessFramework.createFileAsync(
+    permissions.directoryUri,
+    fileName,
+    'application/pdf'
+  );
+
+  await FileSystem.writeAsStringAsync(fileUri, base64, {
+    encoding: FileSystem.EncodingType.Base64,
+  });
+
+  return fileUri;
+}
+
 async function printHtmlDocument(
   html: string,
   dialogTitle: string
 ): Promise<{ success: boolean; uri?: string; error?: string }> {
   try {
+    const fileName = buildPdfFileName(dialogTitle);
+
     if (Platform.OS === 'web') {
-      if (typeof window !== 'undefined' && typeof document !== 'undefined') {
-        const iframe = document.createElement('iframe');
-        iframe.style.position = 'fixed';
-        iframe.style.right = '0';
-        iframe.style.bottom = '0';
-        iframe.style.width = '0';
-        iframe.style.height = '0';
-        iframe.style.border = '0';
-        iframe.style.opacity = '0';
-        iframe.style.zIndex = '-9999';
-        document.body.appendChild(iframe);
-
-        const frameDoc =
-          iframe.contentWindow?.document || iframe.contentDocument;
-
-        if (frameDoc) {
-          frameDoc.open();
-          frameDoc.write(html);
-          frameDoc.close();
-
-          setTimeout(() => {
-            try {
-              iframe.contentWindow?.focus();
-              iframe.contentWindow?.print();
-            } catch (frameErr) {
-              console.warn(
-                'Iframe print fallback, opening dedicated window:',
-                frameErr
-              );
-              const printWindow = window.open('', '_blank');
-              if (printWindow) {
-                printWindow.document.open();
-                printWindow.document.write(html);
-                printWindow.document.close();
-                printWindow.focus();
-                setTimeout(() => {
-                  printWindow.print();
-                }, 300);
-              }
-            } finally {
-              setTimeout(() => {
-                try {
-                  if (document.body.contains(iframe)) {
-                    document.body.removeChild(iframe);
-                  }
-                } catch {}
-              }, 5000);
-            }
-          }, 350);
+      try {
+        const result = await Print.printToFileAsync({ html, base64: true });
+        if (result.base64) {
+          downloadBase64PdfOnWeb(result.base64, fileName);
+          return { success: true };
         }
+        if (result.uri) {
+          const response = await fetch(result.uri);
+          const blob = await response.blob();
+          const objectUrl = URL.createObjectURL(blob);
+          const link = document.createElement('a');
+          link.href = objectUrl;
+          link.download = fileName;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          URL.revokeObjectURL(objectUrl);
+          return { success: true, uri: result.uri };
+        }
+      } catch (webErr) {
+        console.warn('Web printToFileAsync fallback:', webErr);
       }
-      return { success: true };
+
+      throw new Error('No se pudo generar el archivo PDF para descargar.');
     }
 
-    const { uri } = await Print.printToFileAsync({
+    const printResult = await Print.printToFileAsync({
       html,
-      base64: false,
+      base64: true,
     });
 
-    const isAvailable = await Sharing.isAvailableAsync();
-    if (isAvailable) {
-      await Sharing.shareAsync(uri, {
-        mimeType: 'application/pdf',
-        dialogTitle,
-        UTI: 'com.adobe.pdf',
-      });
+    const pdfBase64 =
+      printResult.base64 ||
+      (await FileSystem.readAsStringAsync(printResult.uri, {
+        encoding: FileSystem.EncodingType.Base64,
+      }));
+
+    if (Platform.OS === 'android') {
+      const savedUri = await savePdfOnAndroid(pdfBase64, fileName);
+      return { success: true, uri: savedUri };
     }
 
-    return { success: true, uri };
+    const destUri = `${FileSystem.documentDirectory}${fileName}`;
+    const destInfo = await FileSystem.getInfoAsync(destUri);
+    if (destInfo.exists) {
+      await FileSystem.deleteAsync(destUri, { idempotent: true });
+    }
+    await FileSystem.copyAsync({ from: printResult.uri, to: destUri });
+    return { success: true, uri: destUri };
   } catch (error: any) {
     console.error('Error generating PDF:', error);
     return {

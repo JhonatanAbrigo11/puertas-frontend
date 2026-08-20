@@ -70,7 +70,7 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
     {
       id: 'manufacturing',
       slotIndex: 4,
-      label: 'Ficha Técnica',
+      label: 'Fichas',
       iconInactive: 'clipboard-text-play-outline',
       iconActive: 'clipboard-text-play',
     },

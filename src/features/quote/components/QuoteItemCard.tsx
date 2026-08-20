@@ -14,32 +14,39 @@ import { colors } from '../../../shared/theme/colors';
 import { typography } from '../../../shared/theme/typography';
 import { borderRadius, spacing } from '../../../shared/theme/spacing';
 import { shadows } from '../../../shared/theme/shadows';
+import { useResponsive } from '../../../shared/hooks/useResponsive';
 
 interface QuoteItemCardProps {
   item: QuoteItem;
   index: number;
   onUpdateQuantity: (newQty: number) => void;
-  onRemove: () => void;
   onDownloadPdf?: () => void;
   onGenerateWarehouseOrder?: () => void;
+  onSelectClient?: () => void;
 }
 
 export const QuoteItemCard: React.FC<QuoteItemCardProps> = ({
   item,
   index,
   onUpdateQuantity,
-  onRemove,
   onDownloadPdf,
   onGenerateWarehouseOrder,
+  onSelectClient,
 }) => {
   const [expanded, setExpanded] = useState(false);
+  const { isMobile } = useResponsive();
 
   return (
-    <View style={styles.card}>
-      {/* Top Main Row */}
-      <View style={styles.mainRow}>
-        {/* Left Side: Badge + Thumbnail + Details + Price */}
-        <View style={styles.leftSection}>
+    <View style={[styles.card, isMobile && styles.cardMobile]}>
+      <View style={[styles.mainRow, isMobile && styles.mainRowMobile]}>
+        <TouchableOpacity
+          style={[styles.leftSection, isMobile && styles.leftSectionMobile]}
+          onPress={onSelectClient}
+          activeOpacity={onSelectClient ? 0.75 : 1}
+          disabled={!onSelectClient}
+          accessibilityRole="button"
+          accessibilityLabel="Seleccionar cliente para esta cotización"
+        >
           {/* Index Badge */}
           <View style={styles.indexBadge}>
             <Text style={styles.indexText}>#{index + 1}</Text>
@@ -56,11 +63,14 @@ export const QuoteItemCard: React.FC<QuoteItemCardProps> = ({
           </View>
 
           {/* Product Details */}
-          <View style={styles.detailsContainer}>
-            <Text style={styles.productCode}>{item.product.code}</Text>
-            <Text style={styles.productName}>{item.product.name}</Text>
+          <View style={[styles.detailsContainer, isMobile && styles.detailsContainerMobile]}>
+            <Text style={styles.productCode} numberOfLines={1}>
+              {item.product.code}
+            </Text>
+            <Text style={styles.productName} numberOfLines={2}>
+              {item.product.name}
+            </Text>
 
-            {/* Dimensions Badge */}
             <View style={styles.dimensionsBadge}>
               <MaterialCommunityIcons
                 name="ruler"
@@ -85,11 +95,16 @@ export const QuoteItemCard: React.FC<QuoteItemCardProps> = ({
                 </Text>
               </View>
             </View>
+            {onSelectClient && (
+              <Text style={styles.selectClientHint}>
+                Toca para elegir cliente
+              </Text>
+            )}
           </View>
-        </View>
+        </TouchableOpacity>
 
         {/* Right Side: Quantity Stepper (Row 1) & Actions (Row 2) */}
-        <View style={styles.rightSection}>
+        <View style={[styles.rightSection, isMobile && styles.rightSectionMobile]}>
           {/* Row 1: Quantity Stepper */}
           <View style={styles.quantityContainer}>
             <Stepper
@@ -124,25 +139,6 @@ export const QuoteItemCard: React.FC<QuoteItemCardProps> = ({
                 </Text>
               </TouchableOpacity>
             )}
-
-            <TouchableOpacity
-              style={styles.deleteButton}
-              onPress={onRemove}
-              activeOpacity={0.7}
-            >
-              <MaterialCommunityIcons
-                name="trash-can-outline"
-                size={18}
-                color={colors.danger}
-              />
-              <Text
-                style={styles.deleteText}
-                numberOfLines={1}
-                ellipsizeMode="clip"
-              >
-                Eliminar
-              </Text>
-            </TouchableOpacity>
           </View>
 
           {onGenerateWarehouseOrder && (
@@ -174,7 +170,7 @@ export const QuoteItemCard: React.FC<QuoteItemCardProps> = ({
         onPress={() => setExpanded(!expanded)}
         activeOpacity={0.7}
       >
-        <View style={styles.toggleLeft}>
+        <View style={[styles.toggleLeft, isMobile && styles.toggleLeftMobile]}>
           <MaterialCommunityIcons
             name="format-list-bulleted-type"
             size={16}
@@ -234,21 +230,37 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: colors.borderLight,
     marginBottom: spacing.md,
+    width: '100%',
+    alignSelf: 'stretch',
+    overflow: 'hidden',
     ...shadows.sm,
+  },
+  cardMobile: {
+    padding: spacing.sm,
   },
   mainRow: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'space-between',
     flexWrap: 'wrap',
     gap: spacing.md,
+    width: '100%',
+  },
+  mainRowMobile: {
+    flexDirection: 'column',
+    alignItems: 'stretch',
   },
   leftSection: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     flex: 1,
-    minWidth: 280,
+    minWidth: 0,
     gap: spacing.md,
+  },
+  leftSectionMobile: {
+    width: '100%',
+    flexGrow: 0,
+    minWidth: 0,
   },
   indexBadge: {
     width: 28,
@@ -260,6 +272,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: 2,
+    flexShrink: 0,
   },
   indexText: {
     fontSize: 11,
@@ -267,17 +280,22 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   thumbnailContainer: {
-    width: 82,
-    height: 72,
+    width: 72,
+    height: 64,
     borderRadius: borderRadius.md,
     overflow: 'hidden',
     borderWidth: 1,
     borderColor: colors.borderLight,
     backgroundColor: colors.background,
+    flexShrink: 0,
   },
   detailsContainer: {
     flex: 1,
-    minWidth: 160,
+    minWidth: 0,
+  },
+  detailsContainerMobile: {
+    minWidth: 0,
+    flexShrink: 1,
   },
   productCode: {
     fontSize: 11,
@@ -293,12 +311,13 @@ const styles = StyleSheet.create({
   },
   dimensionsBadge: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     backgroundColor: '#FEF3C7',
     paddingHorizontal: 8,
-    paddingVertical: 3,
+    paddingVertical: 4,
     borderRadius: borderRadius.sm,
     alignSelf: 'flex-start',
+    maxWidth: '100%',
     gap: 4,
     marginTop: 2,
   },
@@ -306,6 +325,9 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: '600',
     color: '#B45309',
+    flex: 1,
+    flexShrink: 1,
+    flexWrap: 'wrap',
   },
   priceBlock: {
     marginTop: 6,
@@ -319,6 +341,7 @@ const styles = StyleSheet.create({
   priceValuesRow: {
     flexDirection: 'row',
     alignItems: 'baseline',
+    flexWrap: 'wrap',
     gap: 6,
     marginTop: 1,
   },
@@ -332,11 +355,23 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     fontWeight: '500',
   },
+  selectClientHint: {
+    marginTop: 6,
+    fontSize: 11,
+    fontWeight: '600',
+    color: colors.goldText,
+  },
   rightSection: {
-    alignItems: 'flex-end',
+    alignItems: 'stretch',
     justifyContent: 'center',
     width: 280,
+    maxWidth: '100%',
     gap: 8,
+    flexShrink: 1,
+  },
+  rightSectionMobile: {
+    width: '100%',
+    alignSelf: 'stretch',
   },
   quantityContainer: {
     width: '100%',
@@ -352,11 +387,11 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   downloadPdfButton: {
-    flex: 1.35,
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#C98A16', // Warm Gold
+    backgroundColor: '#C98A16',
     borderWidth: 1,
     borderColor: '#B45309',
     paddingHorizontal: 10,
@@ -369,26 +404,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: '#FFFFFF',
-    flexShrink: 0,
-  },
-  deleteButton: {
-    flex: 0.9,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FEF2F2',
-    borderWidth: 1,
-    borderColor: '#FECACA',
-    paddingHorizontal: 8,
-    paddingVertical: 9,
-    borderRadius: borderRadius.md,
-    gap: 4,
-  },
-  deleteText: {
-    fontSize: 12,
-    color: colors.danger,
-    fontWeight: '700',
-    flexShrink: 0,
+    flexShrink: 1,
   },
   warehouseOrderButton: {
     width: '100%',
@@ -408,7 +424,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: '700',
     color: '#FFFFFF',
-    flexShrink: 0,
+    flexShrink: 1,
   },
   toggleMaterialsButton: {
     flexDirection: 'row',
@@ -423,11 +439,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
+    flex: 1,
+    minWidth: 0,
+    paddingRight: 8,
+  },
+  toggleLeftMobile: {
+    flex: 1,
+    minWidth: 0,
   },
   toggleText: {
     fontSize: typography.fontSizes.xs,
     fontWeight: typography.fontWeights.semibold,
     color: colors.primary,
+    flex: 1,
+    flexShrink: 1,
   },
   expandedSection: {
     marginTop: spacing.sm,
