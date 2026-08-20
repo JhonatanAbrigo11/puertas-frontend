@@ -65,3 +65,138 @@ export const productImageUris: Record<string, string> = {
   /** Puerta Corrediza de Vidrio — puerta suspendida de cristal templado */
   'puerta-corrediza-vidrio': px(34574609),
 };
+
+export const productGalleryUris: Record<string, string[]> = {
+  'ventana-corrediza-2h': [
+    us('1525570665650-76bb26af503d'),
+    px(28272351),
+    us('1586853236092-0e7e5c84b475'),
+    us('1743685873224-11544a4d9378'),
+  ],
+  'ventana-corrediza-3h': [
+    px(28272351),
+    us('1525570665650-76bb26af503d'),
+    px(13603622),
+    us('1586853236092-0e7e5c84b475'),
+  ],
+  'ventana-batiente': [
+    us('1586853236092-0e7e5c84b475'),
+    us('1743685873224-11544a4d9378'),
+    px(28272351),
+    us('1525570665650-76bb26af503d'),
+  ],
+  'ventana-proyectable': [
+    us('1743685873224-11544a4d9378'),
+    us('1586853236092-0e7e5c84b475'),
+    px(28272351),
+    px(13603622),
+  ],
+  'mampara-fija': [
+    px(13603622),
+    us('1497366754035-f200968a6e72'),
+    px(5511093),
+    px(8142053),
+  ],
+  'mampara-corrediza': [
+    us('1497366754035-f200968a6e72'),
+    px(13603622),
+    px(34574609),
+    px(5511093),
+  ],
+  'division-oficina': [
+    px(5511093),
+    us('1497366754035-f200968a6e72'),
+    px(13603622),
+    px(7078885),
+  ],
+  'mampara-bano': [
+    px(8142053),
+    px(13603622),
+    us('1497366754035-f200968a6e72'),
+    px(34574609),
+  ],
+  'fachada-acm': [
+    px(7078885),
+    px(20106893),
+    px(35022841),
+    px(33993508),
+  ],
+  'fachada-acm-vidrio': [
+    px(20106893),
+    px(7078885),
+    px(35022841),
+    px(13603622),
+  ],
+  'revestimiento-acm': [
+    px(35022841),
+    px(7078885),
+    px(20106893),
+    px(33993508),
+  ],
+  'vitrina-recta': [
+    px(15247808),
+    px(35175923),
+    px(18102042),
+    px(17273249),
+  ],
+  'vitrina-esquinera': [
+    px(35175923),
+    px(15247808),
+    px(18102042),
+    px(17273249),
+  ],
+  'vitrina-puertas-corredizas': [
+    px(18102042),
+    px(15247808),
+    px(35175923),
+    px(17273249),
+  ],
+  'vitrina-exhibidora': [
+    px(17273249),
+    px(15247808),
+    px(35175923),
+    px(18102042),
+  ],
+  'pergola-aluminio': [
+    px(33993508),
+    px(37560455),
+    px(9989504),
+    px(37588542),
+  ],
+  'pergola-policarbonato': [
+    px(37560455),
+    px(33993508),
+    px(9989504),
+    px(37588542),
+  ],
+  'cubierta-policarbonato': [
+    px(9989504),
+    px(37560455),
+    px(33993508),
+    px(35022841),
+  ],
+  'puerta-corrediza': [
+    px(37588542),
+    px(12709862),
+    px(10727928),
+    px(34574609),
+  ],
+  'puerta-batiente': [
+    px(12709862),
+    px(37588542),
+    px(10727928),
+    us('1586853236092-0e7e5c84b475'),
+  ],
+  'puerta-aluminio': [
+    px(10727928),
+    px(12709862),
+    px(37588542),
+    px(7078885),
+  ],
+  'puerta-corrediza-vidrio': [
+    px(34574609),
+    px(37588542),
+    px(13603622),
+    px(8142053),
+  ],
+};

@@ -19,22 +19,6 @@ export const MaterialsTable: React.FC<MaterialsTableProps> = ({
 }) => {
   return (
     <View style={styles.container}>
-      {/* Table Header Title */}
-      <View style={styles.header}>
-        <View style={styles.titleRow}>
-          <MaterialCommunityIcons
-            name="calculator-variant-outline"
-            size={20}
-            color={colors.primary}
-          />
-          <Text style={styles.title}>MATERIALES NECESARIOS</Text>
-        </View>
-      </View>
-
-      <Text style={styles.subtitle}>
-        Cálculo paramétrico en tiempo real según dimensiones y receta de corte
-      </Text>
-
       {/* Table Structure */}
       <View style={styles.table}>
         {/* Table Head */}
