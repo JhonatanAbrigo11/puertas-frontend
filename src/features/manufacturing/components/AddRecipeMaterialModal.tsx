@@ -190,7 +190,7 @@ export const AddRecipeMaterialModal: React.FC<AddRecipeMaterialModalProps> = ({
                 <MaterialCommunityIcons
                   name="puzzle-plus-outline"
                   size={24}
-                  color="#FE4648"
+                  color={colors.gold}
                 />
               </View>
               <View>
@@ -279,7 +279,7 @@ export const AddRecipeMaterialModal: React.FC<AddRecipeMaterialModalProps> = ({
                         <MaterialCommunityIcons
                           name="check-circle"
                           size={18}
-                          color="#FE4648"
+                          color={colors.gold}
                           style={{ marginLeft: 6 }}
                         />
                       )}
@@ -536,7 +536,7 @@ const styles = StyleSheet.create({
   matOptionCode: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#FE4648',
+    color: colors.goldText,
   },
   matOptionUnit: {
     fontSize: 10,
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
   matOptionPrice: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#FE4648',
+    color: colors.goldText,
   },
   presetsGrid: {
     flexDirection: 'row',
@@ -567,7 +567,7 @@ const styles = StyleSheet.create({
   },
   presetCardSelected: {
     backgroundColor: '#EFF6FF',
-    borderColor: '#FE4648',
+    borderColor: colors.gold,
   },
   presetTop: {
     flexDirection: 'row',
@@ -582,7 +582,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   presetLabelSelected: {
-    color: '#FE4648',
+    color: colors.goldText,
   },
   presetUnitBadge: {
     backgroundColor: '#F0F0F0',
@@ -634,7 +634,7 @@ const styles = StyleSheet.create({
   saveBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FE4648',
+    backgroundColor: colors.gold,
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: 8,

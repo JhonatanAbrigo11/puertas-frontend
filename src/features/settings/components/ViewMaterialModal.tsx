@@ -71,7 +71,7 @@ export const ViewMaterialModal: React.FC<ViewMaterialModalProps> = ({
                 <MaterialCommunityIcons
                   name="cube-scan"
                   size={22}
-                  color="#FE4648"
+                  color={colors.gold}
                 />
               </View>
               <View>
@@ -167,7 +167,7 @@ export const ViewMaterialModal: React.FC<ViewMaterialModalProps> = ({
                 <MaterialCommunityIcons
                   name="package-variant"
                   size={18}
-                  color="#FE4648"
+                  color={colors.gold}
                 />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.detailTitle}>Formato de Almacenamiento</Text>
@@ -268,11 +268,11 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: '#F0F9FF',
+    backgroundColor: colors.goldMuted,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#BAE6FD',
+    borderColor: colors.goldBorder,
   },
   modalTitle: {
     fontSize: 15,
@@ -282,7 +282,7 @@ const styles = StyleSheet.create({
   modalCode: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FE4648',
+    color: colors.gold,
     letterSpacing: 0.5,
   },
   closeBtn: {
@@ -304,9 +304,9 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   categoryBadge: {
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.goldLight,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: colors.goldBorder,
     paddingHorizontal: 8,
     paddingVertical: 3,
     borderRadius: 6,
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   categoryBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#FE4648',
+    color: colors.gold,
     textTransform: 'uppercase',
   },
   materialName: {
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   kpiPrice: {
     fontSize: 22,
     fontWeight: '900',
-    color: '#FE4648',
+    color: colors.gold,
   },
   kpiSub: {
     fontSize: 11,
@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
   editActionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FE4648',
+    backgroundColor: colors.gold,
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,

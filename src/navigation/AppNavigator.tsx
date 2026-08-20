@@ -7,30 +7,14 @@ import { CatalogScreen } from '../features/catalog/screens/CatalogScreen';
 import { QuoteScreen } from '../features/quote/screens/QuoteScreen';
 import { SettingsScreen } from '../features/settings/screens/SettingsScreen';
 import { ManufacturingRecipesScreen } from '../features/manufacturing/screens/ManufacturingRecipesScreen';
-import { CreateProductModal } from '../features/manufacturing/components/CreateProductModal';
 import { BottomNavigator } from './components/BottomNavigator';
 import { useQuote } from '../features/quote/context/QuoteContext';
-import { mockProducts } from '../data/mock/products';
-import { Product } from '../core/domain/entities/Product';
 import { colors } from '../shared/theme/colors';
 
 export const AppNavigator: React.FC = () => {
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
-  const [isCreateProductModalOpen, setIsCreateProductModalOpen] = useState(false);
-  const { items, totals, toast, hideToast, showToast } = useQuote();
-
-  const handleSaveNewProduct = (newProduct: Product) => {
-    // Add new product to the mock products list
-    mockProducts.unshift(newProduct);
-    setIsCreateProductModalOpen(false);
-    showToast(
-      'Producto Creado con Éxito',
-      `"${newProduct.name}" se ha añadido al catálogo y fichas de fabricación.`,
-      'success'
-    );
-    setActiveTab('catalog');
-  };
+  const { items, totals, toast, hideToast } = useQuote();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -92,14 +76,7 @@ export const AppNavigator: React.FC = () => {
         activeTab={activeTab}
         onSelectTab={setActiveTab}
         quoteItemCount={items.length}
-        onCreateProduct={() => setIsCreateProductModalOpen(true)}
-      />
-
-      {/* Modal: Create New Product (Triggered by center '+' button) */}
-      <CreateProductModal
-        visible={isCreateProductModalOpen}
-        onClose={() => setIsCreateProductModalOpen(false)}
-        onSaveProduct={handleSaveNewProduct}
+        onOpenProforma={() => setActiveTab('catalog')}
       />
     </SafeAreaView>
   );

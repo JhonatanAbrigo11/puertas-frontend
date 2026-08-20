@@ -184,7 +184,7 @@ export const CreateMaterialModal: React.FC<CreateMaterialModalProps> = ({
                 <MaterialCommunityIcons
                   name={isEditing ? 'pencil-outline' : 'plus-box-outline'}
                   size={24}
-                  color="#FE4648"
+                  color={colors.gold}
                 />
               </View>
               <View>
@@ -495,11 +495,11 @@ const styles = StyleSheet.create({
     width: 42,
     height: 42,
     borderRadius: 10,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.goldMuted,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#DBEAFE',
+    borderColor: colors.goldBorder,
   },
   modalTitle: {
     fontSize: 16,
@@ -613,8 +613,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   categoryChipActive: {
-    backgroundColor: '#EFF6FF',
-    borderColor: '#FE4648',
+    backgroundColor: colors.goldLight,
+    borderColor: colors.gold,
   },
   categoryChipText: {
     fontSize: 11,
@@ -622,7 +622,7 @@ const styles = StyleSheet.create({
     color: '#475569',
   },
   categoryChipTextActive: {
-    color: '#FE4648',
+    color: colors.goldText,
     fontWeight: '700',
   },
   unitChip: {
@@ -676,7 +676,7 @@ const styles = StyleSheet.create({
   saveBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FE4648',
+    backgroundColor: colors.gold,
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: 8,

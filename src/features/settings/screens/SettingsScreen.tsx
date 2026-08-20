@@ -334,7 +334,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = () => {
                         <MaterialCommunityIcons
                           name="eye-outline"
                           size={18}
-                          color="#FE4648"
+                          color={colors.gold}
                         />
                       </TouchableOpacity>
 
@@ -348,7 +348,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = () => {
                         <MaterialCommunityIcons
                           name="pencil-outline"
                           size={18}
-                          color="#FE4648"
+                          color={colors.gold}
                         />
                       </TouchableOpacity>
 
@@ -492,9 +492,9 @@ const styles = StyleSheet.create({
   createBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#C98A16', // Warm Gold
+    backgroundColor: colors.gold,
     borderWidth: 1,
-    borderColor: '#B45309',
+    borderColor: colors.goldDark,
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderRadius: 8,
@@ -540,8 +540,8 @@ const styles = StyleSheet.create({
     borderColor: '#F0F0F0',
   },
   categoryChipSelected: {
-    backgroundColor: '#FEF3C7',
-    borderColor: '#FDE68A',
+    backgroundColor: colors.goldLight,
+    borderColor: colors.goldBorder,
   },
   categoryChipText: {
     fontSize: 12,
@@ -549,7 +549,7 @@ const styles = StyleSheet.create({
     color: '#475569',
   },
   categoryChipTextSelected: {
-    color: '#B45309',
+    color: colors.goldText,
     fontWeight: '800',
   },
   tableCard: {
@@ -602,7 +602,7 @@ const styles = StyleSheet.create({
   materialCode: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#C98A16',
+    color: colors.gold,
     letterSpacing: 0.5,
   },
   categoryBadge: {
@@ -705,9 +705,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#F0F9FF',
+    backgroundColor: colors.goldMuted,
     borderWidth: 1,
-    borderColor: '#BAE6FD',
+    borderColor: colors.goldBorder,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -715,9 +715,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#EFF6FF',
+    backgroundColor: colors.goldLight,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: colors.goldBorder,
     alignItems: 'center',
     justifyContent: 'center',
   },

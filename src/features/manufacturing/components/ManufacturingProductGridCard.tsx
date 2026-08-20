@@ -49,7 +49,7 @@ export const ManufacturingProductGridCard: React.FC<
         <MaterialCommunityIcons
           name="chevron-right"
           size={16}
-          color={colors.primary}
+          color={colors.gold}
         />
       </View>
     </TouchableOpacity>
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
   codeText: {
     fontSize: typography.fontSizes.xs,
     fontWeight: typography.fontWeights.bold,
-    color: colors.primary,
+    color: colors.gold,
   },
   body: {
     padding: spacing.md,
@@ -108,11 +108,11 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     borderTopWidth: 1,
     borderTopColor: colors.borderLight,
-    backgroundColor: colors.primaryTint,
+    backgroundColor: colors.goldMuted,
   },
   footerText: {
     fontSize: typography.fontSizes.xs,
     fontWeight: typography.fontWeights.bold,
-    color: colors.primary,
+    color: colors.gold,
   },
 });

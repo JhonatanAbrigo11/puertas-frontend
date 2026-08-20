@@ -42,7 +42,7 @@ export const shadows = {
   } as ViewStyle,
 
   cardSelected: {
-    shadowColor: '#FE4648',
+    shadowColor: '#0A192F',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.18,
     shadowRadius: 10,

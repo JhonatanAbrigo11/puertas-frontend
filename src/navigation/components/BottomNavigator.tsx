@@ -20,7 +20,7 @@ interface BottomNavigatorProps {
   activeTab: TabType;
   onSelectTab: (tab: TabType) => void;
   quoteItemCount: number;
-  onCreateProduct?: () => void;
+  onOpenProforma?: () => void;
 }
 
 interface NavTabItem {
@@ -36,12 +36,12 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
   activeTab,
   onSelectTab,
   quoteItemCount,
-  onCreateProduct,
+  onOpenProforma,
 }) => {
   const { width: windowWidth } = useWindowDimensions();
   const insets = useSafeAreaInsets();
 
-  // 5 Navigation Tabs mapped to a 6-slot grid (Slot 3 is the permanent Center + button)
+  // 4 tabs + centro Proforma (botón +)
   const leftTabs: NavTabItem[] = [
     {
       id: 'dashboard',
@@ -51,16 +51,8 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
       iconActive: 'view-dashboard',
     },
     {
-      id: 'catalog',
-      slotIndex: 1,
-      label: 'Proforma',
-      iconInactive: 'clipboard-text-outline',
-      iconActive: 'clipboard-text',
-      badgeCount: quoteItemCount > 0 ? quoteItemCount : undefined,
-    },
-    {
       id: 'quote',
-      slotIndex: 2,
+      slotIndex: 1,
       label: 'Clientes',
       iconInactive: 'account-outline',
       iconActive: 'account',
@@ -70,15 +62,15 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
   const rightTabs: NavTabItem[] = [
     {
       id: 'settings',
-      slotIndex: 4,
+      slotIndex: 3,
       label: 'Inventario',
       iconInactive: 'package-variant-closed',
       iconActive: 'package-variant',
     },
     {
       id: 'manufacturing',
-      slotIndex: 5,
-      label: 'Fabricación',
+      slotIndex: 4,
+      label: 'Ficha Técnica',
       iconInactive: 'clipboard-text-play-outline',
       iconActive: 'clipboard-text-play',
     },
@@ -86,32 +78,33 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
 
   const allTabs = [...leftTabs, ...rightTabs];
 
-  // Map active tab to slot index (0, 1, 3, 4)
+  const TOTAL_SLOTS = 5;
+  const CENTER_SLOT_INDEX = 2;
+
   const getSlotIndexFromTab = (tab: TabType): number => {
     switch (tab) {
       case 'dashboard':
         return 0;
-      case 'catalog':
-        return 1;
       case 'quote':
-        return 2;
+        return 1;
+      case 'catalog':
+        return CENTER_SLOT_INDEX;
       case 'settings':
-        return 4;
+        return 3;
       case 'manufacturing':
-        return 5;
+        return 4;
       default:
         return 0;
     }
   };
 
   const activeSlotIndex = getSlotIndexFromTab(activeTab);
+  const isProformaActive = activeTab === 'catalog';
 
   // Dimensions
   const maxWidth = Math.min(windowWidth - 20, 600);
   const [barWidth, setBarWidth] = useState<number>(maxWidth);
 
-  const TOTAL_SLOTS = 6;
-  const CENTER_SLOT_INDEX = 3;
   const BAR_HEIGHT = 74;
   const CORNER_RADIUS = 26;
   const BUBBLE_SIZE = 50;
@@ -173,7 +166,7 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
     dipAnimation.start();
   }, [activeSlotIndex]);
 
-  // Center "+" Button press handler: Tactile dip animation & open Create Product modal
+  // Center "+" abre Proforma
   const handleCenterButtonPress = () => {
     Animated.sequence([
       Animated.timing(centerDipAnim, {
@@ -191,8 +184,8 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
       }),
     ]).start();
 
-    if (onCreateProduct) {
-      onCreateProduct();
+    if (onOpenProforma) {
+      onOpenProforma();
     }
   };
 
@@ -276,8 +269,8 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
 
   // Active Tab Bubble (Burbujita) horizontal translation
   const activeBubbleTranslateX = animatedIndex.interpolate({
-    inputRange: [0, 1, 2, 3, 4, 5],
-    outputRange: [0, 1, 2, 3, 4, 5].map(
+    inputRange: [0, 1, 2, 3, 4],
+    outputRange: [0, 1, 2, 3, 4].map(
       (i) => i * slotWidth + (slotWidth - BUBBLE_SIZE) / 2
     ),
   });
@@ -309,20 +302,14 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
   const activeTabItem =
     allTabs.find((t) => t.id === activeTab) || leftTabs[0];
 
-  const renderTabButton = (tab: NavTabItem) => {
-    const isCurrentActive = activeTab === tab.id;
+  const showSideActiveBubble = !isProformaActive;
 
-    // Inactive icon and label opacity transition
-    const itemOpacity = animatedIndex.interpolate({
+  const renderTabButton = (tab: NavTabItem) => {
+    const isCurrentActive = activeTab === tab.id && showSideActiveBubble;
+
+    const iconOpacity = animatedIndex.interpolate({
       inputRange: [tab.slotIndex - 0.5, tab.slotIndex, tab.slotIndex + 0.5],
       outputRange: [1, 0, 1],
-      extrapolate: 'clamp',
-    });
-
-    // Active label opacity at bottom
-    const activeLabelOpacity = animatedIndex.interpolate({
-      inputRange: [tab.slotIndex - 0.3, tab.slotIndex, tab.slotIndex + 0.3],
-      outputRange: [0, 1, 0],
       extrapolate: 'clamp',
     });
 
@@ -336,51 +323,30 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
         accessibilityLabel={tab.label}
         accessibilityState={{ selected: isCurrentActive }}
       >
-        {/* Inactive Icon & Inactive Label (Fades out when burbujita arrives) */}
         <Animated.View
-          style={[
-            styles.inactiveContent,
-            {
-              opacity: itemOpacity,
-            },
-          ]}
-        >
-          <View style={styles.iconContainer}>
-            <MaterialCommunityIcons
-              name={tab.iconInactive}
-              size={24}
-              color="#64748B"
-            />
-
-            {/* Inactive Badge */}
-            {tab.badgeCount !== undefined && tab.badgeCount > 0 && (
-              <View style={styles.inactiveBadge}>
-                <Text style={styles.inactiveBadgeText}>
-                  {tab.badgeCount > 99 ? '99+' : tab.badgeCount}
-                </Text>
-              </View>
-            )}
-          </View>
-
-          <Text style={styles.inactiveLabel} numberOfLines={1}>
-            {tab.label}
-          </Text>
-        </Animated.View>
-
-        {/* Active Label (Positioned cleanly at bottom of active tab) */}
-        <Animated.View
-          style={[
-            styles.activeLabelContainer,
-            {
-              opacity: activeLabelOpacity,
-            },
-          ]}
+          style={[styles.tabIconWrap, { opacity: iconOpacity }]}
           pointerEvents="none"
         >
-          <Text style={styles.activeLabel} numberOfLines={1}>
-            {tab.label}
-          </Text>
+          <MaterialCommunityIcons
+            name={tab.iconInactive}
+            size={24}
+            color="#737373"
+          />
+          {tab.badgeCount !== undefined && tab.badgeCount > 0 && (
+            <View style={styles.inactiveBadge}>
+              <Text style={styles.inactiveBadgeText}>
+                {tab.badgeCount > 99 ? '99+' : tab.badgeCount}
+              </Text>
+            </View>
+          )}
         </Animated.View>
+
+        <Text
+          style={[styles.tabLabel, isCurrentActive && styles.tabLabelActive]}
+          numberOfLines={1}
+        >
+          {tab.label}
+        </Text>
       </TouchableOpacity>
     );
   };
@@ -431,6 +397,7 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
               width: BUBBLE_SIZE,
               height: BUBBLE_SIZE,
               transform: [{ translateX: activeBubbleTranslateX }],
+              opacity: showSideActiveBubble ? 1 : 0,
             },
           ]}
           pointerEvents="none"
@@ -468,7 +435,7 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
           </Animated.View>
         </Animated.View>
 
-        {/* Tab Row: 3 Tabs Left | Center Spacer | 2 Tabs Right */}
+        {/* Tab Row: 2 Tabs Left | Center Proforma | 2 Tabs Right */}
         <View style={styles.tabsRow}>
           <View style={[styles.tabSection, styles.tabSectionLeft]}>
             {leftTabs.map(renderTabButton)}
@@ -496,11 +463,12 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
             activeOpacity={0.85}
             onPress={handleCenterButtonPress}
             accessibilityRole="button"
-            accessibilityLabel="Crear nuevo producto"
+            accessibilityLabel="Abrir proforma"
           >
             <Animated.View
               style={[
                 styles.centerButtonCircle,
+                isProformaActive && styles.centerButtonCircleActive,
                 {
                   transform: [
                     { translateY: centerButtonTranslateY },
@@ -514,6 +482,13 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
                 size={34}
                 color="#FFFFFF"
               />
+              {quoteItemCount > 0 && (
+                <View style={styles.centerBadge}>
+                  <Text style={styles.centerBadgeText}>
+                    {quoteItemCount > 99 ? '99+' : quoteItemCount}
+                  </Text>
+                </View>
+              )}
             </Animated.View>
           </TouchableOpacity>
         </View>
@@ -539,7 +514,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#FE4648',
+        shadowColor: '#0A192F',
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.14,
         shadowRadius: 16,
@@ -575,14 +550,14 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: '#0A192F', // Deep Midnight Navy
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
     borderColor: '#FFFFFF',
     ...Platform.select({
       ios: {
-        shadowColor: '#0A192F',
+        shadowColor: colors.primary,
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.35,
         shadowRadius: 10,
@@ -632,7 +607,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   tabSectionLeft: {
-    flex: 3,
+    flex: 2,
   },
   tabSectionRight: {
     flex: 2,
@@ -644,17 +619,13 @@ const styles = StyleSheet.create({
     flex: 1,
     height: '100%',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-end',
+    paddingBottom: 8,
     position: 'relative',
-    paddingVertical: 4,
   },
-  inactiveContent: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 4,
-  },
-  iconContainer: {
-    position: 'relative',
+  tabIconWrap: {
+    position: 'absolute',
+    top: 16,
     alignItems: 'center',
     justifyContent: 'center',
     width: 30,
@@ -680,27 +651,17 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     lineHeight: 11,
   },
-  inactiveLabel: {
+  tabLabel: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#64748B',
-    marginTop: 2,
+    color: '#737373',
     textAlign: 'center',
+    width: '100%',
+    paddingHorizontal: 2,
   },
-  activeLabelContainer: {
-    position: 'absolute',
-    bottom: 6,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  activeLabel: {
-    fontSize: 11,
+  tabLabelActive: {
     fontWeight: '800',
-    color: '#0A192F',
-    textAlign: 'center',
-    letterSpacing: 0.1,
+    color: colors.primary,
   },
   centerButtonContainer: {
     position: 'absolute',
@@ -715,7 +676,7 @@ const styles = StyleSheet.create({
     width: 62,
     height: 62,
     borderRadius: 31,
-    backgroundColor: '#0A192F', // Deep Midnight Navy
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3.5,
@@ -723,17 +684,40 @@ const styles = StyleSheet.create({
     ...Platform.select({
       ios: {
         shadowColor: '#0A192F',
-        shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.45,
-        shadowRadius: 14,
+        shadowOffset: { width: 0, height: 6 },
+        shadowOpacity: 0.28,
+        shadowRadius: 10,
       },
       android: {
-        elevation: 14,
+        elevation: 8,
       },
       web: {
         boxShadow:
-          '0 14px 28px -4px rgba(10, 25, 47, 0.48), 0 8px 14px -2px rgba(10, 25, 47, 0.32)',
+          '0 10px 20px -2px rgba(10, 25, 47, 0.35), 0 4px 6px -2px rgba(10, 25, 47, 0.2)',
       } as any,
     }),
+  },
+  centerButtonCircleActive: {
+    borderColor: '#E2E8F0',
+  },
+  centerBadge: {
+    position: 'absolute',
+    top: -2,
+    right: -2,
+    minWidth: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 2,
+    borderColor: colors.primaryDark,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 4,
+  },
+  centerBadgeText: {
+    fontSize: 9,
+    fontWeight: '800',
+    color: colors.primaryDark,
+    lineHeight: 11,
   },
 });

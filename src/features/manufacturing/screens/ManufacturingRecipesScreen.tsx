@@ -487,7 +487,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                 <MaterialCommunityIcons
                   name="arrow-left"
                   size={20}
-                  color="#FE4648"
+                  color={colors.gold}
                 />
                 <Text style={styles.backRowText}>Volver a fichas</Text>
               </TouchableOpacity>
@@ -598,7 +598,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                   ) : (
                     <>
                       <TouchableOpacity style={styles.editSheetBtn} onPress={handleStartEditSheet} activeOpacity={0.8}>
-                        <MaterialCommunityIcons name="pencil-outline" size={16} color="#FE4648" />
+                        <MaterialCommunityIcons name="pencil-outline" size={16} color={colors.gold} />
                         <Text style={styles.editSheetBtnText}>Editar ficha</Text>
                       </TouchableOpacity>
                       <TouchableOpacity style={styles.printSheetBtn} onPress={handlePrint} activeOpacity={0.8}>
@@ -981,7 +981,7 @@ export const ManufacturingRecipesScreen: React.FC = () => {
                               <MaterialCommunityIcons
                                 name="trash-can-outline"
                                 size={16}
-                                color="#DC2626"
+                                color={colors.textMuted}
                               />
                             </TouchableOpacity>
                           </View>
@@ -1070,9 +1070,9 @@ const styles = StyleSheet.create({
   createProductBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FE4648',
+    backgroundColor: colors.gold,
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: colors.goldDark,
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderRadius: 8,
@@ -1118,8 +1118,8 @@ const styles = StyleSheet.create({
     borderColor: '#F0F0F0',
   },
   categoryChipSelected: {
-    backgroundColor: '#FFF0F0',
-    borderColor: '#FE4648',
+    backgroundColor: colors.goldLight,
+    borderColor: colors.goldBorder,
   },
   categoryChipText: {
     fontSize: 12,
@@ -1127,13 +1127,13 @@ const styles = StyleSheet.create({
     color: '#475569',
   },
   categoryChipTextSelected: {
-    color: '#D93638',
+    color: colors.goldText,
     fontWeight: '800',
   },
   gridSectionTitle: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#64748B',
+    color: colors.goldText,
     letterSpacing: 0.6,
     textTransform: 'uppercase',
     marginBottom: 12,
@@ -1179,7 +1179,7 @@ const styles = StyleSheet.create({
   backRowText: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FE4648',
+    color: colors.goldText,
   },
   sheetImageBanner: {
     height: 180,
@@ -1445,9 +1445,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FFF0F0',
+    backgroundColor: colors.goldMuted,
     borderWidth: 1.5,
-    borderColor: '#FFCACA',
+    borderColor: colors.goldBorder,
     borderRadius: 10,
     paddingHorizontal: 14,
     paddingVertical: 10,
@@ -1462,7 +1462,7 @@ const styles = StyleSheet.create({
   simBarTitle: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#D93638',
+    color: colors.goldText,
   },
   steppersInline: {
     flexDirection: 'row',
@@ -1476,7 +1476,7 @@ const styles = StyleSheet.create({
   stepperLabel: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#D93638',
+    color: colors.goldText,
   },
   miniStepBtn: {
     width: 26,
@@ -1484,14 +1484,14 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: colors.gold,
     alignItems: 'center',
     justifyContent: 'center',
   },
   miniStepBtnText: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#FE4648',
+    color: colors.goldText,
   },
   miniStepVal: {
     fontSize: 12,
@@ -1522,9 +1522,9 @@ const styles = StyleSheet.create({
   addMaterialBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FE4648',
+    backgroundColor: colors.gold,
     borderWidth: 1,
-    borderColor: '#FE4648',
+    borderColor: colors.goldDark,
     paddingHorizontal: 12,
     paddingVertical: 7,
     borderRadius: 6,
@@ -1615,7 +1615,7 @@ const styles = StyleSheet.create({
   matCodeText: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#FE4648',
+    color: colors.goldText,
   },
   matNameText: {
     fontSize: 12,
@@ -1626,9 +1626,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: '#FFF0F0',
+    backgroundColor: colors.goldMuted,
     borderWidth: 1,
-    borderColor: '#FFCACA',
+    borderColor: colors.goldBorder,
     paddingHorizontal: 6,
     paddingVertical: 3,
     borderRadius: 4,
@@ -1638,7 +1638,7 @@ const styles = StyleSheet.create({
   formulaText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#D93638',
+    color: colors.goldText,
     flexShrink: 1,
   },
   qtyText: {
@@ -1667,15 +1667,15 @@ const styles = StyleSheet.create({
   subtotalText: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#FE4648',
+    color: colors.goldText,
   },
   deleteRecipeItemBtn: {
     width: 28,
     height: 28,
     borderRadius: 4,
-    backgroundColor: '#FEF2F2',
+    backgroundColor: colors.goldMuted,
     borderWidth: 1,
-    borderColor: '#FECACA',
+    borderColor: colors.borderLight,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1710,6 +1710,6 @@ const styles = StyleSheet.create({
   footerTotalValue: {
     fontSize: 16,
     fontWeight: '900',
-    color: '#FE4648',
+    color: colors.goldText,
   },
 });

@@ -223,7 +223,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                 <MaterialCommunityIcons
                   name="plus-box"
                   size={24}
-                  color="#FE4648"
+                  color={colors.gold}
                 />
               </View>
               <View>
@@ -312,7 +312,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                   <MaterialCommunityIcons
                     name={(selectedCategoryObj?.iconName as any) || 'window-maximize'}
                     size={18}
-                    color="#FE4648"
+                    color={colors.gold}
                   />
                   <Text style={styles.dropdownTriggerText}>
                     {selectedCategoryObj?.name || 'Selecciona una categoría'}
@@ -348,7 +348,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           <MaterialCommunityIcons
                             name={cat.iconName as any}
                             size={18}
-                            color={isSelected ? '#FE4648' : '#64748B'}
+                            color={isSelected ? colors.gold : '#64748B'}
                           />
                           <Text
                             style={[
@@ -364,7 +364,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           <MaterialCommunityIcons
                             name="check-circle"
                             size={18}
-                            color="#FE4648"
+                            color={colors.gold}
                           />
                         )}
                       </TouchableOpacity>
@@ -394,7 +394,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     <MaterialCommunityIcons
                       name="image-plus"
                       size={15}
-                      color={diagramMode === 'upload' ? '#FE4648' : '#64748B'}
+                      color={diagramMode === 'upload' ? colors.gold : '#64748B'}
                     />
                     <Text
                       style={[
@@ -417,7 +417,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     <MaterialCommunityIcons
                       name="vector-square"
                       size={15}
-                      color={diagramMode === 'preset' ? '#FE4648' : '#64748B'}
+                      color={diagramMode === 'preset' ? colors.gold : '#64748B'}
                     />
                     <Text
                       style={[
@@ -468,7 +468,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           <MaterialCommunityIcons
                             name="camera-flip-outline"
                             size={15}
-                            color="#FE4648"
+                            color={colors.gold}
                           />
                           <Text style={styles.changeImageBtnText}>
                             Cambiar imagen
@@ -483,7 +483,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           <MaterialCommunityIcons
                             name="trash-can-outline"
                             size={15}
-                            color="#DC2626"
+                            color={colors.textMuted}
                           />
                           <Text style={styles.removeImageBtnText}>Quitar</Text>
                         </TouchableOpacity>
@@ -501,7 +501,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                       <MaterialCommunityIcons
                         name="cloud-upload-outline"
                         size={28}
-                        color="#FE4648"
+                        color={colors.gold}
                       />
                     </View>
                     <Text style={styles.uploadMainText}>
@@ -514,7 +514,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                       <MaterialCommunityIcons
                         name="folder-image"
                         size={16}
-                        color="#FE4648"
+                        color={colors.gold}
                       />
                       <Text style={styles.uploadBrowseBtnText}>
                         Explorar archivos
@@ -545,7 +545,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                         size={20}
                         color={
                           illustrationType === opt.id && !customImageUri
-                            ? '#FE4648'
+                            ? colors.gold
                             : '#64748B'
                         }
                       />
@@ -835,7 +835,7 @@ const styles = StyleSheet.create({
     height: 42,
   },
   dropdownTriggerActive: {
-    borderColor: '#FE4648',
+    borderColor: colors.gold,
     backgroundColor: '#EFF6FF',
   },
   dropdownTriggerLeft: {
@@ -881,7 +881,7 @@ const styles = StyleSheet.create({
   },
   dropdownItemTextSelected: {
     fontWeight: '700',
-    color: '#FE4648',
+    color: colors.goldText,
   },
   sectionHeaderRow: {
     flexDirection: 'row',
@@ -916,7 +916,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
   },
   modeTabTextActive: {
-    color: '#FE4648',
+    color: colors.goldText,
     fontWeight: '700',
   },
   uploadDropzone: {
@@ -966,7 +966,7 @@ const styles = StyleSheet.create({
   uploadBrowseBtnText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FE4648',
+    color: colors.goldText,
   },
   uploadedPreviewCard: {
     flexDirection: 'row',
@@ -1030,7 +1030,7 @@ const styles = StyleSheet.create({
   changeImageBtnText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#FE4648',
+    color: colors.goldText,
   },
   removeImageBtn: {
     flexDirection: 'row',
@@ -1067,7 +1067,7 @@ const styles = StyleSheet.create({
   },
   illuCardSelected: {
     backgroundColor: '#EFF6FF',
-    borderColor: '#FE4648',
+    borderColor: colors.gold,
   },
   illuCardText: {
     fontSize: 11,
@@ -1076,7 +1076,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   illuCardTextSelected: {
-    color: '#FE4648',
+    color: colors.goldText,
     fontWeight: '700',
   },
   textArea: {
@@ -1109,7 +1109,7 @@ const styles = StyleSheet.create({
   saveBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FE4648',
+    backgroundColor: colors.gold,
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: 8,
