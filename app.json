@@ -7,7 +7,9 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "backgroundColor": "#0F4C81"
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0A192F"
     },
     "ios": {
       "supportsTablet": true,
@@ -15,8 +17,9 @@
     },
     "android": {
       "package": "com.alux.cotizador",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "backgroundColor": "#0F4C81",
+        "backgroundColor": "#0A192F",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
@@ -27,8 +30,10 @@
       "favicon": "./assets/favicon.png",
       "bundler": "metro"
     },
-    "plugins": [
-      "expo-sharing"
-    ]
+    "extra": {
+      "eas": {
+        "projectId": "666004db-1b79-409c-80eb-32ac792a44a0"
+      }
+    }
   }
 }

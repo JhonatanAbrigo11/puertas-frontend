@@ -26,11 +26,11 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         <tr style="border-bottom: 1px solid #F0F0F0; ${
           index % 2 === 1 ? 'background-color: #FFFFFF;' : ''
         }">
-          <td style="padding: 10px 8px; font-weight: 700; color: #FE4648; text-align: center;">#${
+          <td style="padding: 10px 8px; font-weight: 700; color: #C98A16; text-align: center;">#${
             index + 1
           }</td>
           <td style="padding: 10px 8px;">
-            <div style="font-weight: 700; color: #0F172A; font-size: 13px;">${
+            <div style="font-weight: 700; color: #0A192F; font-size: 13px;">${
               item.product.name
             }</div>
             <div style="font-size: 11px; color: #64748B; margin-top: 2px;">
@@ -43,13 +43,13 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
             ${item.widthCm} × ${item.heightCm} cm
             <div style="font-size: 10px; color: #94A3B8;">(${areaM2} m²)</div>
           </td>
-          <td style="padding: 10px 8px; text-align: center; font-weight: 700; font-size: 13px; color: #0F172A;">
+          <td style="padding: 10px 8px; text-align: center; font-weight: 700; font-size: 13px; color: #0A192F;">
             ${item.quantity} und
           </td>
           <td style="padding: 10px 8px; text-align: right; font-size: 12px; color: #475569;">
             $${item.unitPriceDemo.toFixed(2)}
           </td>
-          <td style="padding: 10px 8px; text-align: right; font-weight: 700; font-size: 13px; color: #FE4648;">
+          <td style="padding: 10px 8px; text-align: right; font-weight: 700; font-size: 13px; color: #0A192F;">
             $${item.subtotalDemo.toFixed(2)}
           </td>
         </tr>
@@ -73,18 +73,18 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
               ', '
             )}</div>
           </td>
-          <td style="padding: 8px 10px; text-align: right; font-size: 12px; font-weight: 700; color: #FE4648;">
+          <td style="padding: 8px 10px; text-align: right; font-size: 12px; font-weight: 700; color: #C98A16;">
             ${formattedQty}
           </td>
           <td style="padding: 8px 10px; text-align: center; font-size: 11px; font-weight: 700; color: #475569;">
-            <span style="background: #F0F0F0; padding: 2px 6px; border-radius: 4px;">${
+            <span style="background: #FEF3C7; color: #B45309; padding: 2px 6px; border-radius: 4px;">${
               mat.unit
             }</span>
           </td>
           <td style="padding: 8px 10px; text-align: right; font-size: 12px; color: #64748B;">
             $${mat.unitPriceDemo.toFixed(2)}
           </td>
-          <td style="padding: 8px 10px; text-align: right; font-size: 12px; font-weight: 700; color: #0F172A;">
+          <td style="padding: 8px 10px; text-align: right; font-size: 12px; font-weight: 700; color: #0A192F;">
             $${mat.totalPriceDemo.toFixed(2)}
           </td>
         </tr>
@@ -105,7 +105,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         }
         body {
           font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-          color: #0F172A;
+          color: #0A192F;
           background: #FFFFFF;
           margin: 0;
           padding: 0;
@@ -116,7 +116,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          border-bottom: 3px solid #FE4648;
+          border-bottom: 3px solid #0A192F;
           padding-bottom: 16px;
           margin-bottom: 20px;
         }
@@ -126,7 +126,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         .company-name {
           font-size: 24px;
           font-weight: 900;
-          color: #FE4648;
+          color: #0A192F;
           letter-spacing: 0.5px;
           margin: 0 0 4px 0;
         }
@@ -143,8 +143,8 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         }
         .quote-info-badge {
           text-align: right;
-          background: #F0F7FF;
-          border: 1px solid #93C5FD;
+          background: #FFFDF5;
+          border: 1px solid #FDE68A;
           border-radius: 8px;
           padding: 12px 16px;
           min-width: 200px;
@@ -152,14 +152,14 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         .quote-title {
           font-size: 11px;
           font-weight: 800;
-          color: #FE4648;
+          color: #C98A16;
           letter-spacing: 1px;
           margin: 0 0 4px 0;
         }
         .quote-number {
           font-size: 20px;
           font-weight: 900;
-          color: #0F172A;
+          color: #0A192F;
           margin: 0 0 6px 0;
         }
         .quote-dates {
@@ -168,7 +168,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         }
         .client-card {
           background: #FFFFFF;
-          border: 1px solid #F0F0F0;
+          border: 1px solid #E5E7EB;
           border-radius: 8px;
           padding: 12px 16px;
           margin-bottom: 20px;
@@ -191,17 +191,17 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         .client-value {
           font-size: 13px;
           font-weight: 700;
-          color: #0F172A;
+          color: #0A192F;
           margin-top: 2px;
           margin-bottom: 6px;
         }
         .section-heading {
           font-size: 13px;
           font-weight: 800;
-          color: #FE4648;
+          color: #0A192F;
           text-transform: uppercase;
           letter-spacing: 0.5px;
-          border-left: 4px solid #FE4648;
+          border-left: 4px solid #C98A16;
           padding-left: 8px;
           margin: 20px 0 10px 0;
         }
@@ -211,7 +211,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
           margin-bottom: 16px;
         }
         th {
-          background: #1E293B;
+          background: #0A192F;
           color: #FFFFFF;
           font-size: 11px;
           font-weight: 700;
@@ -240,7 +240,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
           border-bottom: 1px solid #F0F0F0;
         }
         .totals-row-highlight {
-          background: #FE4648;
+          background: #C98A16;
           color: #FFFFFF;
           font-size: 15px;
           font-weight: 900;
