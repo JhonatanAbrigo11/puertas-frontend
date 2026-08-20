@@ -334,7 +334,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = () => {
                         <MaterialCommunityIcons
                           name="eye-outline"
                           size={18}
-                          color="#0284C7"
+                          color="#FE4648"
                         />
                       </TouchableOpacity>
 
@@ -348,7 +348,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = () => {
                         <MaterialCommunityIcons
                           name="pencil-outline"
                           size={18}
-                          color="#2563EB"
+                          color="#FE4648"
                         />
                       </TouchableOpacity>
 
@@ -462,7 +462,7 @@ export const SettingsScreen: React.FC<SettingsScreenProps> = () => {
 const styles = StyleSheet.create({
   screenWrapper: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     position: 'relative',
   },
   container: {
@@ -477,7 +477,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     padding: 16,
     marginBottom: 16,
     gap: 12,
@@ -492,9 +492,9 @@ const styles = StyleSheet.create({
   createBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#0F4C81',
+    backgroundColor: '#FE4648',
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
     paddingHorizontal: 14,
     paddingVertical: 9,
     borderRadius: 8,
@@ -537,11 +537,11 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
   },
   categoryChipSelected: {
-    backgroundColor: '#FDF8ED',
-    borderColor: '#D4AF37',
+    backgroundColor: '#FFF0F0',
+    borderColor: '#FE4648',
   },
   categoryChipText: {
     fontSize: 12,
@@ -549,23 +549,23 @@ const styles = StyleSheet.create({
     color: '#475569',
   },
   categoryChipTextSelected: {
-    color: '#997316',
+    color: '#D93638',
     fontWeight: '800',
   },
   tableCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     overflow: 'hidden',
     ...shadows.sm,
   },
   tableCardHeader: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 18,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: '#F0F0F0',
   },
   tableCardTitle: {
     fontSize: 11,
@@ -583,7 +583,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#FAFAFA',
   },
   materialRowEven: {
     backgroundColor: '#FAFAFA',
@@ -602,11 +602,11 @@ const styles = StyleSheet.create({
   materialCode: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
     letterSpacing: 0.5,
   },
   categoryBadge: {
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#F0F0F0',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -688,7 +688,7 @@ const styles = StyleSheet.create({
   priceValue: {
     fontSize: 16,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   unitLabel: {
     fontSize: 11,
@@ -746,7 +746,7 @@ const styles = StyleSheet.create({
     padding: 24,
     alignItems: 'center',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     ...shadows.lg,
   },
   deleteIconCircle: {
@@ -780,7 +780,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     borderRadius: 8,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
     alignItems: 'center',
     justifyContent: 'center',
   },

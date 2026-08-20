@@ -184,7 +184,7 @@ export const CreateMaterialModal: React.FC<CreateMaterialModalProps> = ({
                 <MaterialCommunityIcons
                   name={isEditing ? 'pencil-outline' : 'plus-box-outline'}
                   size={24}
-                  color="#2563EB"
+                  color="#FE4648"
                 />
               </View>
               <View>
@@ -471,7 +471,7 @@ const styles = StyleSheet.create({
     maxWidth: 640,
     maxHeight: '90%',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     overflow: 'hidden',
     ...shadows.lg,
   },
@@ -482,7 +482,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#FAFAFA',
     backgroundColor: '#FFFFFF',
   },
   modalHeaderLeft: {
@@ -515,7 +515,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -544,7 +544,7 @@ const styles = StyleSheet.create({
     color: '#EF4444',
   },
   input: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
     borderColor: '#CBD5E1',
     borderRadius: 8,
@@ -571,7 +571,7 @@ const styles = StyleSheet.create({
   prefixInputWrapper: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
     borderColor: '#CBD5E1',
     borderRadius: 8,
@@ -605,16 +605,16 @@ const styles = StyleSheet.create({
     gap: 6,
   },
   categoryChip: {
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     paddingHorizontal: 10,
     paddingVertical: 6,
     borderRadius: 6,
   },
   categoryChipActive: {
     backgroundColor: '#EFF6FF',
-    borderColor: '#2563EB',
+    borderColor: '#FE4648',
   },
   categoryChipText: {
     fontSize: 11,
@@ -622,13 +622,13 @@ const styles = StyleSheet.create({
     color: '#475569',
   },
   categoryChipTextActive: {
-    color: '#2563EB',
+    color: '#FE4648',
     fontWeight: '700',
   },
   unitChip: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 6,
@@ -659,14 +659,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+    borderTopColor: '#FAFAFA',
     backgroundColor: '#FFFFFF',
   },
   cancelBtn: {
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
   },
   cancelBtnText: {
     fontSize: 12,
@@ -676,7 +676,7 @@ const styles = StyleSheet.create({
   saveBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2563EB',
+    backgroundColor: '#FE4648',
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: 8,

@@ -340,7 +340,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     paddingBottom: 12,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#FAFAFA',
   },
   sectionHeader: {
     fontSize: 10,
@@ -371,16 +371,16 @@ const styles = StyleSheet.create({
   stepBtn: {
     width: 38,
     height: '100%',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     borderRightWidth: 1,
-    borderRightColor: '#E2E8F0',
+    borderRightColor: '#F0F0F0',
   },
   stepBtnText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   stepBtnTextDisabled: {
     color: '#CBD5E1',
@@ -396,13 +396,13 @@ const styles = StyleSheet.create({
     borderWidth: 0,
   },
   unitBox: {
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
     paddingHorizontal: 10,
     height: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     borderLeftWidth: 1,
-    borderLeftColor: '#E2E8F0',
+    borderLeftColor: '#F0F0F0',
   },
   unitText: {
     fontSize: 11,
@@ -429,15 +429,15 @@ const styles = StyleSheet.create({
     width: '48%',
     backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     borderRadius: 8,
     paddingVertical: 8,
     alignItems: 'center',
     justifyContent: 'center',
   },
   presetChipSelected: {
-    backgroundColor: '#FDF8ED',
-    borderColor: '#D4AF37',
+    backgroundColor: '#FFF0F0',
+    borderColor: '#FE4648',
   },
   presetChipText: {
     fontSize: 11,
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
     color: '#475569',
   },
   presetChipTextSelected: {
-    color: '#997316',
+    color: '#D93638',
     fontWeight: '800',
   },
   summaryRow: {
@@ -460,13 +460,13 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0F4C81',
+    color: '#FE4648',
     marginTop: 1,
   },
   subtotalCard: {
-    backgroundColor: '#FDF8ED',
+    backgroundColor: '#FFF0F0',
     borderWidth: 1.5,
-    borderColor: '#E8D28E',
+    borderColor: '#FFCACA',
     borderRadius: 10,
     padding: 14,
     marginBottom: 16,
@@ -474,13 +474,13 @@ const styles = StyleSheet.create({
   subtotalLabel: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#997316',
+    color: '#D93638',
     letterSpacing: 0.5,
   },
   subtotalValue: {
     fontSize: 24,
     fontWeight: '900',
-    color: '#0A2540',
+    color: '#1A1A1A',
     marginVertical: 2,
   },
   subtotalPerUnit: {
@@ -494,9 +494,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0F4C81',
+    backgroundColor: '#FE4648',
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
     paddingVertical: 12,
     borderRadius: 8,
     ...shadows.sm,

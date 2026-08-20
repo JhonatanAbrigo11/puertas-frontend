@@ -405,7 +405,7 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
             <Defs>
               <SvgGradient id="barWhiteGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                 <Stop offset="0%" stopColor="#FFFFFF" stopOpacity={1} />
-                <Stop offset="100%" stopColor="#F8FAFC" stopOpacity={1} />
+                <Stop offset="100%" stopColor="#FFFFFF" stopOpacity={1} />
               </SvgGradient>
             </Defs>
 
@@ -416,7 +416,7 @@ export const BottomNavigator: React.FC<BottomNavigatorProps> = ({
             <Path
               d={svgTopBorderPath}
               fill="none"
-              stroke="#E2E8F0"
+              stroke="#F0F0F0"
               strokeWidth={1.5}
             />
           </Svg>
@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#0F4C81',
+        shadowColor: '#FE4648',
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.14,
         shadowRadius: 16,
@@ -667,7 +667,7 @@ const styles = StyleSheet.create({
     minWidth: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: '#2563EB',
+    backgroundColor: '#FE4648',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 3,

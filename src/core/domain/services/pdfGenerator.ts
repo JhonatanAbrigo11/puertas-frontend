@@ -23,10 +23,10 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
     .map((item, index) => {
       const areaM2 = ((item.widthCm * item.heightCm) / 10000).toFixed(2);
       return `
-        <tr style="border-bottom: 1px solid #E2E8F0; ${
-          index % 2 === 1 ? 'background-color: #F8FAFC;' : ''
+        <tr style="border-bottom: 1px solid #F0F0F0; ${
+          index % 2 === 1 ? 'background-color: #FFFFFF;' : ''
         }">
-          <td style="padding: 10px 8px; font-weight: 700; color: #0F4C81; text-align: center;">#${
+          <td style="padding: 10px 8px; font-weight: 700; color: #FE4648; text-align: center;">#${
             index + 1
           }</td>
           <td style="padding: 10px 8px;">
@@ -49,7 +49,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
           <td style="padding: 10px 8px; text-align: right; font-size: 12px; color: #475569;">
             $${item.unitPriceDemo.toFixed(2)}
           </td>
-          <td style="padding: 10px 8px; text-align: right; font-weight: 700; font-size: 13px; color: #0F4C81;">
+          <td style="padding: 10px 8px; text-align: right; font-weight: 700; font-size: 13px; color: #FE4648;">
             $${item.subtotalDemo.toFixed(2)}
           </td>
         </tr>
@@ -64,8 +64,8 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
           ? Math.ceil(mat.totalQuantity)
           : mat.totalQuantity.toFixed(2);
       return `
-        <tr style="border-bottom: 1px solid #E2E8F0; ${
-          index % 2 === 1 ? 'background-color: #F8FAFC;' : ''
+        <tr style="border-bottom: 1px solid #F0F0F0; ${
+          index % 2 === 1 ? 'background-color: #FFFFFF;' : ''
         }">
           <td style="padding: 8px 10px; font-size: 12px; font-weight: 600; color: #1E293B;">
             ${mat.materialName}
@@ -73,11 +73,11 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
               ', '
             )}</div>
           </td>
-          <td style="padding: 8px 10px; text-align: right; font-size: 12px; font-weight: 700; color: #0F4C81;">
+          <td style="padding: 8px 10px; text-align: right; font-size: 12px; font-weight: 700; color: #FE4648;">
             ${formattedQty}
           </td>
           <td style="padding: 8px 10px; text-align: center; font-size: 11px; font-weight: 700; color: #475569;">
-            <span style="background: #E2E8F0; padding: 2px 6px; border-radius: 4px;">${
+            <span style="background: #F0F0F0; padding: 2px 6px; border-radius: 4px;">${
               mat.unit
             }</span>
           </td>
@@ -116,7 +116,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
           display: flex;
           justify-content: space-between;
           align-items: flex-start;
-          border-bottom: 3px solid #0F4C81;
+          border-bottom: 3px solid #FE4648;
           padding-bottom: 16px;
           margin-bottom: 20px;
         }
@@ -126,7 +126,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         .company-name {
           font-size: 24px;
           font-weight: 900;
-          color: #0F4C81;
+          color: #FE4648;
           letter-spacing: 0.5px;
           margin: 0 0 4px 0;
         }
@@ -152,7 +152,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         .quote-title {
           font-size: 11px;
           font-weight: 800;
-          color: #0F4C81;
+          color: #FE4648;
           letter-spacing: 1px;
           margin: 0 0 4px 0;
         }
@@ -167,8 +167,8 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
           color: #475569;
         }
         .client-card {
-          background: #F8FAFC;
-          border: 1px solid #E2E8F0;
+          background: #FFFFFF;
+          border: 1px solid #F0F0F0;
           border-radius: 8px;
           padding: 12px 16px;
           margin-bottom: 20px;
@@ -198,10 +198,10 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         .section-heading {
           font-size: 13px;
           font-weight: 800;
-          color: #0F4C81;
+          color: #FE4648;
           text-transform: uppercase;
           letter-spacing: 0.5px;
-          border-left: 4px solid #0F4C81;
+          border-left: 4px solid #FE4648;
           padding-left: 8px;
           margin: 20px 0 10px 0;
         }
@@ -227,7 +227,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         }
         .totals-card {
           width: 320px;
-          background: #F8FAFC;
+          background: #FFFFFF;
           border: 1px solid #CBD5E1;
           border-radius: 8px;
           overflow: hidden;
@@ -237,10 +237,10 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
           justify-content: space-between;
           padding: 8px 14px;
           font-size: 12px;
-          border-bottom: 1px solid #E2E8F0;
+          border-bottom: 1px solid #F0F0F0;
         }
         .totals-row-highlight {
-          background: #0F4C81;
+          background: #FE4648;
           color: #FFFFFF;
           font-size: 15px;
           font-weight: 900;
@@ -248,7 +248,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
         }
         .terms-block {
           background: #FFFFFF;
-          border: 1px solid #E2E8F0;
+          border: 1px solid #F0F0F0;
           border-radius: 8px;
           padding: 12px 16px;
           font-size: 10px;
@@ -283,7 +283,7 @@ export function generateQuoteHtml(quote: Quote, totals: QuoteTotals): string {
       <!-- 1. Header -->
       <div class="header-container">
         <div class="company-logo-block">
-          <div class="company-name">ALUX <span style="font-size: 18px; color: #2563EB;">PRO</span></div>
+          <div class="company-name">ALUX <span style="font-size: 18px; color: #FE4648;">PRO</span></div>
           <div class="company-tagline">Carpintería de Aluminio & Vidrio Arquitectónico</div>
           <div class="company-meta">
             <strong>RUC:</strong> 1792837461001 &nbsp;|&nbsp; <strong>PBX / WhatsApp:</strong> +593 99 123 4567<br/>

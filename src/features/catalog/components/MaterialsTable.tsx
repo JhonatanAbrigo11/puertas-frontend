@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   table: {
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     borderRadius: borderRadius.md,
     overflow: 'hidden',
     backgroundColor: '#FFFFFF',
@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   tableHeaderRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
     paddingVertical: 10,
     paddingHorizontal: spacing.md,
     borderBottomWidth: 1.5,
@@ -185,7 +185,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#FAFAFA',
   },
   tableRowEven: {
     backgroundColor: '#FAFAFA',
@@ -229,9 +229,9 @@ const styles = StyleSheet.create({
     color: '#0F172A',
   },
   unitChip: {
-    backgroundColor: '#FDF8ED',
+    backgroundColor: '#FFF0F0',
     borderWidth: 1,
-    borderColor: '#E8D28E',
+    borderColor: '#FFCACA',
     paddingHorizontal: 7,
     paddingVertical: 2,
     borderRadius: 4,
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
   unitChipText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#997316',
+    color: '#D93638',
   },
   priceText: {
     fontSize: 12,
@@ -249,17 +249,17 @@ const styles = StyleSheet.create({
   subtotalText: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#0A2540',
+    color: '#1A1A1A',
   },
   tableFooter: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#FDF8ED',
+    backgroundColor: '#FFF0F0',
     paddingVertical: 12,
     paddingHorizontal: spacing.md,
     borderTopWidth: 1.5,
-    borderTopColor: '#E8D28E',
+    borderTopColor: '#FFCACA',
   },
   footerLeft: {
     flex: 1,
@@ -278,11 +278,11 @@ const styles = StyleSheet.create({
   totalLabel: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#997316',
+    color: '#D93638',
   },
   totalAmount: {
     fontSize: 16,
     fontWeight: '900',
-    color: '#0A2540',
+    color: '#1A1A1A',
   },
 });

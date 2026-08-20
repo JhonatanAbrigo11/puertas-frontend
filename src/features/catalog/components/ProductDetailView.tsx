@@ -570,7 +570,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                 <MaterialCommunityIcons
                   name="information-outline"
                   size={16}
-                  color="#0284C7"
+                  color="#FE4648"
                 />
                 <Text style={styles.infoBannerText}>
                   Producto fabricado a la medida según tus necesidades
@@ -1029,9 +1029,9 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: '#475569',
     lineHeight: 18,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     borderRadius: borderRadius.md,
     padding: spacing.sm,
     marginBottom: spacing.xs,
@@ -1070,7 +1070,7 @@ const styles = StyleSheet.create({
   infoBannerText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#0284C7',
+    color: '#FE4648',
     flex: 1,
   },
 });

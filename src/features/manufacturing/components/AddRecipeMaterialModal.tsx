@@ -190,7 +190,7 @@ export const AddRecipeMaterialModal: React.FC<AddRecipeMaterialModalProps> = ({
                 <MaterialCommunityIcons
                   name="puzzle-plus-outline"
                   size={24}
-                  color="#2563EB"
+                  color="#FE4648"
                 />
               </View>
               <View>
@@ -279,7 +279,7 @@ export const AddRecipeMaterialModal: React.FC<AddRecipeMaterialModalProps> = ({
                         <MaterialCommunityIcons
                           name="check-circle"
                           size={18}
-                          color="#2563EB"
+                          color="#FE4648"
                           style={{ marginLeft: 6 }}
                         />
                       )}
@@ -423,7 +423,7 @@ const styles = StyleSheet.create({
     maxWidth: 650,
     maxHeight: '90%',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     overflow: 'hidden',
     ...shadows.lg,
   },
@@ -434,7 +434,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#FAFAFA',
     backgroundColor: '#FFFFFF',
   },
   modalHeaderLeft: {
@@ -467,7 +467,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -493,7 +493,7 @@ const styles = StyleSheet.create({
   searchBox: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1,
     borderColor: '#CBD5E1',
     borderRadius: 8,
@@ -512,9 +512,9 @@ const styles = StyleSheet.create({
   materialPickerList: {
     maxHeight: 160,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     borderRadius: 8,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
   },
   matOption: {
     flexDirection: 'row',
@@ -522,7 +522,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#FAFAFA',
     backgroundColor: '#FFFFFF',
   },
   matOptionSelected: {
@@ -536,7 +536,7 @@ const styles = StyleSheet.create({
   matOptionCode: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#2563EB',
+    color: '#FE4648',
   },
   matOptionUnit: {
     fontSize: 10,
@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
   matOptionPrice: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   presetsGrid: {
     flexDirection: 'row',
@@ -559,15 +559,15 @@ const styles = StyleSheet.create({
   },
   presetCard: {
     width: '48.5%',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     borderRadius: 8,
     padding: 10,
   },
   presetCardSelected: {
     backgroundColor: '#EFF6FF',
-    borderColor: '#2563EB',
+    borderColor: '#FE4648',
   },
   presetTop: {
     flexDirection: 'row',
@@ -582,10 +582,10 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   presetLabelSelected: {
-    color: '#2563EB',
+    color: '#FE4648',
   },
   presetUnitBadge: {
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#F0F0F0',
     paddingHorizontal: 5,
     paddingVertical: 1,
     borderRadius: 4,
@@ -600,7 +600,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
   },
   input: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
     borderColor: '#CBD5E1',
     borderRadius: 8,
@@ -617,14 +617,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+    borderTopColor: '#FAFAFA',
     backgroundColor: '#FFFFFF',
   },
   cancelBtn: {
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
   },
   cancelBtnText: {
     fontSize: 12,
@@ -634,7 +634,7 @@ const styles = StyleSheet.create({
   saveBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2563EB',
+    backgroundColor: '#FE4648',
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: 8,

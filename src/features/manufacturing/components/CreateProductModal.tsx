@@ -223,7 +223,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                 <MaterialCommunityIcons
                   name="plus-box"
                   size={24}
-                  color="#2563EB"
+                  color="#FE4648"
                 />
               </View>
               <View>
@@ -312,7 +312,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                   <MaterialCommunityIcons
                     name={(selectedCategoryObj?.iconName as any) || 'window-maximize'}
                     size={18}
-                    color="#2563EB"
+                    color="#FE4648"
                   />
                   <Text style={styles.dropdownTriggerText}>
                     {selectedCategoryObj?.name || 'Selecciona una categoría'}
@@ -348,7 +348,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           <MaterialCommunityIcons
                             name={cat.iconName as any}
                             size={18}
-                            color={isSelected ? '#2563EB' : '#64748B'}
+                            color={isSelected ? '#FE4648' : '#64748B'}
                           />
                           <Text
                             style={[
@@ -364,7 +364,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           <MaterialCommunityIcons
                             name="check-circle"
                             size={18}
-                            color="#2563EB"
+                            color="#FE4648"
                           />
                         )}
                       </TouchableOpacity>
@@ -394,7 +394,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     <MaterialCommunityIcons
                       name="image-plus"
                       size={15}
-                      color={diagramMode === 'upload' ? '#2563EB' : '#64748B'}
+                      color={diagramMode === 'upload' ? '#FE4648' : '#64748B'}
                     />
                     <Text
                       style={[
@@ -417,7 +417,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                     <MaterialCommunityIcons
                       name="vector-square"
                       size={15}
-                      color={diagramMode === 'preset' ? '#2563EB' : '#64748B'}
+                      color={diagramMode === 'preset' ? '#FE4648' : '#64748B'}
                     />
                     <Text
                       style={[
@@ -468,7 +468,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                           <MaterialCommunityIcons
                             name="camera-flip-outline"
                             size={15}
-                            color="#2563EB"
+                            color="#FE4648"
                           />
                           <Text style={styles.changeImageBtnText}>
                             Cambiar imagen
@@ -501,7 +501,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                       <MaterialCommunityIcons
                         name="cloud-upload-outline"
                         size={28}
-                        color="#2563EB"
+                        color="#FE4648"
                       />
                     </View>
                     <Text style={styles.uploadMainText}>
@@ -514,7 +514,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                       <MaterialCommunityIcons
                         name="folder-image"
                         size={16}
-                        color="#2563EB"
+                        color="#FE4648"
                       />
                       <Text style={styles.uploadBrowseBtnText}>
                         Explorar archivos
@@ -545,7 +545,7 @@ export const CreateProductModal: React.FC<CreateProductModalProps> = ({
                         size={20}
                         color={
                           illustrationType === opt.id && !customImageUri
-                            ? '#2563EB'
+                            ? '#FE4648'
                             : '#64748B'
                         }
                       />
@@ -731,7 +731,7 @@ const styles = StyleSheet.create({
     maxWidth: 680,
     maxHeight: '90%',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     overflow: 'hidden',
     ...shadows.lg,
   },
@@ -742,7 +742,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#FAFAFA',
     backgroundColor: '#FFFFFF',
   },
   modalHeaderLeft: {
@@ -775,7 +775,7 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -804,7 +804,7 @@ const styles = StyleSheet.create({
     color: '#EF4444',
   },
   input: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
     borderColor: '#CBD5E1',
     borderRadius: 8,
@@ -827,7 +827,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
     borderColor: '#CBD5E1',
     borderRadius: 8,
@@ -835,7 +835,7 @@ const styles = StyleSheet.create({
     height: 42,
   },
   dropdownTriggerActive: {
-    borderColor: '#2563EB',
+    borderColor: '#FE4648',
     backgroundColor: '#EFF6FF',
   },
   dropdownTriggerLeft: {
@@ -864,7 +864,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#FAFAFA',
   },
   dropdownItemSelected: {
     backgroundColor: '#EFF6FF',
@@ -881,7 +881,7 @@ const styles = StyleSheet.create({
   },
   dropdownItemTextSelected: {
     fontWeight: '700',
-    color: '#2563EB',
+    color: '#FE4648',
   },
   sectionHeaderRow: {
     flexDirection: 'row',
@@ -893,7 +893,7 @@ const styles = StyleSheet.create({
   },
   modeTabs: {
     flexDirection: 'row',
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
     borderRadius: 8,
     padding: 3,
     gap: 4,
@@ -916,7 +916,7 @@ const styles = StyleSheet.create({
     color: '#64748B',
   },
   modeTabTextActive: {
-    color: '#2563EB',
+    color: '#FE4648',
     fontWeight: '700',
   },
   uploadDropzone: {
@@ -926,7 +926,7 @@ const styles = StyleSheet.create({
     borderColor: '#93C5FD',
     borderStyle: 'dashed',
     borderRadius: 12,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     paddingVertical: 20,
     paddingHorizontal: 16,
   },
@@ -966,13 +966,13 @@ const styles = StyleSheet.create({
   uploadBrowseBtnText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#2563EB',
+    color: '#FE4648',
   },
   uploadedPreviewCard: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
     borderColor: '#BFDBFE',
     borderRadius: 12,
@@ -984,7 +984,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
@@ -1030,7 +1030,7 @@ const styles = StyleSheet.create({
   changeImageBtnText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#2563EB',
+    color: '#FE4648',
   },
   removeImageBtn: {
     flexDirection: 'row',
@@ -1058,16 +1058,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     borderRadius: 8,
     paddingHorizontal: 10,
     paddingVertical: 8,
   },
   illuCardSelected: {
     backgroundColor: '#EFF6FF',
-    borderColor: '#2563EB',
+    borderColor: '#FE4648',
   },
   illuCardText: {
     fontSize: 11,
@@ -1076,7 +1076,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   illuCardTextSelected: {
-    color: '#2563EB',
+    color: '#FE4648',
     fontWeight: '700',
   },
   textArea: {
@@ -1092,14 +1092,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+    borderTopColor: '#FAFAFA',
     backgroundColor: '#FFFFFF',
   },
   cancelBtn: {
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
   },
   cancelBtnText: {
     fontSize: 12,
@@ -1109,7 +1109,7 @@ const styles = StyleSheet.create({
   saveBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2563EB',
+    backgroundColor: '#FE4648',
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: 8,

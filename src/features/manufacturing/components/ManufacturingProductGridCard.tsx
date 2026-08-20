@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
   },
   imageWrap: {
     height: 120,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     position: 'relative',
   },
   codeBadge: {

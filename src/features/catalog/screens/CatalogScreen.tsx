@@ -225,7 +225,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
               <MaterialCommunityIcons
                 name="clipboard-text"
                 size={22}
-                color="#0F4C81"
+                color="#FE4648"
               />
             </View>
             <View>
@@ -260,7 +260,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
             <MaterialCommunityIcons
               name="account-edit-outline"
               size={20}
-              color="#0F4C81"
+              color="#FE4648"
             />
           </TouchableOpacity>
         </View>
@@ -305,7 +305,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                   <MaterialCommunityIcons
                     name="package-variant-closed"
                     size={20}
-                    color="#0F4C81"
+                    color="#FE4648"
                   />
                 </View>
                 <View style={styles.kpiTextGroup}>
@@ -323,7 +323,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                   <MaterialCommunityIcons
                     name="hammer-wrench"
                     size={20}
-                    color="#0284C7"
+                    color="#FE4648"
                   />
                 </View>
                 <View style={styles.kpiTextGroup}>
@@ -425,7 +425,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                   <MaterialCommunityIcons
                     name="plus-circle-outline"
                     size={16}
-                    color="#2563EB"
+                    color="#FE4648"
                   />
                   <Text style={styles.addMoreLinkText}>Configurar más productos</Text>
                 </TouchableOpacity>
@@ -550,7 +550,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                   <MaterialCommunityIcons
                     name="account-search-outline"
                     size={20}
-                    color="#0F4C81"
+                    color="#FE4648"
                   />
                   <Text style={styles.selectorTitle}>Seleccionar Cliente Destino</Text>
                 </View>
@@ -601,7 +601,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                         <MaterialCommunityIcons
                           name="check-circle"
                           size={22}
-                          color="#0F4C81"
+                          color="#FE4648"
                         />
                       )}
                     </TouchableOpacity>
@@ -733,7 +733,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                 <MaterialCommunityIcons
                   name="account-search-outline"
                   size={20}
-                  color="#0F4C81"
+                  color="#FE4648"
                 />
                 <Text style={styles.selectorTitle}>Seleccionar Cliente</Text>
               </View>
@@ -779,7 +779,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                       <MaterialCommunityIcons
                         name="check-circle"
                         size={20}
-                        color="#0F4C81"
+                        color="#FE4648"
                       />
                     )}
                   </TouchableOpacity>
@@ -821,7 +821,7 @@ const styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     flexDirection: 'column',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     height: '100%',
     overflow: 'hidden',
   },
@@ -846,11 +846,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'row',
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
   },
   sidebarWrapper: {
     height: '100%',
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#F0F0F0',
     borderRightWidth: 1.5,
     borderRightColor: '#CBD5E1',
     transitionProperty: 'width',
@@ -991,7 +991,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-    backgroundColor: '#F0F6FD',
+    backgroundColor: '#FFF0F0',
     borderWidth: 1,
     borderColor: '#BFDBFE',
     borderRadius: 8,
@@ -1001,12 +1001,12 @@ const styles = StyleSheet.create({
   clientBadgeText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0F4C81',
+    color: '#FE4648',
     maxWidth: 220,
   },
   quotesContainer: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
   },
   quotesContent: {
     padding: spacing.lg,
@@ -1016,7 +1016,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: borderRadius.lg,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     padding: spacing.md,
     flexDirection: 'row',
     alignItems: 'center',
@@ -1037,7 +1037,7 @@ const styles = StyleSheet.create({
     width: 44,
     height: 44,
     borderRadius: 12,
-    backgroundColor: '#F0F6FD',
+    backgroundColor: '#FFF0F0',
     borderWidth: 1.5,
     borderColor: '#BFDBFE',
     alignItems: 'center',
@@ -1065,7 +1065,7 @@ const styles = StyleSheet.create({
   quoteCodeText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#2563EB',
+    color: '#FE4648',
     letterSpacing: 0.5,
   },
   quotesHeaderSubtitle: {
@@ -1078,9 +1078,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     borderRadius: borderRadius.md,
     paddingHorizontal: spacing.md,
     paddingVertical: 8,
@@ -1098,14 +1098,14 @@ const styles = StyleSheet.create({
   clientTriggerName: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0F4C81',
+    color: '#FE4648',
     marginTop: 1,
   },
   emptyQuoteCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: borderRadius.xl,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     padding: spacing['3xl'],
     alignItems: 'center',
     justifyContent: 'center',
@@ -1116,7 +1116,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.md,
@@ -1139,9 +1139,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#0F4C81',
+    backgroundColor: '#FE4648',
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: borderRadius.md,
@@ -1163,7 +1163,7 @@ const styles = StyleSheet.create({
     minWidth: 180,
     backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     borderRadius: borderRadius.lg,
     padding: spacing.md,
     flexDirection: 'row',
@@ -1172,18 +1172,18 @@ const styles = StyleSheet.create({
     ...shadows.sm,
   },
   kpiCardHighlight: {
-    backgroundColor: '#0F4C81',
-    borderColor: '#D4AF37',
+    backgroundColor: '#FE4648',
+    borderColor: '#FE4648',
   },
   kpiIconWrapper: {
     width: 40,
     height: 40,
     borderRadius: 10,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
   },
   kpiIconWrapperHighlight: {
     backgroundColor: 'rgba(255, 255, 255, 0.18)',
@@ -1259,9 +1259,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-    backgroundColor: '#0F4C81',
+    backgroundColor: '#FE4648',
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
     paddingHorizontal: 18,
     paddingVertical: 10,
     borderRadius: borderRadius.md,
@@ -1299,7 +1299,7 @@ const styles = StyleSheet.create({
   addMoreLinkText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#2563EB',
+    color: '#FE4648',
   },
   selectorOverlay: {
     flex: 1,
@@ -1327,7 +1327,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     borderBottomWidth: 1,
     borderBottomColor: colors.borderLight,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
   },
   selectorTitleRow: {
     flexDirection: 'row',
@@ -1359,8 +1359,8 @@ const styles = StyleSheet.create({
     padding: spacing.sm,
   },
   selectorItemActive: {
-    borderColor: '#0F4C81',
-    backgroundColor: '#F0F6FD',
+    borderColor: '#FE4648',
+    backgroundColor: '#FFF0F0',
   },
   selectorItemInfo: {
     flex: 1,
@@ -1406,9 +1406,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 8,
     borderRadius: borderRadius.md,
-    backgroundColor: '#0F4C81',
+    backgroundColor: '#FE4648',
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
   },
   saveButtonText: {
     fontSize: 12,

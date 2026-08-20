@@ -71,7 +71,7 @@ export const ViewMaterialModal: React.FC<ViewMaterialModalProps> = ({
                 <MaterialCommunityIcons
                   name="cube-scan"
                   size={22}
-                  color="#0284C7"
+                  color="#FE4648"
                 />
               </View>
               <View>
@@ -167,7 +167,7 @@ export const ViewMaterialModal: React.FC<ViewMaterialModalProps> = ({
                 <MaterialCommunityIcons
                   name="package-variant"
                   size={18}
-                  color="#2563EB"
+                  color="#FE4648"
                 />
                 <View style={{ flex: 1 }}>
                   <Text style={styles.detailTitle}>Formato de Almacenamiento</Text>
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
     maxWidth: 520,
     maxHeight: '85%',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     overflow: 'hidden',
     ...shadows.lg,
   },
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#FAFAFA',
     backgroundColor: '#FFFFFF',
   },
   headerLeft: {
@@ -282,14 +282,14 @@ const styles = StyleSheet.create({
   modalCode: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#2563EB',
+    color: '#FE4648',
     letterSpacing: 0.5,
   },
   closeBtn: {
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
   categoryBadgeText: {
     fontSize: 10,
     fontWeight: '700',
-    color: '#2563EB',
+    color: '#FE4648',
     textTransform: 'uppercase',
   },
   materialName: {
@@ -335,9 +335,9 @@ const styles = StyleSheet.create({
   },
   kpiCard: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     borderRadius: 12,
     padding: 14,
   },
@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   kpiPrice: {
     fontSize: 22,
     fontWeight: '900',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   kpiSub: {
     fontSize: 11,
@@ -395,7 +395,7 @@ const styles = StyleSheet.create({
   infoSection: {
     backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: '#F1F5F9',
+    borderColor: '#FAFAFA',
     borderRadius: 12,
     padding: 14,
     gap: 10,
@@ -431,14 +431,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderTopWidth: 1,
-    borderTopColor: '#F1F5F9',
+    borderTopColor: '#FAFAFA',
     backgroundColor: '#FFFFFF',
   },
   closeActionBtn: {
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,
-    backgroundColor: '#F1F5F9',
+    backgroundColor: '#FAFAFA',
   },
   closeActionBtnText: {
     fontSize: 12,
@@ -448,7 +448,7 @@ const styles = StyleSheet.create({
   editActionBtn: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#2563EB',
+    backgroundColor: '#FE4648',
     paddingHorizontal: 16,
     paddingVertical: 10,
     borderRadius: 8,

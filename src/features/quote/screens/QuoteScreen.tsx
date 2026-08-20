@@ -249,7 +249,7 @@ export const QuoteScreen: React.FC<QuoteScreenProps> = () => {
                           <MaterialCommunityIcons
                             name="eye-outline"
                             size={18}
-                            color="#0284C7"
+                            color="#FE4648"
                           />
                         </TouchableOpacity>
 
@@ -262,7 +262,7 @@ export const QuoteScreen: React.FC<QuoteScreenProps> = () => {
                           <MaterialCommunityIcons
                             name="pencil-outline"
                             size={18}
-                            color="#2563EB"
+                            color="#FE4648"
                           />
                         </TouchableOpacity>
 
@@ -548,7 +548,7 @@ const styles = StyleSheet.create({
     gap: 6,
     backgroundColor: colors.primary,
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
     borderRadius: borderRadius.md,
     paddingHorizontal: 12,
     paddingVertical: 8,
@@ -583,16 +583,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#F0F0F0',
     overflow: 'hidden',
     ...shadows.sm,
   },
   tableCardHeader: {
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 18,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#E2E8F0',
+    borderBottomColor: '#F0F0F0',
   },
   tableCardTitle: {
     fontSize: 11,
@@ -610,7 +610,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 14,
     borderBottomWidth: 1,
-    borderBottomColor: '#F1F5F9',
+    borderBottomColor: '#FAFAFA',
   },
   clientRowEven: {
     backgroundColor: '#FAFAFA',
@@ -629,11 +629,11 @@ const styles = StyleSheet.create({
   clientCode: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
     letterSpacing: 0.5,
   },
   categoryBadge: {
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#F0F0F0',
     paddingHorizontal: 6,
     paddingVertical: 2,
     borderRadius: 4,
@@ -658,8 +658,8 @@ const styles = StyleSheet.create({
     borderColor: '#A7F3D0',
   },
   statusBadgeDefault: {
-    backgroundColor: '#F8FAFC',
-    borderColor: '#E2E8F0',
+    backgroundColor: '#FFFFFF',
+    borderColor: '#F0F0F0',
   },
   statusBadgeText: {
     fontSize: 10,
@@ -705,7 +705,7 @@ const styles = StyleSheet.create({
   contactValue: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   contactLabel: {
     fontSize: 11,
@@ -844,7 +844,7 @@ const styles = StyleSheet.create({
   },
   saveButton: {
     borderWidth: 1,
-    borderColor: '#D4AF37',
+    borderColor: '#FE4648',
     borderRadius: borderRadius.md,
     paddingHorizontal: 14,
     paddingVertical: 8,
