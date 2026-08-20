@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import {
   View,
   StyleSheet,
@@ -7,6 +7,8 @@ import {
   Text,
   ScrollView,
   Platform,
+  Animated,
+  Easing,
 } from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Category, CategoryId } from '../../../core/domain/entities/Category';
@@ -61,6 +63,95 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(true);
   const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const [isClientSelectorOpen, setIsClientSelectorOpen] = useState(false);
+
+  // Flying Add-to-Quote Animation
+  const quotesTabRef = useRef<View>(null);
+  const targetTabCoords = useRef({ x: 340, y: 70 });
+  const badgeScaleAnim = useRef(new Animated.Value(1)).current;
+  const flyingAnim = useRef(new Animated.Value(0)).current;
+  const [isFlying, setIsFlying] = useState(false);
+  const [flyingData, setFlyingData] = useState<{
+    startX: number;
+    startY: number;
+    targetX: number;
+    targetY: number;
+    count: number;
+  } | null>(null);
+
+  const triggerFlyAnimation = (
+    startCoords: { x: number; y: number },
+    count: number
+  ) => {
+    quotesTabRef.current?.measureInWindow?.((x, y, width, height) => {
+      if (x && y) {
+        targetTabCoords.current = { x: x + width / 2, y: y + height / 2 };
+      }
+    });
+
+    const targetX = targetTabCoords.current.x || 340;
+    const targetY = targetTabCoords.current.y || 70;
+
+    setFlyingData({
+      startX: startCoords.x,
+      startY: startCoords.y,
+      targetX,
+      targetY,
+      count,
+    });
+    setIsFlying(true);
+    flyingAnim.setValue(0);
+
+    Animated.timing(flyingAnim, {
+      toValue: 1,
+      duration: 650,
+      easing: Easing.bezier(0.2, 0.85, 0.25, 1),
+      useNativeDriver: Platform.OS !== 'web',
+    }).start(() => {
+      setIsFlying(false);
+      setFlyingData(null);
+      Animated.sequence([
+        Animated.timing(badgeScaleAnim, {
+          toValue: 1.6,
+          duration: 140,
+          useNativeDriver: Platform.OS !== 'web',
+        }),
+        Animated.spring(badgeScaleAnim, {
+          toValue: 1,
+          friction: 3,
+          tension: 40,
+          useNativeDriver: Platform.OS !== 'web',
+        }),
+      ]).start();
+    });
+  };
+
+  const flyTranslateX = flyingData
+    ? flyingAnim.interpolate({
+        inputRange: [0, 1],
+        outputRange: [flyingData.startX - 22, flyingData.targetX - 22],
+      })
+    : 0;
+
+  const flyTranslateY = flyingData
+    ? flyingAnim.interpolate({
+        inputRange: [0, 0.45, 1],
+        outputRange: [
+          flyingData.startY - 22,
+          Math.min(flyingData.startY, flyingData.targetY) - 90,
+          flyingData.targetY - 22,
+        ],
+      })
+    : 0;
+
+  const flyScale = flyingAnim.interpolate({
+    inputRange: [0, 0.2, 0.75, 1],
+    outputRange: [0.7, 1.4, 0.95, 0.35],
+  });
+
+  const flyOpacity = flyingAnim.interpolate({
+    inputRange: [0, 0.08, 0.88, 1],
+    outputRange: [0, 1, 1, 0],
+  });
 
   const selectedClient =
     clients.find((client) => client.id === selectedClientId) || null;
@@ -185,11 +276,19 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
 
         {/* Tab 2: Cotización */}
         <TouchableOpacity
+          ref={quotesTabRef as any}
           style={[
             styles.segmentButton,
             activeSubTab === 'quotes' && styles.segmentButtonActive,
           ]}
           onPress={() => setActiveSubTab('quotes')}
+          onLayout={() => {
+            quotesTabRef.current?.measureInWindow?.((x, y, width, height) => {
+              if (x && y) {
+                targetTabCoords.current = { x: x + width / 2, y: y + height / 2 };
+              }
+            });
+          }}
           activeOpacity={0.8}
           accessibilityRole="tab"
           accessibilityState={{ selected: activeSubTab === 'quotes' }}
@@ -208,6 +307,21 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
           >
             Cotización
           </Text>
+
+          {totals.totalProductsCount > 0 && (
+            <Animated.View
+              style={[
+                styles.cotizacionTabBadge,
+                {
+                  transform: [{ scale: badgeScaleAnim }],
+                },
+              ]}
+            >
+              <Text style={styles.cotizacionTabBadgeText}>
+                {totals.totalProductsCount}
+              </Text>
+            </Animated.View>
+          )}
         </TouchableOpacity>
       </View>
 
@@ -374,7 +488,10 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
             {/* Product Detail Area */}
             <View style={styles.productDetailWrapper}>
               {selectedProduct ? (
-                <ProductDetailView product={selectedProduct} />
+                <ProductDetailView
+                  product={selectedProduct}
+                  onAddToCartAnimation={triggerFlyAnimation}
+                />
               ) : (
                 <View style={styles.emptySelection}>
                   <Text>Selecciona un producto del panel izquierdo</Text>
@@ -382,6 +499,37 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
               )}
             </View>
           </View>
+        )}
+
+        {/* Flying Item Animation Overlay */}
+        {isFlying && flyingData && (
+          <Animated.View
+            pointerEvents="none"
+            style={[
+              styles.flyingBall,
+              {
+                transform: [
+                  { translateX: flyTranslateX },
+                  { translateY: flyTranslateY },
+                  { scale: flyScale },
+                ],
+                opacity: flyOpacity,
+              },
+            ]}
+          >
+            <View style={styles.flyingBallInner}>
+              <MaterialCommunityIcons
+                name="cart-plus"
+                size={20}
+                color="#FFFFFF"
+              />
+              {flyingData.count > 1 && (
+                <Text style={styles.flyingBallCountText}>
+                  +{flyingData.count}
+                </Text>
+              )}
+            </View>
+          </Animated.View>
         )}
 
         {/* Client Selector Modal */}
@@ -398,7 +546,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                   <MaterialCommunityIcons
                     name="account-search-outline"
                     size={20}
-                    color="#FE4648"
+                    color="#C98A16"
                   />
                   <Text style={styles.selectorTitle}>Seleccionar Cliente Destino</Text>
                 </View>
@@ -449,7 +597,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                         <MaterialCommunityIcons
                           name="check-circle"
                           size={22}
-                          color="#FE4648"
+                          color="#C98A16"
                         />
                       )}
                     </TouchableOpacity>
@@ -520,8 +668,44 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
           </View>
 
           {/* Product Detail View */}
-          {selectedProduct && <ProductDetailView product={selectedProduct} />}
+          {selectedProduct && (
+            <ProductDetailView
+              product={selectedProduct}
+              onAddToCartAnimation={triggerFlyAnimation}
+            />
+          )}
         </View>
+      )}
+
+      {/* Flying Item Animation Overlay */}
+      {isFlying && flyingData && (
+        <Animated.View
+          pointerEvents="none"
+          style={[
+            styles.flyingBall,
+            {
+              transform: [
+                { translateX: flyTranslateX },
+                { translateY: flyTranslateY },
+                { scale: flyScale },
+              ],
+              opacity: flyOpacity,
+            },
+          ]}
+        >
+          <View style={styles.flyingBallInner}>
+            <MaterialCommunityIcons
+              name="cart-plus"
+              size={20}
+              color="#FFFFFF"
+            />
+            {flyingData.count > 1 && (
+              <Text style={styles.flyingBallCountText}>
+                +{flyingData.count}
+              </Text>
+            )}
+          </View>
+        </Animated.View>
       )}
 
       {/* Mobile Modal Drawer for choosing products */}
@@ -581,7 +765,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                 <MaterialCommunityIcons
                   name="account-search-outline"
                   size={20}
-                  color="#FE4648"
+                  color="#C98A16"
                 />
                 <Text style={styles.selectorTitle}>Seleccionar Cliente</Text>
               </View>
@@ -622,12 +806,17 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                       <Text style={styles.selectorItemMeta}>
                         {client.phone || client.email || 'Sin contacto'}
                       </Text>
+                      {!!client.address && (
+                        <Text style={styles.selectorItemAddress} numberOfLines={1}>
+                          {client.address}
+                        </Text>
+                      )}
                     </View>
                     {isCurrentClient && (
                       <MaterialCommunityIcons
                         name="check-circle"
-                        size={20}
-                        color="#FE4648"
+                        size={22}
+                        color="#C98A16"
                       />
                     )}
                   </TouchableOpacity>
@@ -810,30 +999,76 @@ const styles = StyleSheet.create({
       } as any,
     }),
   },
-  tabBadge: {
-    minWidth: 20,
-    height: 20,
-    borderRadius: 10,
+  cotizacionTabBadge: {
+    minWidth: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: '#C98A16', // Warm Gold
     alignItems: 'center',
     justifyContent: 'center',
-    paddingHorizontal: 5,
+    paddingHorizontal: 6,
+    marginLeft: 8,
+    borderWidth: 1.5,
+    borderColor: '#FFFFFF',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#C98A16',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.3,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 2,
+      },
+      web: {
+        boxShadow: '0 1px 4px rgba(201, 138, 22, 0.3)',
+      } as any,
+    }),
   },
-  tabBadgeActive: {
-    backgroundColor: '#EF4444',
+  cotizacionTabBadgeText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#FFFFFF',
+    lineHeight: 13,
   },
-  tabBadgeInactive: {
-    backgroundColor: '#EF4444',
+  flyingBall: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 44,
+    height: 44,
+    zIndex: 9999,
   },
-  tabBadgeText: {
+  flyingBallInner: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#C98A16', // Warm Gold
+    borderWidth: 2,
+    borderColor: '#FFFFFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#C98A16',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.45,
+        shadowRadius: 8,
+      },
+      android: {
+        elevation: 8,
+      },
+      web: {
+        boxShadow: '0 4px 14px rgba(201, 138, 22, 0.45)',
+      } as any,
+    }),
+  },
+  flyingBallCountText: {
     fontSize: 10,
     fontWeight: '800',
-    lineHeight: 12,
-  },
-  tabBadgeTextActive: {
     color: '#FFFFFF',
-  },
-  tabBadgeTextInactive: {
-    color: '#FFFFFF',
+    marginLeft: 2,
   },
   clientBadgePill: {
     flexDirection: 'row',
