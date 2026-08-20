@@ -194,7 +194,7 @@ export const QuoteScreen: React.FC<QuoteScreenProps> = () => {
                                 : 'account-outline'
                             }
                             size={12}
-                            color={isSelected ? '#059669' : '#64748B'}
+                            color={isSelected ? '#FE4648' : '#737373'}
                           />
                           <Text
                             style={[
@@ -216,7 +216,7 @@ export const QuoteScreen: React.FC<QuoteScreenProps> = () => {
                           <MaterialCommunityIcons
                             name="phone-outline"
                             size={14}
-                            color="#64748B"
+                            color="#737373"
                           />
                           <Text style={styles.contactText}>{client.phone}</Text>
                         </View>
@@ -597,7 +597,7 @@ const styles = StyleSheet.create({
   tableCardTitle: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#475569',
+    color: '#525252',
     letterSpacing: 0.8,
   },
   clientsList: {
@@ -641,7 +641,7 @@ const styles = StyleSheet.create({
   categoryBadgeText: {
     fontSize: 9,
     fontWeight: '700',
-    color: '#475569',
+    color: '#525252',
     textTransform: 'uppercase',
   },
   statusBadge: {
@@ -666,15 +666,15 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   statusTextActive: {
-    color: '#059669',
+    color: '#FE4648',
   },
   statusTextDefault: {
-    color: '#64748B',
+    color: '#737373',
   },
   clientName: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#0F172A',
+    color: '#1A1A1A',
     marginBottom: 3,
   },
   contactRow: {
@@ -686,11 +686,11 @@ const styles = StyleSheet.create({
   contactText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#475569',
+    color: '#525252',
   },
   clientDesc: {
     fontSize: 11,
-    color: '#64748B',
+    color: '#737373',
     lineHeight: 15,
   },
   clientRightBlock: {
@@ -722,9 +722,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 32,
     borderRadius: 6,
-    backgroundColor: '#F0F9FF',
+    backgroundColor: '#FFF0F0',
     borderWidth: 1,
-    borderColor: '#BAE6FD',
+    borderColor: '#FFCACA',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -734,7 +734,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     backgroundColor: '#EFF6FF',
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: '#FFCACA',
     alignItems: 'center',
     justifyContent: 'center',
   },

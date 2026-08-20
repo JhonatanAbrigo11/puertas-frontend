@@ -340,7 +340,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                   <MaterialCommunityIcons
                     name="account-hard-hat-outline"
                     size={20}
-                    color="#059669"
+                    color="#FE4648"
                   />
                 </View>
                 <View style={styles.kpiTextGroup}>
@@ -850,9 +850,9 @@ const styles = StyleSheet.create({
   },
   sidebarWrapper: {
     height: '100%',
-    backgroundColor: '#F0F0F0',
+    backgroundColor: '#FAFAFA',
     borderRightWidth: 1.5,
-    borderRightColor: '#CBD5E1',
+    borderRightColor: '#F0F0F0',
     transitionProperty: 'width',
     transitionDuration: '200ms',
   } as any,
@@ -900,7 +900,7 @@ const styles = StyleSheet.create({
   segmentedContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#FAFAFA',
     borderRadius: 14,
     padding: 3,
     gap: 4,
@@ -913,10 +913,10 @@ const styles = StyleSheet.create({
     borderRadius: 11,
   },
   segmentButtonActive: {
-    backgroundColor: '#1E3A2B', // Forest Green
+    backgroundColor: '#FE4648', // Forest Green
     ...Platform.select({
       ios: {
-        shadowColor: '#1E3A2B',
+        shadowColor: '#FE4648',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.2,
         shadowRadius: 4,
@@ -925,7 +925,7 @@ const styles = StyleSheet.create({
         elevation: 2,
       },
       web: {
-        boxShadow: '0 2px 6px rgba(30, 58, 43, 0.2)',
+        boxShadow: '0 2px 6px rgba(254, 70, 72, 0.2)',
       } as any,
     }),
   },
@@ -993,7 +993,7 @@ const styles = StyleSheet.create({
     gap: 6,
     backgroundColor: '#FFF0F0',
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: '#FFCACA',
     borderRadius: 8,
     paddingHorizontal: 12,
     paddingVertical: 6,
@@ -1039,7 +1039,7 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: '#FFF0F0',
     borderWidth: 1.5,
-    borderColor: '#BFDBFE',
+    borderColor: '#FFCACA',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -1060,7 +1060,7 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: '#BFDBFE',
+    borderColor: '#FFCACA',
   },
   quoteCodeText: {
     fontSize: 11,
@@ -1070,7 +1070,7 @@ const styles = StyleSheet.create({
   },
   quotesHeaderSubtitle: {
     fontSize: 12,
-    color: '#64748B',
+    color: '#737373',
     fontWeight: '500',
     marginTop: 2,
   },
@@ -1124,12 +1124,12 @@ const styles = StyleSheet.create({
   emptyQuoteTitle: {
     fontSize: 17,
     fontWeight: '800',
-    color: '#0F172A',
+    color: '#1A1A1A',
     marginBottom: 6,
   },
   emptyQuoteSub: {
     fontSize: 13,
-    color: '#64748B',
+    color: '#737373',
     textAlign: 'center',
     maxWidth: 420,
     lineHeight: 19,
@@ -1194,7 +1194,7 @@ const styles = StyleSheet.create({
   },
   kpiLabel: {
     fontSize: 10,
-    color: '#64748B',
+    color: '#737373',
     fontWeight: '700',
     textTransform: 'uppercase',
     letterSpacing: 0.5,
@@ -1208,7 +1208,7 @@ const styles = StyleSheet.create({
   kpiValue: {
     fontSize: 17,
     fontWeight: '800',
-    color: '#0F172A',
+    color: '#1A1A1A',
     marginTop: 2,
   },
   kpiValueHighlight: {
@@ -1220,7 +1220,7 @@ const styles = StyleSheet.create({
   kpiSubValue: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#737373',
   },
   topActionsBar: {
     flexDirection: 'row',
@@ -1288,7 +1288,7 @@ const styles = StyleSheet.create({
   sectionTitleText: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#64748B',
+    color: '#737373',
     letterSpacing: 0.8,
   },
   addMoreLink: {
@@ -1378,7 +1378,7 @@ const styles = StyleSheet.create({
   selectorItemAddress: {
     marginTop: 2,
     fontSize: 11,
-    color: '#64748B',
+    color: '#737373',
   },
   selectorActions: {
     flexDirection: 'row',

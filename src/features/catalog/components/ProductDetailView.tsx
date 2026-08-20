@@ -538,7 +538,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   <MaterialCommunityIcons
                     name="check-circle-outline"
                     size={16}
-                    color="#10B981"
+                    color="#FE4648"
                   />
                   <Text style={styles.benefitText}>
                     Perfilería {product.aluminumSeries}
@@ -549,7 +549,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                   <MaterialCommunityIcons
                     name="check-circle-outline"
                     size={16}
-                    color="#10B981"
+                    color="#FE4648"
                   />
                   <Text style={styles.benefitText}>{product.glassType}</Text>
                 </View>
@@ -559,7 +559,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
                     <MaterialCommunityIcons
                       name="check-circle-outline"
                       size={16}
-                      color="#10B981"
+                      color="#FE4648"
                     />
                     <Text style={styles.benefitText}>{feat}</Text>
                   </View>
@@ -587,7 +587,7 @@ export const ProductDetailView: React.FC<ProductDetailViewProps> = ({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8F9FA',
+    backgroundColor: '#FFFFFF',
   },
   contentContainer: {
     padding: 20,
@@ -901,13 +901,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#1E3A2B', // Forest Green
+    backgroundColor: '#FE4648', // Forest Green
     paddingVertical: 14,
     paddingHorizontal: 30,
     borderRadius: 12,
     ...Platform.select({
       ios: {
-        shadowColor: '#1E3A2B',
+        shadowColor: '#FE4648',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
@@ -916,12 +916,12 @@ const styles = StyleSheet.create({
         elevation: 3,
       },
       web: {
-        boxShadow: '0 2px 6px rgba(30, 58, 43, 0.25)',
+        boxShadow: '0 2px 6px rgba(254, 70, 72, 0.25)',
       } as any,
     }),
   },
   btnSuccess: {
-    backgroundColor: '#10B981',
+    backgroundColor: '#16A34A',
   },
   primaryAddBtnText: {
     fontSize: 15,
@@ -1027,7 +1027,7 @@ const styles = StyleSheet.create({
   },
   benefitsDescription: {
     fontSize: 12,
-    color: '#475569',
+    color: '#525252',
     lineHeight: 18,
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
@@ -1039,7 +1039,7 @@ const styles = StyleSheet.create({
   benefitsTitle: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#64748B',
+    color: '#737373',
     letterSpacing: 0.8,
     marginBottom: 8,
   },
@@ -1059,9 +1059,9 @@ const styles = StyleSheet.create({
   infoBanner: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F0F9FF',
+    backgroundColor: '#FFF0F0',
     borderWidth: 1,
-    borderColor: '#BAE6FD',
+    borderColor: '#FFCACA',
     paddingHorizontal: 12,
     paddingVertical: 8,
     borderRadius: 8,

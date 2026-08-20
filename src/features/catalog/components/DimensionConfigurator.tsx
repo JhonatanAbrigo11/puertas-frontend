@@ -304,7 +304,7 @@ export const DimensionConfigurator: React.FC<DimensionConfiguratorProps> = ({
               <MaterialCommunityIcons
                 name="printer-outline"
                 size={18}
-                color="#475569"
+                color="#525252"
                 style={{ marginRight: 6 }}
               />
               <Text style={styles.secondaryPrintBtnText}>Imprimir Ficha</Text>
@@ -328,12 +328,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: '800',
-    color: '#0F172A',
+    color: '#1A1A1A',
     letterSpacing: 0.5,
   },
   subtitle: {
     fontSize: 11,
-    color: '#64748B',
+    color: '#737373',
     marginTop: 2,
   },
   section: {
@@ -345,7 +345,7 @@ const styles = StyleSheet.create({
   sectionHeader: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#64748B',
+    color: '#737373',
     letterSpacing: 0.8,
     marginBottom: 10,
   },
@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 14,
     fontWeight: '700',
-    color: '#0F172A',
+    color: '#1A1A1A',
     paddingVertical: 0,
     backgroundColor: 'transparent',
     borderWidth: 0,
@@ -407,7 +407,7 @@ const styles = StyleSheet.create({
   unitText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#64748B',
+    color: '#737373',
   },
   rangeText: {
     fontSize: 10,
@@ -442,7 +442,7 @@ const styles = StyleSheet.create({
   presetChipText: {
     fontSize: 11,
     fontWeight: '600',
-    color: '#475569',
+    color: '#525252',
   },
   presetChipTextSelected: {
     color: '#D93638',
@@ -485,7 +485,7 @@ const styles = StyleSheet.create({
   },
   subtotalPerUnit: {
     fontSize: 11,
-    color: '#64748B',
+    color: '#737373',
   },
   buttonsContainer: {
     gap: 8,
@@ -519,7 +519,7 @@ const styles = StyleSheet.create({
   secondaryPrintBtnText: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#475569',
+    color: '#525252',
   },
   btnDisabled: {
     opacity: 0.5,

@@ -239,9 +239,9 @@ const styles = StyleSheet.create({
     width: 32,
     height: 36,
     borderRadius: 8,
-    backgroundColor: '#1E3A2B', // Forest Green
+    backgroundColor: '#FE4648', // Forest Green
     borderWidth: 1,
-    borderColor: '#1E3A2B',
+    borderColor: '#FE4648',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -272,14 +272,14 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 10,
-    backgroundColor: '#1E3A2B', // Forest Green
+    backgroundColor: '#FE4648', // Forest Green
     borderWidth: 1,
-    borderColor: '#1E3A2B',
+    borderColor: '#FE4648',
     alignItems: 'center',
     justifyContent: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#1E3A2B',
+        shadowColor: '#FE4648',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 3,
@@ -330,12 +330,12 @@ const styles = StyleSheet.create({
     }),
   },
   miniThumbCardSelected: {
-    borderColor: '#1E3A2B',
+    borderColor: '#FE4648',
     backgroundColor: '#F3F4F6',
     borderWidth: 2.5,
     ...Platform.select({
       ios: {
-        shadowColor: '#1E3A2B',
+        shadowColor: '#FE4648',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.25,
         shadowRadius: 4,
@@ -355,7 +355,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#1E3A2B',
+    backgroundColor: '#FE4648',
     borderWidth: 1,
     borderColor: '#FFFFFF',
   },
@@ -376,7 +376,7 @@ const styles = StyleSheet.create({
   searchInput: {
     flex: 1,
     fontSize: 12,
-    color: '#0F172A',
+    color: '#1A1A1A',
     paddingVertical: 0,
     backgroundColor: 'transparent',
     borderWidth: 0,
@@ -394,7 +394,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 11,
     fontWeight: '800',
-    color: '#64748B',
+    color: '#737373',
     letterSpacing: 0.8,
   },
   listContent: {

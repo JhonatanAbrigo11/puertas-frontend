@@ -153,7 +153,7 @@ const styles = StyleSheet.create({
   colHeader: {
     fontSize: 10,
     fontWeight: '800',
-    color: '#475569',
+    color: '#525252',
     letterSpacing: 0.5,
   },
   colMaterialHeader: {
@@ -216,17 +216,17 @@ const styles = StyleSheet.create({
   materialName: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0F172A',
+    color: '#1A1A1A',
   },
   formulaNote: {
     fontSize: 10,
-    color: '#64748B',
+    color: '#737373',
     marginTop: 2,
   },
   quantityText: {
     fontSize: 12,
     fontWeight: '800',
-    color: '#0F172A',
+    color: '#1A1A1A',
   },
   unitChip: {
     backgroundColor: '#FFF0F0',
@@ -244,7 +244,7 @@ const styles = StyleSheet.create({
   priceText: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#64748B',
+    color: '#737373',
   },
   subtotalText: {
     fontSize: 13,
