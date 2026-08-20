@@ -52,14 +52,6 @@ export const DimensionConfigurator: React.FC<DimensionConfiguratorProps> = ({
   hideActions = false,
   hideSummary = false,
 }) => {
-  const presetDimensions = [
-    { label: '100 x 100 cm', w: 100, h: 100 },
-    { label: '120 x 100 cm', w: 120, h: 100 },
-    { label: '150 x 120 cm', w: 150, h: 120 },
-    { label: '180 x 150 cm', w: 180, h: 150 },
-    { label: '200 x 210 cm', w: 200, h: 210 },
-  ];
-
   const handleStepperChange = (
     currentVal: number,
     delta: number,
@@ -255,40 +247,7 @@ export const DimensionConfigurator: React.FC<DimensionConfiguratorProps> = ({
         </View>
       </View>
 
-      {/* 3. Medidas Estándar */}
-      <View style={styles.section}>
-        <Text style={styles.sectionHeader}>MEDIDAS ESTÁNDAR</Text>
-        <View style={styles.presetsGrid}>
-          {presetDimensions.map((preset, idx) => {
-            const isSelected = widthCm === preset.w && heightCm === preset.h;
-            return (
-              <TouchableOpacity
-                key={idx}
-                style={[
-                  styles.presetChip,
-                  isSelected && styles.presetChipSelected,
-                ]}
-                onPress={() => {
-                  onWidthChange(preset.w);
-                  onHeightChange(preset.h);
-                }}
-                activeOpacity={0.7}
-              >
-                <Text
-                  style={[
-                    styles.presetChipText,
-                    isSelected && styles.presetChipTextSelected,
-                  ]}
-                >
-                  {preset.label}
-                </Text>
-              </TouchableOpacity>
-            );
-          })}
-        </View>
-      </View>
-
-      {/* 4. Resumen Técnico */}
+      {/* 3. Resumen Técnico */}
       {!hideSummary && (
         <>
           <View style={styles.section}>
