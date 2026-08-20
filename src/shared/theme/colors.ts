@@ -1,65 +1,65 @@
 export const colors = {
-  // Brand Primary — #FE4648 + blanco
-  primary: '#FE4648',
-  primaryDark: '#D93638',
-  primaryLight: '#FF7072',
-  primaryMuted: '#FFF0F0',
-  primaryBorder: '#FFCACA',
-  primaryTint: '#FFF8F8',
+  // Brand Primary: Luxury Architectural Navy Blue
+  primary: '#0F4C81', // Deep Luxury Navy
+  primaryDark: '#0A2540', // Midnight Navy
+  primaryLight: '#1E609A', // Vibrant Royal Navy
+  primaryMuted: '#EBF4FC', // Soft Blue Tint
+  primaryBorder: '#BBD8F5',
+  primaryTint: '#F0F6FD',
 
-  // Acento secundario (misma familia rojo)
-  gold: '#FE4648',
-  goldDark: '#D93638',
-  goldLight: '#FFF0F0',
-  goldMuted: '#FFE4E4',
-  goldBorder: '#FFCACA',
-  goldText: '#D93638',
-  goldHover: '#FF5859',
+  // Brand Accent: Luxury Architectural Gold / Dorado
+  gold: '#D4AF37', // Royal Gold
+  goldDark: '#B8860B', // Antique Dark Gold
+  goldLight: '#FDF8ED', // Warm Gold Cream
+  goldMuted: '#F4E8C1', // Pale Gold Tint
+  goldBorder: '#E8D28E', // Soft Gold Border
+  goldText: '#997316', // Readable Gold Tone for text
+  goldHover: '#C5A059', // Metallic Gold
 
-  // Acentos complementarios
-  accentTeal: '#FE4648',
-  accentTealBg: '#FFF0F0',
-  accentGlass: '#FE4648',
-  accentGlassBg: '#FFF0F0',
+  // Secondary Accents
+  accentTeal: '#0D9488',
+  accentTealBg: '#F0FDFA',
+  accentGlass: '#0284C7',
+  accentGlassBg: '#E0F2FE',
 
   // Status & Feedback
   success: '#10B981',
   successBg: '#ECFDF5',
   successBorder: '#A7F3D0',
-  warning: '#F59E0B',
-  warningBg: '#FFFBEB',
+  warning: '#D4AF37', // Gold Warning
+  warningBg: '#FFFDF5',
   warningBorder: '#FDE68A',
-  danger: '#DC2626',
+  danger: '#EF4444',
   dangerBg: '#FEF2F2',
   dangerBorder: '#FECACA',
-  info: '#FE4648',
-  infoBg: '#FFF0F0',
+  info: '#0F4C81',
+  infoBg: '#F0F6FD',
 
-  // Blanco puro y superficies
+  // Pure White & Surface Layers
   white: '#FFFFFF',
-  background: '#FFFFFF',
+  background: '#F8FAFC',
   surface: '#FFFFFF',
   surfaceCard: '#FFFFFF',
   surfaceElevated: '#FFFFFF',
-  surfaceHover: '#FFF5F5',
-  surfaceActive: '#FFE8E8',
+  surfaceHover: '#F1F5F9',
+  surfaceActive: '#E2E8F0',
 
-  borderLight: '#F0F0F0',
-  borderMedium: '#E5E5E5',
-  borderDark: '#CCCCCC',
+  borderLight: '#E2E8F0',
+  borderMedium: '#CBD5E1',
+  borderDark: '#94A3B8',
 
-  // Texto
-  textPrimary: '#1A1A1A',
-  textSecondary: '#525252',
-  textMuted: '#737373',
-  textLight: '#A3A3A3',
+  // Text Hierarchy
+  textPrimary: '#0A2540', // Deepest Navy for high contrast & luxury feel
+  textSecondary: '#475569',
+  textMuted: '#64748B',
+  textLight: '#94A3B8',
   textInverse: '#FFFFFF',
-  textPrimaryAccent: '#FE4648',
-  textGold: '#D93638',
+  textPrimaryAccent: '#0F4C81',
+  textGold: '#997316',
 
-  // Aluminio & vidrio (neutros)
-  aluminumMetallic: '#A3A3A3',
-  aluminumDark: '#404040',
-  aluminumLight: '#F5F5F5',
+  // Metallic Aluminum & Glass
+  aluminumMetallic: '#94A3B8',
+  aluminumDark: '#334155',
+  aluminumLight: '#F1F5F9',
   glassReflection: 'rgba(255, 255, 255, 0.75)',
 };

@@ -380,7 +380,7 @@ const styles = StyleSheet.create({
   stepBtnText: {
     fontSize: 18,
     fontWeight: '700',
-    color: '#FE4648',
+    color: '#0F4C81',
   },
   stepBtnTextDisabled: {
     color: '#CBD5E1',
@@ -460,7 +460,7 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#FE4648',
+    color: '#0F4C81',
     marginTop: 1,
   },
   subtotalCard: {
@@ -494,7 +494,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FE4648',
+    backgroundColor: '#0F4C81',
     borderWidth: 1,
     borderColor: '#D4AF37',
     paddingVertical: 12,

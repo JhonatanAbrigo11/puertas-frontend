@@ -221,7 +221,7 @@ const styles = StyleSheet.create({
   pdfButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#FE4648',
+    backgroundColor: '#0F4C81',
     borderWidth: 1,
     borderColor: '#D4AF37',
     paddingHorizontal: 12,
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   kpiCardHighlight: {
-    backgroundColor: '#FE4648',
+    backgroundColor: '#0F4C81',
     borderWidth: 1.5,
     borderColor: '#D4AF37',
   },

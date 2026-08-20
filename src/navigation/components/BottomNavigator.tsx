@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#FE4648',
+        shadowColor: '#0F4C81',
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.14,
         shadowRadius: 16,
@@ -575,16 +575,16 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: colors.primary, // Architectural Deep Blue #FE4648
+    backgroundColor: '#1E3A2B', // Forest Green
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
     borderColor: '#FFFFFF',
     ...Platform.select({
       ios: {
-        shadowColor: '#FE4648',
+        shadowColor: '#1E3A2B',
         shadowOffset: { width: 0, height: 6 },
-        shadowOpacity: 0.38,
+        shadowOpacity: 0.35,
         shadowRadius: 10,
       },
       android: {
@@ -592,7 +592,7 @@ const styles = StyleSheet.create({
       },
       web: {
         boxShadow:
-          '0 10px 20px -2px rgba(15, 76, 129, 0.42), 0 4px 6px -2px rgba(15, 76, 129, 0.25)',
+          '0 10px 20px -2px rgba(30, 58, 43, 0.4), 0 4px 6px -2px rgba(30, 58, 43, 0.2)',
       } as any,
     }),
   },
@@ -667,7 +667,7 @@ const styles = StyleSheet.create({
     minWidth: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: '#FE4648',
+    backgroundColor: '#2563EB',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 3,
@@ -698,7 +698,7 @@ const styles = StyleSheet.create({
   activeLabel: {
     fontSize: 11,
     fontWeight: '800',
-    color: colors.primary,
+    color: '#1E3A2B',
     textAlign: 'center',
     letterSpacing: 0.1,
   },
@@ -715,16 +715,16 @@ const styles = StyleSheet.create({
     width: 62,
     height: 62,
     borderRadius: 31,
-    backgroundColor: colors.primary, // #FE4648
+    backgroundColor: '#1E3A2B', // Forest Green
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3.5,
     borderColor: '#FFFFFF',
     ...Platform.select({
       ios: {
-        shadowColor: '#FE4648',
+        shadowColor: '#1E3A2B',
         shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.45,
+        shadowOpacity: 0.4,
         shadowRadius: 14,
       },
       android: {
@@ -732,7 +732,7 @@ const styles = StyleSheet.create({
       },
       web: {
         boxShadow:
-          '0 14px 28px -4px rgba(15, 76, 129, 0.48), 0 8px 14px -2px rgba(15, 76, 129, 0.32)',
+          '0 14px 28px -4px rgba(30, 58, 43, 0.45), 0 8px 14px -2px rgba(30, 58, 43, 0.3)',
       } as any,
     }),
   },

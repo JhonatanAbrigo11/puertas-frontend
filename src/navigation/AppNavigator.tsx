@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
   },
   screenContainer: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.background,
   },
   screenContainerDashboard: {
     backgroundColor: '#FFFFFF',

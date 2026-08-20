@@ -69,8 +69,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
           >
             <MaterialCommunityIcons
               name="chevron-double-right"
-              size={20}
-              color="#2563EB"
+              size={18}
+              color="#FFFFFF"
             />
           </TouchableOpacity>
         )}
@@ -132,7 +132,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <MaterialCommunityIcons
               name="chevron-double-left"
               size={18}
-              color="#64748B"
+              color="#FFFFFF"
             />
           </TouchableOpacity>
         )}
@@ -209,11 +209,25 @@ const styles = StyleSheet.create({
   sidebar: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#F8FAFC',
-    borderRightWidth: 1.5,
-    borderRightColor: '#EDF2F7',
+    backgroundColor: '#FFFFFF',
+    borderRightWidth: 1,
+    borderRightColor: '#E5E7EB',
     padding: spacing.md,
     flexDirection: 'column',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 1, height: 0 },
+        shadowOpacity: 0.04,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 1,
+      },
+      web: {
+        boxShadow: '1px 0 3px rgba(0, 0, 0, 0.03)',
+      } as any,
+    }),
   },
   fullHeaderRow: {
     flexDirection: 'row',
@@ -224,36 +238,64 @@ const styles = StyleSheet.create({
   collapseBtn: {
     width: 32,
     height: 36,
-    borderRadius: 6,
-    backgroundColor: '#FFFFFF',
+    borderRadius: 8,
+    backgroundColor: '#1E3A2B', // Forest Green
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#1E3A2B',
     alignItems: 'center',
     justifyContent: 'center',
   },
   miniRail: {
     width: '100%',
     height: '100%',
-    backgroundColor: '#F8FAFC',
-    borderRightWidth: 1.5,
-    borderRightColor: '#EDF2F7',
-    paddingVertical: 12,
+    backgroundColor: '#FFFFFF',
+    borderRightWidth: 1,
+    borderRightColor: '#E5E7EB',
+    paddingVertical: 14,
     alignItems: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 1, height: 0 },
+        shadowOpacity: 0.04,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 1,
+      },
+      web: {
+        boxShadow: '1px 0 3px rgba(0, 0, 0, 0.03)',
+      } as any,
+    }),
   },
   miniToggleBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 8,
-    backgroundColor: '#F0F6FD',
-    borderWidth: 1.5,
-    borderColor: '#BBD8F5',
+    width: 38,
+    height: 38,
+    borderRadius: 10,
+    backgroundColor: '#1E3A2B', // Forest Green
+    borderWidth: 1,
+    borderColor: '#1E3A2B',
     alignItems: 'center',
     justifyContent: 'center',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#1E3A2B',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 3,
+      },
+      android: {
+        elevation: 2,
+      },
+      web: {
+        boxShadow: '0 2px 5px rgba(30, 58, 43, 0.25)',
+      } as any,
+    }),
   },
   miniDivider: {
     width: 32,
     height: 1.5,
-    backgroundColor: '#E2E8F0',
+    backgroundColor: '#E5E7EB',
     marginVertical: 12,
   },
   miniListContent: {
@@ -262,21 +304,49 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
   },
   miniThumbCard: {
-    width: 46,
-    height: 46,
-    borderRadius: 8,
+    width: 48,
+    height: 48,
+    borderRadius: 10,
     backgroundColor: '#FFFFFF',
     borderWidth: 1.5,
-    borderColor: '#E2E8F0',
+    borderColor: '#E5E7EB',
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
     position: 'relative',
+    ...Platform.select({
+      ios: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.05,
+        shadowRadius: 2,
+      },
+      android: {
+        elevation: 1,
+      },
+      web: {
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.04)',
+      } as any,
+    }),
   },
   miniThumbCardSelected: {
-    borderColor: '#FE4648',
-    backgroundColor: '#FDF8ED',
-    borderWidth: 2,
+    borderColor: '#1E3A2B',
+    backgroundColor: '#F3F4F6',
+    borderWidth: 2.5,
+    ...Platform.select({
+      ios: {
+        shadowColor: '#1E3A2B',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+      },
+      android: {
+        elevation: 3,
+      },
+      web: {
+        boxShadow: '0 2px 6px rgba(30, 58, 43, 0.25)',
+      } as any,
+    }),
   },
   miniSelectedDot: {
     position: 'absolute',
@@ -285,7 +355,7 @@ const styles = StyleSheet.create({
     width: 8,
     height: 8,
     borderRadius: 4,
-    backgroundColor: '#D4AF37',
+    backgroundColor: '#1E3A2B',
     borderWidth: 1,
     borderColor: '#FFFFFF',
   },
@@ -294,7 +364,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: '#E5E7EB',
     borderRadius: borderRadius.md,
     paddingHorizontal: spacing.sm,
     marginBottom: spacing.md,
