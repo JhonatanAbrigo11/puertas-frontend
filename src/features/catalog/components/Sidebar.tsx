@@ -274,7 +274,7 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   miniThumbCardSelected: {
-    borderColor: '#0F4C81',
+    borderColor: '#FE4648',
     backgroundColor: '#FDF8ED',
     borderWidth: 2,
   },

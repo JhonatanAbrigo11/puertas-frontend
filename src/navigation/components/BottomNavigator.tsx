@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     ...Platform.select({
       ios: {
-        shadowColor: '#0F4C81',
+        shadowColor: '#FE4648',
         shadowOffset: { width: 0, height: 8 },
         shadowOpacity: 0.14,
         shadowRadius: 16,
@@ -575,14 +575,14 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: colors.primary, // Architectural Deep Blue #0F4C81
+    backgroundColor: colors.primary, // Architectural Deep Blue #FE4648
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3,
     borderColor: '#FFFFFF',
     ...Platform.select({
       ios: {
-        shadowColor: '#0F4C81',
+        shadowColor: '#FE4648',
         shadowOffset: { width: 0, height: 6 },
         shadowOpacity: 0.38,
         shadowRadius: 10,
@@ -667,7 +667,7 @@ const styles = StyleSheet.create({
     minWidth: 16,
     height: 16,
     borderRadius: 8,
-    backgroundColor: '#2563EB',
+    backgroundColor: '#FE4648',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 3,
@@ -715,14 +715,14 @@ const styles = StyleSheet.create({
     width: 62,
     height: 62,
     borderRadius: 31,
-    backgroundColor: colors.primary, // #0F4C81
+    backgroundColor: colors.primary, // #FE4648
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 3.5,
     borderColor: '#FFFFFF',
     ...Platform.select({
       ios: {
-        shadowColor: '#0F4C81',
+        shadowColor: '#FE4648',
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.45,
         shadowRadius: 14,

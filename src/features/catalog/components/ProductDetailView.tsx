@@ -642,7 +642,7 @@ const styles = StyleSheet.create({
   summaryValue: {
     fontSize: 12,
     fontWeight: '700',
-    color: '#0F4C81',
+    color: '#FE4648',
     marginTop: 4,
   },
   fullWidthSubtotalCard: {
@@ -683,7 +683,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#0F4C81',
+    backgroundColor: '#FE4648',
     borderWidth: 1,
     borderColor: '#D4AF37',
     paddingVertical: 14,

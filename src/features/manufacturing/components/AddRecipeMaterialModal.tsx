@@ -550,7 +550,7 @@ const styles = StyleSheet.create({
   matOptionPrice: {
     fontSize: 13,
     fontWeight: '800',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   presetsGrid: {
     flexDirection: 'row',

@@ -196,7 +196,7 @@ export const CatalogScreen: React.FC<CatalogScreenProps> = ({
                 <MaterialCommunityIcons
                   name="cart-outline"
                   size={14}
-                  color="#0F4C81"
+                  color="#FE4648"
                 />
                 <Text style={styles.cartTabText}>Cotizaciones</Text>
                 {items.length > 0 && (
@@ -503,7 +503,7 @@ const styles = StyleSheet.create({
   cartTabText: {
     fontSize: 11,
     fontWeight: '700',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   cartBadge: {
     position: 'absolute',

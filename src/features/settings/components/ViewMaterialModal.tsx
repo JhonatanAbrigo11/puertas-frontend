@@ -351,7 +351,7 @@ const styles = StyleSheet.create({
   kpiPrice: {
     fontSize: 22,
     fontWeight: '900',
-    color: '#0F4C81',
+    color: '#FE4648',
   },
   kpiSub: {
     fontSize: 11,
